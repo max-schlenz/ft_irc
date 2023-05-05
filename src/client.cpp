@@ -35,30 +35,30 @@ int main()
 	}
 	recv(client, buffer, bufSize, 0);
 	std::cout << "Connection confirmed" << std::endl;
-	// std::cout << "Enter # to end the connection" << std::endl;
-	// do {
-	// 		std::cout << "Client: ";
-	// 		do {
-	// 			std::cin >> buffer;
-	// 			send(client, buffer, bufSize, 0);
-	// 			if (*buffer == '#')
-	// 			{
-	// 				send(client, buffer, bufSize, 0);
-	// 				*buffer = '*';
-	// 				isExit = true;
-	// 			}
-	// 		} while (*buffer != '*');
-	// 		std::cout << "Server: ";
-	// 		do {
-	// 			recv(client, buffer, bufSize, 0);
-	// 			std::cout << "buffer" << " ";
-	// 			if (*buffer == '#')
-	// 			{
-	// 				*buffer = '*';
-	// 				isExit = true;
-	// 			}
-	// 		} while (*buffer != '*');
-	// } while (!isExit);
+	std::cout << "Enter # to end the connection" << std::endl;
+	do {
+			std::cout << "Client: ";
+			do {
+				std::cin >> buffer;
+				send(client, buffer, bufSize, 0);
+				if (*buffer == '#')
+				{
+					send(client, buffer, bufSize, 0);
+					*buffer = '*';
+					isExit = true;
+				}
+			} while (*buffer != '*');
+			std::cout << "Server: ";
+			do {
+				recv(client, buffer, bufSize, 0);
+				std::cout << "buffer" << " ";
+				if (*buffer == '#')
+				{
+					*buffer = '*';
+					isExit = true;
+				}
+			} while (*buffer != '*');
+	} while (!isExit);
 	std::cout << "Connection terminated..." << std::endl;
 	return (0);
 }

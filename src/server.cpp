@@ -36,7 +36,7 @@ static void init_server(t_server *server)
 	if (bind(server->sock, (struct sockaddr*)&sin, sizeof(sin)) < 0)
 		exiting(2);
 	server->sin = sin;
-	listen(server->sock, 1);
+	listen(server->sock, 2);
 }
 
 int main(int argc, char **argv)
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	int client;
 	t_server	server;
 	int bufSize = 1024;
-	char buffer_arr[bufSize] = {'\0'};
+	char buffer_arr[bufSize]; // = {'\0'};
 	std::string buffer("test");
 	socklen_t size;
 
@@ -66,11 +66,14 @@ int main(int argc, char **argv)
 		// better_strcpy(buffer, "Username\n> ", bufSize);
 		send(client, buffer.c_str(), buffer.size(), 0);
 		do {
-			buffer = "\0";
+			// buffer = "\0";
+			memset(buffer_arr, 0, bufSize);
 			recv(client, &buffer_arr, bufSize, 0);
-			std::cout << buffer_arr << std::endl;
+
+			std::cout << buffer_arr;
 
 		} while (buffer_arr[0] != '#');
+			std::cout << std::endl;
 		close(server.sock);
 		close(client);
 		exit(0);
