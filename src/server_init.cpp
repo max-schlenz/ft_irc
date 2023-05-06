@@ -1,5 +1,5 @@
 #include "Server.hpp"
-#include "irc.h"
+#include "irc.hpp"
 
 void init_server(Server& server, int port)
 {
