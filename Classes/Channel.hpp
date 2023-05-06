@@ -45,9 +45,9 @@ class Channel
 		Channel(){}
 		~Channel(){}
 	private:
-		Client* clients;
-		std::string topic;
-		std::string password;
+		Client*		clients;
+		std::string	topic;
+		std::string	password;
 		int			num_clients;
 		int			channel_size;
 };

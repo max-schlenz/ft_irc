@@ -1,7 +1,7 @@
 ### Testfiles ###
 test.*
 *test.*
-
+.vscode
 ### C ###
 # Prerequisites
 *.d

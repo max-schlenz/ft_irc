@@ -2,13 +2,12 @@
 
 void	exiting(int error_code);
 
-int Server::accept_client()
+void Server::accept_client()
 {
-	socklen_t size;
-	int client;
-
-	client = accept(this->_sock, (struct sockaddr*)&this->_sin, &size);
-	if (client < 0)
+	Client client = Client();
+	client.set_id(accept(this->_sock, (struct sockaddr*)&this->_sin, &this->_sinLen));
+	if (client.id() < 0) {
 		exiting(3);
-	return (client);
+	}
+	this->_clients.push_back(client);
 }
