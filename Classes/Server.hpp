@@ -19,7 +19,6 @@
 # define BWHITE "\033[1;37m"
 # define RESET "\033[0m"
 
-
 typedef struct s_server t_server;
 
 struct s_server
