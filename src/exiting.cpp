@@ -1,4 +1,4 @@
-#include "irc.h"
+#include "irc.hpp"
 
 void	exiting(int error_code)
 {

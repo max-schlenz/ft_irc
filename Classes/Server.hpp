@@ -1,5 +1,5 @@
-#ifndef SERVER_H
-# define SERVER_H
+#ifndef SERVER_HPP
+# define SERVER_HPP
 # include <sys/socket.h>
 # include <sys/types.h>
 # include <netdb.h>
@@ -9,23 +9,38 @@
 # include <string>
 # include <netinet/in.h>
 
-# define RED "\033[0;31m"
-# define BRED "\033[1;31m"
-# define GREEN "\033[0;32m"
-# define BGREEN "\033[1;32m"
-# define BLUE "\033[0;34m"
-# define BBLUE "\033[1;34m"
-# define GRAY "\033[0m\033[38;5;239m"
-# define BWHITE "\033[1;37m"
-# define RESET "\033[0m"
+typedef struct sockaddr_in sockaddr_in;
+typedef struct protoent protoent;
 
-typedef struct s_server t_server;
-
-struct s_server
-{
-	int	sock;
-	int port;
-	struct	sockaddr_in sin;
+class Server {
+	public:
+		int accept_client();
+		void set_sock(int sock) {
+			this->_sock = sock;
+		};
+		void set_port(int port) {
+			this->_port = port;
+		};
+		void set_sin(sockaddr_in sin) {
+			this->_sin = sin;
+		};
+		int sock() const {
+			return (this->_sock);
+		}
+		int port() const {
+			return (this->_port);
+		}
+		sockaddr_in& sin() {
+			return (this->_sin);
+		}
+		Server(){};
+		Server(int port, int sock, sockaddr_in sin) : _sock(sock), _port(port), _sin(sin){};
+		~Server(){};
+	private:
+		int	_sock;
+		int _port;
+		int _client;
+		sockaddr_in _sin;
 };
 
-# endif
+#endif
