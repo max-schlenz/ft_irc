@@ -61,7 +61,8 @@ int main(int argc, char **argv)
 	init_server(&server);
 
 	std::cout << "Server listening on: " << BWHITE << inet_ntoa(server.sin.sin_addr) << ":" << server.port << RESET <<  std::endl;
-	while (true)
+
+	while (true) // outer loop which waits for connection
 	{
 		int client = accept(server.sock, (struct sockaddr*)&server.sin, &size);
 		if (client < 0)
@@ -71,7 +72,7 @@ int main(int argc, char **argv)
 		client_ip_str = inet_ntoa(client_ip.sin_addr);
 		std::cout << GREEN << "Client " << BGREEN << client_ip_str << GREEN << " connected." << RESET << std::endl;
 
-		while (true) // 
+		while (true) // inner loop for recieving messages from currently connected client
 		{
 			memset(buffer_arr, 0, bufSize);
 			recv_len = recv(client, &buffer_arr, bufSize, 0);
