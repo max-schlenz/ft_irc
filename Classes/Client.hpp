@@ -1,7 +1,7 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 # include <string>
-
+# include <iostream>
 typedef struct sockaddr_in sockaddr_in;
 
 class Client
@@ -38,6 +38,7 @@ class Client
 			this->_op = op;
 		}
 		void set_ipstr(char *ipStr){
+			std::cout << ipStr << std::endl;
 			this->_ipStr = ipStr;
 		}
 		void set_id(int id){

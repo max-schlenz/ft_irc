@@ -33,11 +33,11 @@ class Server {
 		const int& port() const {
 			return (this->_port);
 		}
-		const sockaddr_in& sin() const {
+		sockaddr_in& sin() {
 			return (this->_sin);
 		}
-		const Client& client() const {
-			return (this->_clients[0]);
+		Client& client() {
+			return (this->_clients.front());
 		}
 		const socklen_t& sinLen() const {
 			return (this->_sinLen);

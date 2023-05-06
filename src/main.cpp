@@ -9,8 +9,11 @@ int main(int argc, char **argv)
 {
 	int		bufSize = 1024;
 	char	buffer_arr[bufSize];
+	struct sockaddr_in	client_ip;
+	socklen_t 			client_ip_len = sizeof(client_ip);
+	std::string 		client_ip_str;
 
-	Client				client;
+	Client	client;
 	Server	server;
 
 	int			recv_len = 0;
@@ -24,10 +27,21 @@ int main(int argc, char **argv)
 
 	while (true) // outer loop which waits for connection
 	{
+
+		// server.accept_client();
+		// client = server.client();
+
+		// getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
+		// client.set_ipstr(inet_ntoa(client.sin().sin_addr));
+
+		// std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
 		server.accept_client();
 		client = server.client();
+		// if (client < 0)
+		// 	exiting(3);
 
-		getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
+		// set_sin()
+		getsockname(client.id(), (struct sockaddr*)&(client.sin()), &(client.sinLen()));
 		client.set_ipstr(inet_ntoa(client.sin().sin_addr));
 		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
 
