@@ -1,7 +1,7 @@
 #include <iostream>
-#include "server.h"
 #include <vector>
 #include <stdlib.h> //atoi linux
+#include "Server.hpp"
 
 static void	exiting(int error_code)
 {
