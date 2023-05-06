@@ -8,13 +8,15 @@
 # include <string.h>
 # include <string>
 # include <netinet/in.h>
+ #include "Client.hpp"
+ #include <vector>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
 
 class Server {
 	public:
-		int accept_client();
+		void accept_client();
 		void set_sock(int sock) {
 			this->_sock = sock;
 		};
@@ -22,16 +24,23 @@ class Server {
 			this->_port = port;
 		};
 		void set_sin(sockaddr_in sin) {
+			this->_sinLen = sizeof(sin);
 			this->_sin = sin;
 		};
-		int sock() const {
+		const int& sock() const {
 			return (this->_sock);
 		}
-		int port() const {
+		const int& port() const {
 			return (this->_port);
 		}
-		sockaddr_in& sin() {
+		const sockaddr_in& sin() const {
 			return (this->_sin);
+		}
+		const Client& client() const {
+			return (this->_clients[0]);
+		}
+		const socklen_t& sinLen() const {
+			return (this->_sinLen);
 		}
 		Server(){};
 		Server(int port, int sock, sockaddr_in sin) : _sock(sock), _port(port), _sin(sin){};
@@ -41,6 +50,8 @@ class Server {
 		int _port;
 		int _client;
 		sockaddr_in _sin;
+		socklen_t _sinLen;
+		std::vector<Client> _clients;
 };
 
 #endif
