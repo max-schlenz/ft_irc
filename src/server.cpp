@@ -1,11 +1,9 @@
-#include <iostream>
 #include "server.h"
-#include <vector>
 
-static void	exiting(int error_code)
+void	exiting(int error_code)
 {
 	if (error_code == 0)
-		std::cout << "Invalid Arguments" << std::endl;
+		std::cout << "usage: ./server <port>" << std::endl;
 	else if (error_code == 1)
 		std::cout << "Error establishing connection..." << std::endl;
 	else if (error_code == 2)
@@ -20,7 +18,7 @@ static void	exiting(int error_code)
 }
 
 
-static void init_server(t_server *server)
+void init_server(t_server *server)
 {
 	struct	protoent *proto = getprotobyname("tcp");
 	struct	sockaddr_in sin;
@@ -37,46 +35,4 @@ static void init_server(t_server *server)
 		exiting(2);
 	server->sin = sin;
 	listen(server->sock, 2);
-}
-
-int main(int argc, char **argv)
-{
-	int client;
-	t_server	server;
-	int bufSize = 1024;
-	char buffer_arr[bufSize]; // = {'\0'};
-	std::string buffer("test");
-	socklen_t size;
-
-	if (argc != 3)
-		exiting(0);
-	server.port = atoi(argv[1]);
-	init_server(&server);
-	client = accept(server.sock, (struct sockaddr*)&server.sin, &size);
-	
-	if (client < 0)
-		exiting(3);
-	buffer = "Server connected\n";
-	send(client, buffer.c_str(), buffer.size(), 0);
-	buffer = "Please Authenticate\n";
-	send(client, buffer.c_str(), buffer.size(), 0);
-	while (client > 0)
-	{
-		buffer = "Username\n> ";
-		// better_strcpy(buffer, "Username\n> ", bufSize);
-		send(client, buffer.c_str(), buffer.size(), 0);
-		do {
-			// buffer = "\0";
-			memset(buffer_arr, 0, bufSize);
-			recv(client, &buffer_arr, bufSize, 0);
-
-			std::cout << buffer_arr;
-
-		} while (buffer_arr[0] != '#');
-			std::cout << std::endl;
-		close(server.sock);
-		close(client);
-		exit(0);
-	}
-	return (0);
 }
