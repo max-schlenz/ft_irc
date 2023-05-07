@@ -16,7 +16,7 @@ void init_server(Server& server, int port)
 	sin.sin_port = htons(port);
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
 	server.set_sin(sin);
-	if (bind(server.sock(), (struct sockaddr*)&server.sin(), sizeof(server.sin())) < 0)
+	if (bind(server.sock(), (struct sockaddr*)&server.sin(), server.sinLen()) < 0)
 		exiting(2);
 	listen(server.sock(), 1);
 }
