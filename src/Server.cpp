@@ -6,7 +6,8 @@ void Server::accept_client()
 {
 	Client client = Client();
 	socklen_t size = sizeof(this->_sin);
-	client.set_id(accept(this->_sock, (struct sockaddr*)&this->_sin, &size));
+	int id = accept(this->_sock, (struct sockaddr*)&this->_sin, &size);
+	client.set_id(id);
 	if (client.id() < 0) {
 		exiting(3);
 	}

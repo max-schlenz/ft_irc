@@ -16,8 +16,8 @@ class Client
 		void set_op(bool op){
 			this->_op = op;
 		}
-		void set_ipstr(char *ipStr){
-			this->_ipStr = ipStr;
+		void set_ipstr(){
+			this->_ipStr = inet_ntoa(this->_sin.sin_addr);
 		}
 		void set_id(int id){
 			this->_id = id;

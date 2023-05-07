@@ -4,10 +4,12 @@
 #include "Server.hpp"
 #include "Client.hpp"
 #include "irc.hpp"
+#include <signal.h>
+#include <poll.h>
 
-void l(struct lol* s)
-{
-	s->test_struct.f = 12;
+void sigint_handler(int sig) {
+  printf("Exiting programm...\n");
+  exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char **argv)
@@ -25,13 +27,24 @@ int main(int argc, char **argv)
 
 	init_server(server, atoi(argv[1]));
 	std::cout << "Server listening on: " << BWHITE << inet_ntoa(server.sin().sin_addr) << ":" << server.port() << RESET <<  std::endl;
+	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+		printf("Error: Unable to register signal handler!\n");
+		exit(EXIT_FAILURE);
+	}
+	std::vector<pollfd> poll_fds;
 
+    pollfd server_poll_fd;
+	memset(&server_poll_fd, 0, sizeof(server_poll_fd));
+    server_poll_fd.fd = server.sock();
+    server_poll_fd.events = POLLIN;
+    poll_fds.push_back(server_poll_fd);
 	while (true) // outer loop which waits for connection
 	{
+		int num_fds = poll(poll_fds.data(), poll_fds.size(), 10);
 		server.accept_client();
 		client = server.client();
 		getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
-		client.set_ipstr(inet_ntoa(client.sin().sin_addr));
+		client.set_ipstr();
 		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
 		while (true) // inner loop for recieving messages from currently connected client
 		{
@@ -47,4 +60,5 @@ int main(int argc, char **argv)
 		}
 		std::cout << std::endl;
 	}
+	return (EXIT_SUCCESS);
 }
