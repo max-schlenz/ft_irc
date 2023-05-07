@@ -14,15 +14,6 @@
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
 
-struct x {
-	int f;
-};
-
-struct lol {
-	int i;
-	struct x test_struct;
-};
-
 class Server {
 	public:
 		void accept_client();
@@ -32,7 +23,7 @@ class Server {
 		void set_port(int port) {
 			this->_port = port;
 		};
-		void set_sin(struct sockaddr_in sin) {
+		void set_sin(sockaddr_in sin) {
 			this->_sinLen = sizeof(sin);
 			this->_sin = sin;
 		};
@@ -45,7 +36,7 @@ class Server {
 		const int& port() const {
 			return (this->_port);
 		}
-		struct sockaddr_in& sin() {
+		sockaddr_in& sin() {
 			return (this->_sin);
 		}
 		Client& client() {
@@ -61,7 +52,7 @@ class Server {
 		int	_sock;
 		int _port;
 		int _client;
-		struct sockaddr_in _sin;
+		sockaddr_in _sin;
 		socklen_t _sinLen;
 		std::vector<Client> _clients;
 };

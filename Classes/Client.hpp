@@ -44,7 +44,7 @@ class Client
 		const int& id() const {
 			return (this->_id);
 		}
-		struct sockaddr_in& sin() {
+		sockaddr_in& sin() {
 			return (this->_sin);
 		}
 		socklen_t& sinLen() {
@@ -59,7 +59,7 @@ class Client
 		bool		_op;
 		std::string _ipStr;
 		int 		_id;
-		struct sockaddr_in _sin;
+		sockaddr_in _sin;
 		socklen_t _sinLen;
 };
 

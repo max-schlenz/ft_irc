@@ -2,10 +2,11 @@
 test.*
 *test.*
 .vscode
+server
 ### C ###
 # Prerequisites
 *.d
-
+*.obj/
 # Object files
 *.o
 *.ko
