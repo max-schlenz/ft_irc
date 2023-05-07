@@ -7,6 +7,28 @@ typedef struct sockaddr_in sockaddr_in;
 class Client
 {
 	public:
+		void set_username(std::string username){
+			this->_username = username;
+		}
+		void set_nickname(std::string nickname){
+			this->_nickname = nickname;
+		}
+		void set_op(bool op){
+			this->_op = op;
+		}
+		void set_ipstr(char *ipStr){
+			this->_ipStr = ipStr;
+		}
+		void set_id(int id){
+			this->_id = id;
+		}
+		void set_sin(sockaddr_in& sin){
+			this->_sinLen = sizeof(sin);
+			this->_sin = sin;
+		}
+		void set_sinLen(socklen_t sinLen) {
+			this->_sinLen = sinLen;
+		}
 		const std::string& username() const {
 			return (this->_username);
 		}
@@ -22,31 +44,11 @@ class Client
 		const int& id() const {
 			return (this->_id);
 		}
-		sockaddr_in& sin() {
+		struct sockaddr_in& sin() {
 			return (this->_sin);
 		}
 		socklen_t& sinLen() {
 			return (this->_sinLen);
-		}
-		void set_username(std::string username){
-			this->_username = username;
-		}
-		void set_nickname(std::string nickname){
-			this->_nickname = nickname;
-		}
-		void set_op(bool op){
-			this->_op = op;
-		}
-		void set_ipstr(char *ipStr){
-			std::cout << ipStr << std::endl;
-			this->_ipStr = ipStr;
-		}
-		void set_id(int id){
-			this->_id = id;
-		}
-		void set_sin(sockaddr_in& sin){
-			this->_sinLen = sizeof(sin);
-			this->_sin = sin;
 		}
 		Client(std::string nickname, std::string username, bool op) : _nickname(nickname), _username(username), _op(op) {}
 		Client(){}
@@ -57,7 +59,7 @@ class Client
 		bool		_op;
 		std::string _ipStr;
 		int 		_id;
-		sockaddr_in _sin;
+		struct sockaddr_in _sin;
 		socklen_t _sinLen;
 };
 
