@@ -2,6 +2,7 @@
 # define CLIENT_HPP
 # include <string>
 # include <iostream>
+
 typedef struct sockaddr_in sockaddr_in;
 
 class Client
@@ -22,12 +23,12 @@ class Client
 		void set_id(int id){
 			this->_id = id;
 		}
-		void set_sin(sockaddr_in& sin){
-			this->_sinLen = sizeof(sin);
-			this->_sin = sin;
+		void set_saddr_in(sockaddr_in& saddr_in){
+			this->_saddr_in_len = sizeof(saddr_in);
+			this->_saddr_in = saddr_in;
 		}
-		void set_sinLen(socklen_t sinLen) {
-			this->_sinLen = sinLen;
+		void set_sinLen(socklen_t saddr_in_len) {
+			this->_saddr_in_len = saddr_in_len;
 		}
 		const std::string& username() const {
 			return (this->_username);
@@ -44,11 +45,11 @@ class Client
 		const int& id() const {
 			return (this->_id);
 		}
-		sockaddr_in& sin() {
-			return (this->_sin);
+		sockaddr_in& saddr_in() {
+			return (this->_saddr_in);
 		}
-		socklen_t& sinLen() {
-			return (this->_sinLen);
+		socklen_t& saddr_in_len() {
+			return (this->_saddr_in_len);
 		}
 		Client(std::string nickname, std::string username, bool op) : _nickname(nickname), _username(username), _op(op) {}
 		Client(){}
@@ -59,8 +60,8 @@ class Client
 		bool		_op;
 		std::string _ipStr;
 		int 		_id;
-		sockaddr_in _sin;
-		socklen_t _sinLen;
+		sockaddr_in _saddr_in;
+		socklen_t _saddr_in_len;
 };
 
 #endif
