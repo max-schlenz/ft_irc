@@ -21,5 +21,5 @@ void init_server(Server& server, int port)
 	server.set_port(port);
 	if (bind(server.sock(), (struct sockaddr*)&server.sin(), server.sinLen()) < 0)
 		exiting(2);
-	listen(server.sock(), 1);
+	listen(server.sock(), 5);
 }
