@@ -66,10 +66,10 @@ int main(int argc, char **argv)
 					// while (true)
 					// {
 						recv_len = recv(poll_fds[i].fd, &buffer_arr, bufSize, 0);
-						if (buffer_arr[0] == '#')
+						if (recv_len <= 0)
 						{
 							std::cout << RED << "Client " << BRED << client.ipStr() << RED << " disconnected." << RESET << std::flush;
-							close(poll_fds[i].fd);
+							// close(poll_fds[i].fd);
 							poll_fds.erase(poll_fds.begin() + i);
 							memset(buffer_arr, 0, bufSize);
 							// break;
