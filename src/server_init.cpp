@@ -12,6 +12,8 @@ void init_server(Server& server, int port)
 		exiting(4);
 	server.set_sock(socket(AF_INET, SOCK_STREAM, proto->p_proto));
 	fcntl(server.sock(), F_SETFL, O_NONBLOCK);
+	int optval = 1;
+    setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
 	if (sock < 0)
 		exiting(1);
 	sin.sin_family = AF_INET;
