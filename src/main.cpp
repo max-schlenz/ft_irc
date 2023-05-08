@@ -40,25 +40,31 @@ int main(int argc, char **argv)
     poll_fds.push_back(server_poll_fd);
 	while (true) // outer loop which waits for connection
 	{
-		int num_fds = poll(poll_fds.data(), poll_fds.size(), 10);
-		server.accept_client();
-		client = server.client();
-		getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
-		client.set_ipstr();
-		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
-		while (true) // inner loop for recieving messages from currently connected client
+		int res = poll(poll_fds.data(), poll_fds.size(), 5000);
+		std::cout << "debug: poll" << std::endl;
+		if (res == -1)
+			exiting(5);
+		else if (res > 0)
 		{
+			server.accept_client();
+			client = server.client();
+			// getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
+			// client.set_ipstr();
+			// std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
+			// while (true) // inner loop for recieving messages from currently connected client
+			// {
 			memset(buffer_arr, 0, bufSize);
 			recv_len = recv(client.id(), &buffer_arr, bufSize, 0);
-			if (recv_len <= 0 || (buffer_arr[0] == '#'))
+			if (buffer_arr[0] == '#')
 			{
 				std::cout << RED << "Client " << BRED << client.ipStr() << RED << " disconnected." << RESET << std::flush;
 				close(client.id());
-				break;
+				// break;
 			}
-			std::cout << buffer_arr;
+				std::cout << buffer_arr << std::endl;
+			// }
+			// std::cout ;
 		}
-		std::cout << std::endl;
 	}
 	return (EXIT_SUCCESS);
 }

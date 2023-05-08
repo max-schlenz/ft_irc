@@ -8,8 +8,9 @@
 # include <string.h>
 # include <string>
 # include <netinet/in.h>
- #include "Client.hpp"
- #include <vector>
+# include "Client.hpp"
+# include "irc.hpp"
+# include <vector>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;

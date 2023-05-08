@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include "irc.hpp"
+#include <fcntl.h>
 
 void init_server(Server& server, int port)
 {
@@ -10,12 +11,14 @@ void init_server(Server& server, int port)
 	if (!proto)
 		exiting(4);
 	server.set_sock(socket(AF_INET, SOCK_STREAM, proto->p_proto));
+	fcntl(server.sock(), F_SETFL, O_NONBLOCK);
 	if (sock < 0)
 		exiting(1);
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(port);
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
 	server.set_sin(sin);
+	server.set_port(port);
 	if (bind(server.sock(), (struct sockaddr*)&server.sin(), server.sinLen()) < 0)
 		exiting(2);
 	listen(server.sock(), 1);
