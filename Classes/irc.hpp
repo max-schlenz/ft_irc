@@ -14,6 +14,8 @@
 # define BWHITE "\033[1;37m"
 # define RESET "\033[0m"
 
+class Server;
+
 void	exiting(int error_code);
 void	init_server(Server& server, int port);
 

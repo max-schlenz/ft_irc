@@ -2,6 +2,8 @@
 # define CLIENT_HPP
 # include <string>
 # include <iostream>
+# include <netinet/in.h>
+# include <arpa/inet.h>
 
 typedef struct sockaddr_in sockaddr_in;
 
@@ -17,18 +19,18 @@ class Client
 		void set_op(bool op){
 			this->_op = op;
 		}
-		void set_ipstr(char *ipStr){
-			this->_ipStr = ipStr;
+		void set_ipstr(){
+			this->_ipStr = inet_ntoa(this->_saddr_in.sin_addr);
 		}
 		void set_id(int id){
 			this->_id = id;
 		}
-		void set_saddr_in(sockaddr_in& saddr_in){
-			this->_saddr_in_len = sizeof(saddr_in);
-			this->_saddr_in = saddr_in;
+		void set_sin(sockaddr_in& sin){
+			this->_saddr_in_len = sizeof(sin);
+			this->_saddr_in = sin;
 		}
-		void set_sinLen(socklen_t saddr_in_len) {
-			this->_saddr_in_len = saddr_in_len;
+		void set_sinLen(socklen_t sinLen) {
+			this->_saddr_in_len = sinLen;
 		}
 		const std::string& username() const {
 			return (this->_username);
@@ -45,13 +47,14 @@ class Client
 		const int& id() const {
 			return (this->_id);
 		}
-		sockaddr_in& saddr_in() {
+		sockaddr_in& sin() {
 			return (this->_saddr_in);
 		}
-		socklen_t& saddr_in_len() {
+		socklen_t& sinLen() {
 			return (this->_saddr_in_len);
 		}
 		Client(std::string nickname, std::string username, bool op) : _nickname(nickname), _username(username), _op(op) {}
+		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr);
 		Client(){}
 		~Client(){}
 	private:
