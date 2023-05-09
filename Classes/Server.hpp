@@ -46,12 +46,13 @@ class Server {
 		socklen_t& sinLen() {
 			return (this->_sinLen);
 		}
-		Server(){};
+		Server(int port);
 		Server(int port, int sock, sockaddr_in sin) : _sock(sock), _port(port), _sin(sin){};
 		~Server(){};
 	private:
 		int	_sock;
 		int _port;
+		protoent* _proto;
 		int _client;
 		sockaddr_in _sin;
 		socklen_t _sinLen;

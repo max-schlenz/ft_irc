@@ -2,6 +2,9 @@
 # define CLIENT_HPP
 # include <string>
 # include <iostream>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+
 typedef struct sockaddr_in sockaddr_in;
 
 class Client
@@ -51,6 +54,7 @@ class Client
 			return (this->_sinLen);
 		}
 		Client(std::string nickname, std::string username, bool op) : _nickname(nickname), _username(username), _op(op) {}
+		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr);
 		Client(){}
 		~Client(){}
 	private:

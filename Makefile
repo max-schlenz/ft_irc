@@ -6,7 +6,7 @@ MAKEFLAGS		=	#j
 CXXFLAGS		=	-std=c++98 -g #-Wall -Wextra -Werror 
 
 NAME			=	server
-SRC_NAME		=	main exiting server_init Server
+SRC_NAME		=	main exiting server_init Server Client
 INC_NAME		=	Channel Client Server irc
 
 SRC_DIR			=	src/
