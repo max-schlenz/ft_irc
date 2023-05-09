@@ -8,7 +8,7 @@
 #include <poll.h>
 
 void sigint_handler(int sig) {
-  printf("Exiting programm...\n");
+  std::cout << "Exiting programm..." << std::endl;
   exit(EXIT_SUCCESS);
 }
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 	Server	server(atoi(argv[1]));
 	std::cout << "Server listening on: " << BWHITE << inet_ntoa(server.sin().sin_addr) << ":" << server.port() << RESET <<  std::endl;
 	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
-		printf("Error: Unable to register signal handler!\n");
+		std::cout << "Error: Unable to register signal handler!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	std::vector<pollfd> poll_fds;

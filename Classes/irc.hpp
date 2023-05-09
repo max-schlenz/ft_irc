@@ -2,6 +2,7 @@
 # define IRC_H
 # include <string>
 # include <iostream>
+# include <cstdlib>
 # include "Server.hpp"
 
 # define RED "\033[0;31m"
