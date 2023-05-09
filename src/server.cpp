@@ -1,38 +1,19 @@
-#include "server.h"
+# include <Server.hpp>
 
-void	exiting(int error_code)
+void	exiting(int error_code);
+
+void Server::accept_client()
 {
-	if (error_code == 0)
-		std::cout << "usage: ./server <port>" << std::endl;
-	else if (error_code == 1)
-		std::cout << "Error establishing connection..." << std::endl;
-	else if (error_code == 2)
-		std::cout << "Error binding socket..." << std::endl;
-	else if (error_code == 3)
-		std::cout << "Error on accepting..." << std::endl;
-	else if (error_code == 4)
-		std::cout << "Error getting proton.." << std::endl;
-	else
-		std::cout << "ERROR" << std::endl;
-	exit(1);
-}
-
-
-void init_server(t_server *server)
-{
-	struct	protoent *proto = getprotobyname("tcp");
-	struct	sockaddr_in sin;
-
-	if (!proto)
-		exiting(4);
-	server->sock = socket(AF_INET, SOCK_STREAM, proto->p_proto);
-	if (server->sock < 0)
-		exiting(1);
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(server->port);
-	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	if (bind(server->sock, (struct sockaddr*)&sin, sizeof(sin)) < 0)
-		exiting(2);
-	server->sin = sin;
-	listen(server->sock, 2);
+	Client client = Client();
+	socklen_t size = sizeof(this->_sin);
+	int id = accept(this->_sock, (struct sockaddr*)&this->_sin, &size);
+	client.set_id(id);
+	if (client.id() > 0) {
+		// exiting(3);
+		client.set_sinLen(sizeof(this->_sin));
+		getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
+		client.set_ipstr();
+		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
+		this->_clients.push_back(client);
+	}
 }
