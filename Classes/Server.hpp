@@ -55,7 +55,7 @@ class Server {
 		protoent* _proto;
 		int _client;
 		sockaddr_in _sin;
-		socklen_t _sinLen;
+		socklen_t _sin_Len;
 		std::vector<Client> _clients;
 };
 
