@@ -5,8 +5,8 @@ void	exiting(int error_code);
 void Server::accept_client()
 {
 	Client client = Client();
-	socklen_t size = sizeof(this->_sin);
-	int id = accept(this->_sock, (struct sockaddr*)&this->_sin, &size);
+	socklen_t size = sizeof(client.sin());
+	int id = accept(this->_sock, (struct sockaddr*)&client.sin(), &size);
 	client.set_id(id);
 	if (client.id() > 0) {
 		// exiting(3);

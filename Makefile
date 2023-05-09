@@ -3,7 +3,7 @@ DATE			=	$$(date +%Y/%m/%d)
 
 CXX				=	c++
 MAKEFLAGS		=	#j
-CXXFLAGS		=	-std=c++98 #-Wall -Wextra -Werror 
+CXXFLAGS		=	-std=c++98 -g #-Wall -Wextra -Werror 
 
 NAME			=	server
 SRC_NAME		=	main exiting server_init Server

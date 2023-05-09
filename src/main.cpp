@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	std::vector<pollfd> poll_fds;
+	std::vector<std::string> cmd_queue;
 
     pollfd server_poll_fd;
 	memset(&server_poll_fd, 0, sizeof(server_poll_fd));
@@ -42,7 +43,7 @@ int main(int argc, char **argv)
 	// int res = 1;
 	while (1) // outer loop which waits for connection
 	{
-		int res = poll(poll_fds.data(), poll_fds.size(), 5000);
+		int res = poll(poll_fds.data(), poll_fds.size(), 1000);
 		// if (poll_fds.size )
 		// std::cout << res << std::endl;
 		if (res == -1)
@@ -76,7 +77,13 @@ int main(int argc, char **argv)
 						}
 						else
 						{
-							std::cout << buffer_arr << std::flush;
+							cmd_queue.push_back(buffer_arr);
+							if (strchr(buffer_arr, '\n'))
+							{
+								for (std::vector<std::string>::iterator it = cmd_queue.begin(); it != cmd_queue.end(); ++it)
+									std::cout << *it << std::flush;
+								cmd_queue.clear();
+							}
 							memset(buffer_arr, 0, bufSize);
 						}
 					// }

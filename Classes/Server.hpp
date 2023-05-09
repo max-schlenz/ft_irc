@@ -41,7 +41,7 @@ class Server {
 			return (this->_sin);
 		}
 		Client& client() {
-			return (this->_clients.front());
+			return (this->_clients.back());
 		}
 		socklen_t& sinLen() {
 			return (this->_sinLen);
