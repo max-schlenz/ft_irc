@@ -24,12 +24,12 @@ class Server {
 		void set_port(int port) {
 			this->_port = port;
 		};
-		void set_sin(sockaddr_in sin) {
-			this->_sinLen = sizeof(sin);
-			this->_sin = sin;
+		void set_sin(sockaddr_in _saddr_in) {
+			this->_saddr_in_len = sizeof(_saddr_in);
+			this->_saddr_in = _saddr_in;
 		};
-		void set_sinLen(socklen_t sinLen) {
-			this->_sinLen = sinLen;
+		void set_sinLen(socklen_t _saddr_in_len) {
+			this->_saddr_in_len = _saddr_in_len;
 		}
 		const int& sock() const {
 			return (this->_sock);
@@ -38,24 +38,24 @@ class Server {
 			return (this->_port);
 		}
 		sockaddr_in& sin() {
-			return (this->_sin);
+			return (this->_saddr_in);
 		}
 		Client& client() {
 			return (this->_clients.back());
 		}
 		socklen_t& sinLen() {
-			return (this->_sinLen);
+			return (this->_saddr_in_len);
 		}
 		Server(int port);
-		Server(int port, int sock, sockaddr_in sin) : _sock(sock), _port(port), _sin(sin){};
+		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
 	private:
 		int	_sock;
 		int _port;
 		protoent* _proto;
 		int _client;
-		sockaddr_in _sin;
-		socklen_t _sin_Len;
+		sockaddr_in _saddr_in;
+		socklen_t _saddr_in_len;
 		std::vector<Client> _clients;
 };
 

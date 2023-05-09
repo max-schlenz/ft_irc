@@ -20,17 +20,17 @@ class Client
 			this->_op = op;
 		}
 		void set_ipstr(){
-			this->_ipStr = inet_ntoa(this->_sin.sin_addr);
+			this->_ipStr = inet_ntoa(this->_saddr_in.sin_addr);
 		}
 		void set_id(int id){
 			this->_id = id;
 		}
 		void set_sin(sockaddr_in& sin){
-			this->_sinLen = sizeof(sin);
-			this->_sin = sin;
+			this->_saddr_in_len = sizeof(sin);
+			this->_saddr_in = sin;
 		}
 		void set_sinLen(socklen_t sinLen) {
-			this->_sinLen = sinLen;
+			this->_saddr_in_len = sinLen;
 		}
 		const std::string& username() const {
 			return (this->_username);
@@ -48,10 +48,10 @@ class Client
 			return (this->_id);
 		}
 		sockaddr_in& sin() {
-			return (this->_sin);
+			return (this->_saddr_in);
 		}
 		socklen_t& sinLen() {
-			return (this->_sinLen);
+			return (this->_saddr_in_len);
 		}
 		Client(std::string nickname, std::string username, bool op) : _nickname(nickname), _username(username), _op(op) {}
 		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr);
@@ -63,8 +63,8 @@ class Client
 		bool		_op;
 		std::string _ipStr;
 		int 		_id;
-		sockaddr_in _sin;
-		socklen_t _sinLen;
+		sockaddr_in _saddr_in;
+		socklen_t _saddr_in_len;
 };
 
 #endif

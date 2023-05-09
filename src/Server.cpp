@@ -12,7 +12,7 @@ void	exiting(int error_code);
 // 	client.set_id(id);
 // 	if (client.id() > 0) {
 // 		// exiting(3);
-// 		client.set_sinLen(sizeof(this->_sin));
+// 		client.set_sinLen(sizeof(this->_saddr_in));
 // 		getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
 // 		client.set_ipstr();
 // 		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
@@ -40,14 +40,14 @@ Server::Server(int port)
 	this->_proto = getprotobyname("tcp");
 	this->_sock = socket(AF_INET, SOCK_STREAM, this->_proto->p_proto);
 	this->_port = port;
-	this->_sin.sin_family = AF_INET;
-	this->_sin.sin_port = htons(this->_port);
-	this->_sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	this->_sinLen = sizeof(this->_sin);
+	this->_saddr_in.sin_family = AF_INET;
+	this->_saddr_in.sin_port = htons(this->_port);
+	this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
+	this->_saddr_in_len = sizeof(this->_saddr_in);
 
 	int optval = 1;
     setsockopt(this->_sock, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
 	fcntl(this->_sock, F_SETFL, O_NONBLOCK);
-	bind(this->_sock, (struct sockaddr*)&this->_sin, this->_sinLen);
+	bind(this->_sock, (struct sockaddr*)&this->_saddr_in, this->_saddr_in_len);
 	listen(this->_sock, 5);
 }
