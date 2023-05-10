@@ -1,41 +1,30 @@
 # include "Server.hpp"
 # include "Client.hpp"
+# include "irc.hpp"
 # include <fcntl.h>
 
-void	exiting(int error_code);
-
-// void Server::accept_client()
-// {
-// 	Client client = Client();
-// 	socklen_t size = sizeof(client.sin());
-// 	int id = accept(this->_sock, (struct sockaddr*)&client.sin(), &size);
-// 	client.set_id(id);
-// 	if (client.id() > 0) {
-// 		// exiting(3);
-// 		client.set_sinLen(sizeof(this->_saddr_in));
-// 		getsockname(client.id(), (struct sockaddr*)&client.sin(), &client.sinLen());
-// 		client.set_ipstr();
-// 		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
-// 		this->_clients.push_back(client);
-// 	}
-// }
-
-void Server::accept_client()
+void Server::accept_client(std::vector<pollfd>& poll_fds)
 {
-	sockaddr_in sin;
+	sockaddr_in	sin;
+	char*		ipStr;
+	pollfd		client_poll_fd;
 	socklen_t size = sizeof(sin);
-	char* ipStr;
 	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
 	if (sock > 0) {
 		getsockname(sock, (struct sockaddr*)&sin, &size);
 		ipStr = inet_ntoa(sin.sin_addr);
 		Client client(sin, size, sock, ipStr);
+
 		this->_clients.push_back(client);
+		client_poll_fd.fd = client.id();
+		client_poll_fd.events = POLLIN;
+		poll_fds.push_back(client_poll_fd);
+
 		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
 	}
 }
 
-Server::Server(int port)
+Server::Server(int port, std::vector<pollfd>& poll_fds)
 {
 	this->_proto = getprotobyname("tcp");
 	this->_sock = socket(AF_INET, SOCK_STREAM, this->_proto->p_proto);
@@ -50,4 +39,10 @@ Server::Server(int port)
 	fcntl(this->_sock, F_SETFL, O_NONBLOCK);
 	bind(this->_sock, (struct sockaddr*)&this->_saddr_in, this->_saddr_in_len);
 	listen(this->_sock, 5);
+
+	pollfd server_poll_fd;
+	// memset(&server_poll_fd, 0, sizeof(server_poll_fd));
+    server_poll_fd.fd = this->_sock;
+    server_poll_fd.events = POLLIN;
+    poll_fds.push_back(server_poll_fd);
 }

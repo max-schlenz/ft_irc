@@ -11,13 +11,14 @@
 # include "Client.hpp"
 # include "irc.hpp"
 # include <vector>
+#include <poll.h>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
 
 class Server {
 	public:
-		void accept_client();
+		void accept_client(std::vector<pollfd>& poll_fds);
 		void set_sock(int sock) {
 			this->_sock = sock;
 		};
@@ -40,13 +41,13 @@ class Server {
 		sockaddr_in& sin() {
 			return (this->_saddr_in);
 		}
-		Client& client() {
-			return (this->_clients.back());
+		Client& client(int i) {
+			return (this->_clients[i]);
 		}
 		socklen_t& sinLen() {
 			return (this->_saddr_in_len);
 		}
-		Server(int port);
+		Server(int port, std::vector<pollfd>& poll_fds);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
 	private:
