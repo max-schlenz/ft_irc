@@ -1,4 +1,6 @@
 ### Testfiles ###
+
+ignore/
 test.*
 *test.*
 .vscode
