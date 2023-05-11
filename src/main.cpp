@@ -7,14 +7,16 @@
 #include <signal.h>
 
 
-void sigint_handler(int sig) {
+void sigint_handler(int sig) 
+{
   std::cout << "Exiting programm..." << std::endl;
   exit(EXIT_SUCCESS);
 }
 
 void sig()
 {
-	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+	if (signal(SIGINT, sigint_handler) == SIG_ERR) 
+	{
 		std::cout << "Error: Unable to register signal handler!" << std::endl;
 		exit(EXIT_FAILURE);
 	}

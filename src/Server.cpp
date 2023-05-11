@@ -10,7 +10,8 @@ void Server::accept_client(std::vector<pollfd>& poll_fds)
 	pollfd		client_poll_fd;
 	socklen_t size = sizeof(sin);
 	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
-	if (sock > 0) {
+	if (sock > 0)
+	{
 		getsockname(sock, (struct sockaddr*)&sin, &size);
 		ipStr = inet_ntoa(sin.sin_addr);
 		Client client(sin, size, sock, ipStr);
@@ -82,8 +83,6 @@ void Server::handleClientReq(int i)
 	memset(buffer_arr, 0, RECV_BUF);
 	int		recv_len = 0;
 	
-	std::vector<std::string> cmd_queue;
-
 	recv_len = recv(this->_pollFds[i].fd, &buffer_arr, RECV_BUF, 0);
 	if (recv_len <= 0)
 	{
@@ -93,12 +92,12 @@ void Server::handleClientReq(int i)
 	}
 	else
 	{
-		cmd_queue.push_back(buffer_arr);
+		this->_clients[i - 1].getCmdQueue().push_back(buffer_arr);
 		if (strchr(buffer_arr, '\n'))
 		{
-			for (std::vector<std::string>::iterator it = cmd_queue.begin(); it != cmd_queue.end(); ++it)
+			for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
 				std::cout << *it << std::flush;
-			cmd_queue.clear();
+			this->_clients[i - 1].getCmdQueue().clear();
 		}
 		memset(buffer_arr, 0, RECV_BUF);
 	}
