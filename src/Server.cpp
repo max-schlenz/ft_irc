@@ -71,8 +71,9 @@ void Server::startServer()
 		{
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
 				this->accept_client(this->_pollFds);
-			else if (this->_pollFds[i].revents & POLLIN)
+			else if (this->_pollFds[i].revents & POLLIN) {
 				this->handleClientReq(i);
+			}
 		}
 	}
 }
@@ -99,6 +100,8 @@ void Server::handleClientReq(int i)
 				std::cout << *it << std::flush;
 			this->_clients[i - 1].getCmdQueue().clear();
 		}
+		std::string welcome_message = ":127.0.0.1 001 tdehne :Welcome to the Internet Relay Network tdehne!tdehne@tdehne\r\n";
+		send(this->_clients[i - 1].sock(), welcome_message.c_str(), welcome_message.size(), 0);
 		memset(buffer_arr, 0, RECV_BUF);
 	}
 }
