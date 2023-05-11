@@ -23,8 +23,8 @@ class Client
 		void set_ipstr(){
 			this->_ipStr = inet_ntoa(this->_saddr_in.sin_addr);
 		}
-		void set_id(int id){
-			this->_id = id;
+		void set_sock(int sock){
+			this->_sock = sock;
 		}
 		void set_sin(sockaddr_in& sin){
 			this->_saddr_in_len = sizeof(sin);
@@ -45,8 +45,8 @@ class Client
 		const std::string& ipStr() const {
 			return (this->_ipStr);
 		}
-		const int& id() const {
-			return (this->_id);
+		const int& sock() const {
+			return (this->_sock);
 		}
 		sockaddr_in& sin() {
 			return (this->_saddr_in);
@@ -69,7 +69,7 @@ class Client
 		std::string _username;
 		bool		_op;
 		std::string _ipStr;
-		int 		_id;
+		int 		_sock;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
 		std::vector<std::string> _cmdQueue;

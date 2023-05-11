@@ -17,7 +17,7 @@ void Server::accept_client(std::vector<pollfd>& poll_fds)
 		Client client(sin, size, sock, ipStr);
 
 		this->_clients.push_back(client);
-		client_poll_fd.fd = client.id();
+		client_poll_fd.fd = client.sock();
 		client_poll_fd.events = POLLIN;
 		poll_fds.push_back(client_poll_fd);
 
