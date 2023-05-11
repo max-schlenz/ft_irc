@@ -18,8 +18,8 @@ class Channel
 		const int get_channel_size() const {
 			return (this->channel_size);
 		}
-		const Client& get_clients() const {
-			return (*this->clients);
+		std::vector<Client>& get_clients() {
+			return (this->_clients);
 		}
 		void set_topic(std::string topic){
 			this->topic = topic;
@@ -31,23 +31,20 @@ class Channel
 			this->channel_size = size;
 		}
 		void add_client(Client client){
-			if (num_clients < channel_size)
-			{
-				clients[num_clients++] = client;
-			}
+			this->_clients.push_back(client);
 		}
 		Channel(std::string topic, std::string password, int size) : num_clients(0) {
 			this->topic = topic;
 			this->password = password;
 			this->channel_size = size;
-			this->clients = new Client[size];
 		}
 		Channel(){}
 		~Channel(){}
 	private:
-		Client*		clients;
+		std::vector<Client> _clients;
 		std::string	topic;
 		std::string	password;
+		std::string	mode;
 		int			num_clients;
 		int			channel_size;
 };
