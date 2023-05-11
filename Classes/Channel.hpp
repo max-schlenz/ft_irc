@@ -44,7 +44,11 @@ class Channel
 		std::vector<Client> _clients;
 		std::string	topic;
 		std::string	password;
-		std::string	mode;
+		std::string	modes;
+		bool		mode_i;
+		bool		mode_t;
+		bool		mode_k;
+		bool		mode_o;
 		int			num_clients;
 		int			channel_size;
 };
