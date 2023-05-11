@@ -4,6 +4,7 @@
 # include <iostream>
 # include <netinet/in.h>
 # include <arpa/inet.h>
+# include <vector>
 
 typedef struct sockaddr_in sockaddr_in;
 
@@ -53,6 +54,9 @@ class Client
 		socklen_t& sinLen() {
 			return (this->_saddr_in_len);
 		}
+		std::vector<std::string> getCmdQueue() {
+			return this->_cmdQueue;
+		}
 		Client(std::string nickname, std::string username, bool op) : _nickname(nickname), _username(username), _op(op) {}
 		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr);
 		Client(){}
@@ -65,6 +69,8 @@ class Client
 		int 		_id;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
+		
+		std::vector<std::string> _cmdQueue;
 };
 
 #endif

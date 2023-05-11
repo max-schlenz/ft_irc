@@ -3,8 +3,6 @@
 # include "irc.hpp"
 # include <fcntl.h>
 
-void handleClientReq(std::vector<pollfd>& poll_fds, Server& server, int i);
-
 void Server::accept_client(std::vector<pollfd>& poll_fds)
 {
 	sockaddr_in	sin;
@@ -50,17 +48,88 @@ Server::Server(int port)
 
 void Server::startServer()
 {
+	int res = 0;
+
 	while (true)
 	{
-		int res = poll(this->_pollFds.data(), this->_pollFds.size(), 1000);
-		if (res == -1)
-			exiting(5);
+		try
+		{
+			res = poll(this->_pollFds.data(), this->_pollFds.size(), 1000);
+			if (res == -1)
+				throw Server::ErrorPoll();
+
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	
 		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
 		{
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
 				this->accept_client(this->_pollFds);
 			else if (this->_pollFds[i].revents & POLLIN)
-				handleClientReq(this->_pollFds, *this, i);
+				this->handleClientReq(i);
 		}
 	}
+}
+
+void Server::handleClientReq(int i)
+{
+	char	buffer_arr[RECV_BUF];
+	memset(buffer_arr, 0, RECV_BUF);
+
+	Client	client;
+	int		recv_len = 0;
+	
+	std::vector<std::string> cmd_queue;
+
+	recv_len = recv(this->_pollFds[i].fd, &buffer_arr, RECV_BUF, 0);
+	if (recv_len <= 0)
+	{
+		std::cout << RED << "Client " << BRED << this->client(i - 1).ipStr() << RED << " disconnected." << RESET << std::endl;
+		close(this->_pollFds[i].fd);
+		this->_pollFds.erase(this->_pollFds.begin() + i);
+	}
+	else
+	{
+		cmd_queue.push_back(buffer_arr);
+		if (strchr(buffer_arr, '\n'))
+		{
+			for (std::vector<std::string>::iterator it = cmd_queue.begin(); it != cmd_queue.end(); ++it)
+				std::cout << *it << std::flush;
+			cmd_queue.clear();
+		}
+		memset(buffer_arr, 0, RECV_BUF);
+	}
+}
+
+const char* Server::InvalidArgsException::what() const throw()
+{
+	return "Invalid Arguments";
+}
+
+const char* Server::ErrorEstablishingConException::what() const throw()
+{
+	return "Error establishing connection...";
+}
+
+const char* Server::ErrorBindingSocketException::what() const throw()
+{
+	return "Error binding socket...";
+}
+
+const char* Server::ErrorOnAcceptException::what() const throw()
+{
+	return "Error on accepting...";
+}
+
+const char* Server::ErrorGettingProtonException::what() const throw()
+{
+	return "Error getting proton...";
+}
+
+const char* Server::ErrorPoll::what() const throw()
+{
+	return "Error: poll returned -1";
 }

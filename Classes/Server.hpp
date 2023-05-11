@@ -1,5 +1,9 @@
+
 #ifndef SERVER_HPP
 # define SERVER_HPP
+
+# define RECV_BUF 1024
+
 # include <sys/socket.h>
 # include <sys/types.h>
 # include <netdb.h>
@@ -11,13 +15,47 @@
 # include "Client.hpp"
 # include "irc.hpp"
 # include <vector>
-#include <poll.h>
+# include <poll.h>
+# include <stdexcept>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
 
 class Server {
 	public:
+		class	InvalidArgsException: public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
+		
+		class	ErrorEstablishingConException: public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
+
+		class	ErrorBindingSocketException: public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
+		
+		class	ErrorOnAcceptException: public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
+		class	ErrorGettingProtonException: public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
+		class	ErrorPoll: public std::exception
+		{
+			public:
+				virtual const char *what() const throw();
+		};
 		void accept_client(std::vector<pollfd>& poll_fds);
 		void set_sock(int sock) {
 			this->_sock = sock;
@@ -52,6 +90,8 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
 		void startServer();
+		void handleClientReq(int i);
+
 	private:
 		int	_sock;
 		int _port;
@@ -59,6 +99,7 @@ class Server {
 		int _client;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
+		
 		std::vector<Client> _clients;
 		std::vector<pollfd> _pollFds;
 };
