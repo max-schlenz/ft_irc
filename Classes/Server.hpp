@@ -47,9 +47,11 @@ class Server {
 		socklen_t& sinLen() {
 			return (this->_saddr_in_len);
 		}
-		Server(int port, std::vector<pollfd>& poll_fds);
+		// Server(int port, std::vector<pollfd>& poll_fds);
+		Server(int port);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
+		void startServer();
 	private:
 		int	_sock;
 		int _port;
@@ -58,6 +60,7 @@ class Server {
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
 		std::vector<Client> _clients;
+		std::vector<pollfd> _pollFds;
 };
 
 #endif
