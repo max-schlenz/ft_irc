@@ -44,6 +44,8 @@ Server::Server(int port)
     server_poll_fd.fd = this->_sock;
     server_poll_fd.events = POLLIN;
     this->_pollFds.push_back(server_poll_fd);
+	
+	std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
 }
 
 void Server::startServer()
@@ -78,8 +80,6 @@ void Server::handleClientReq(int i)
 {
 	char	buffer_arr[RECV_BUF];
 	memset(buffer_arr, 0, RECV_BUF);
-
-	Client	client;
 	int		recv_len = 0;
 	
 	std::vector<std::string> cmd_queue;
