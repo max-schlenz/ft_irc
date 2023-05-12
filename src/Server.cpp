@@ -20,7 +20,7 @@ void Server::accept_client(std::vector<pollfd>& poll_fds)
 		client_poll_fd.fd = client.sock();
 		client_poll_fd.events = POLLIN;
 		poll_fds.push_back(client_poll_fd);
-
+		
 		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
 	}
 }
@@ -78,6 +78,7 @@ void Server::startServer()
 	}
 }
 
+
 void Server::handleClientReq(int i)
 {
 	char	buffer_arr[RECV_BUF];
@@ -93,6 +94,16 @@ void Server::handleClientReq(int i)
 	}
 	else
 	{
+		// std::string client_msg = "CAP LS\r\nNICK tdehne\r\nUSER tdehne tdehne 127.0.0.1 :Talea Dehne\r\n\0";
+		// std::cout << "buffer :" << client_msg << std::flush;
+		// while (buffer_arr[i])
+		// {
+		// 	if (buffer_arr[i] != client_msg[i]) {
+		// 		std::cout << "buff:" << buffer_arr[i] << ":str:" << client_msg[i] << std::flush;
+		// 		exit(0);
+		// 	}
+		// 	++i;
+		// }
 		this->_clients[i - 1].getCmdQueue().push_back(buffer_arr);
 		if (strchr(buffer_arr, '\n'))
 		{
@@ -100,8 +111,24 @@ void Server::handleClientReq(int i)
 				std::cout << *it << std::flush;
 			this->_clients[i - 1].getCmdQueue().clear();
 		}
-		std::string welcome_message = ":127.0.0.1 001 tdehne :Welcome to the Internet Relay Network tdehne!tdehne@tdehne\r\n";
-		send(this->_clients[i - 1].sock(), welcome_message.c_str(), welcome_message.size(), 0);
+		std::string client_msg = buffer_arr;
+		if (client_msg == "CAP LS\r\nNICK tdehne\r\nUSER tdehne tdehne 127.0.0.1 :Talea Dehne\r\n\0") {
+			std::string welcome_message = ":127.0.0.1 001 tdehne :Welcome to the Internet Relay Network tdehne!tdehne@tdehne\r\n";
+			send(this->_clients[i - 1].sock(), welcome_message.c_str(), welcome_message.size(), 0);
+		}
+		if (client_msg == "MODE tdehne +i\r\n")
+		{
+			// :server-name 324 client-nick #example +i
+			std::string res = ":127.0.0.1 324 tdehne #example +i\r\n";
+			send(this->_clients[i - 1].sock(), res.c_str(), res.size(), 0);
+			// std::cout << "mode tdehne" << std::endl;
+		}
+		if (client_msg == "PRIVMSG 127.0.0.1 :PING 1683898440 88166\r\n")
+		{
+			std::string res2 = "PONG 127.0.0.1\r\n";
+			send(this->_clients[i - 1].sock(), res2.c_str(), res2.size(), 0);
+			std::cout << "YAY" << std::endl;
+		}
 		memset(buffer_arr, 0, RECV_BUF);
 	}
 }
