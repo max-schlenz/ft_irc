@@ -93,6 +93,8 @@ class Server {
 		void handleReqPing(int i, std::string request);
 		void handleClientReq(int i);
 		void handleReqHandshake(int i, std::string command);
+		void parseReq(std::string command, int i);
+
 	private:
 		int	_sock;
 		int _port;

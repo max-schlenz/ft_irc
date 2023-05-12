@@ -91,6 +91,18 @@ void Server::handleReqHandshake(int i, std::string request)
 	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
 }
 
+void Server::parseReq(std::string request, int i)
+{
+	if (request.find("CAP LS") != std::string::npos)
+		this->handleReqHandshake(i, request);
+	else if (request.find("PING") != std::string::npos)
+		this->handleReqPing(i, request);
+	else if (request.find("PONG") != std::string::npos)
+		std::cout << GRAY << "pong received" << RESET << std::endl;
+	else
+		std::cout << "not recognized: " << request << std::flush;
+}
+
 void Server::handleClientReq(int i)
 {
 	char	buffer_arr[RECV_BUF];
@@ -124,13 +136,7 @@ void Server::handleClientReq(int i)
 			std::string command;
 			for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
 				command += *it;
-			// std::cout << command << std::endl;
-			if (command.find("CAP LS") != std::string::npos)
-				this->handleReqHandshake(i, command);
-			else if (command.find("PING") != std::string::npos)
-				this->handleReqPing(i, command);
-			else
-				std::cout << "not recognized: " << command << std::flush;
+			this->parseReq(command, i);
 			this->_clients[i - 1].getCmdQueue().clear();
 		}
 		if (test)
