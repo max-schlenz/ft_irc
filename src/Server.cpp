@@ -77,6 +77,11 @@ void Server::startServer()
 	}
 }
 
+void Server::handleReqPing()
+{
+	std::cout << "PING REQ RECIEVED" << std::endl;
+}
+
 void Server::handleClientReq(int i)
 {
 	char	buffer_arr[RECV_BUF];
@@ -88,15 +93,21 @@ void Server::handleClientReq(int i)
 	{
 		std::cout << RED << "Client " << BRED << this->client(i - 1).ipStr() << RED << " disconnected." << RESET << std::endl;
 		close(this->_pollFds[i].fd);
+		std::cout << this->_pollFds.size() << " - " << this->_clients.size() << std::endl;
 		this->_pollFds.erase(this->_pollFds.begin() + i);
+		this->_clients.erase(this->_clients.begin() + (i - 1));
 	}
 	else
 	{
 		this->_clients[i - 1].getCmdQueue().push_back(buffer_arr);
 		if (strchr(buffer_arr, '\n'))
 		{
+			std::string command;
 			for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
-				std::cout << *it << std::flush;
+				command += *it;
+			std::cout << command << std::endl;
+			if (command.find("PING") != command.npos)
+				this->handleReqPing();
 			this->_clients[i - 1].getCmdQueue().clear();
 		}
 		memset(buffer_arr, 0, RECV_BUF);

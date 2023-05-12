@@ -90,6 +90,7 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
 		void startServer();
+		void handleReqPing();
 		void handleClientReq(int i);
 
 	private:
