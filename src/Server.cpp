@@ -80,8 +80,15 @@ void Server::startServer()
 void Server::handleReqPing(int i, std::string request)
 {
 	std::string response = "PONG " + request.substr(5);
-	std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
-	send(this->_clients[i - 1].sock(), response.c_str(), request.size(), 0);
+	// std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
+	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
+}
+
+void Server::handleReqHandshake(int i, std::string request)
+{
+	std::string response = ":127.0.0.1 001 mschlenz :Welcome to the Internet Relay Network mschlenz!mschlenz@mschlenz\r\n";
+	// std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
+	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
 }
 
 void Server::handleClientReq(int i)
@@ -100,19 +107,35 @@ void Server::handleClientReq(int i)
 	}
 	else
 	{
-		this->_clients[i - 1].getCmdQueue().push_back(buffer_arr);
+		std::string buffer_str = buffer_arr;
+		size_t		buffer_str_nl;
+		bool		test = false;
+
+		if ((buffer_str_nl = buffer_str.find('\n')) != std::string::npos)
+		{
+			this->_clients[i - 1].getCmdQueue().push_back(buffer_str.substr(0, buffer_str_nl + 1));
+			test = true;
+		}
+		else
+			this->_clients[i - 1].getCmdQueue().push_back(buffer_str);
 
 		if (strchr(buffer_arr, '\n'))
 		{
-			std::cout << "#" << buffer_arr << std::endl;
 			std::string command;
 			for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
 				command += *it;
-			if (command.find("PING") != std::string::npos)
+			// std::cout << command << std::endl;
+			if (command.find("CAP LS") != std::string::npos)
+				this->handleReqHandshake(i, command);
+			else if (command.find("PING") != std::string::npos)
 				this->handleReqPing(i, command);
 			else
 				std::cout << "not recognized: " << command << std::flush;
 			this->_clients[i - 1].getCmdQueue().clear();
+		}
+		if (test)
+		{
+			this->_clients[i - 1].getCmdQueue().push_back(buffer_str.substr(buffer_str_nl + 1));
 		}
 		memset(buffer_arr, 0, RECV_BUF);
 	}

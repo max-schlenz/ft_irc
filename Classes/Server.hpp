@@ -92,7 +92,7 @@ class Server {
 		void startServer();
 		void handleReqPing(int i, std::string request);
 		void handleClientReq(int i);
-
+		void handleReqHandshake(int i, std::string command);
 	private:
 		int	_sock;
 		int _port;
