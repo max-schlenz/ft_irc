@@ -51,6 +51,7 @@ class Channel
 		bool		mode_o;
 		int			num_clients;
 		int			channel_size;
+		int lol;
 };
 
 #endif

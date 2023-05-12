@@ -77,9 +77,11 @@ void Server::startServer()
 	}
 }
 
-void Server::handleReqPing()
+void Server::handleReqPing(int i, std::string request)
 {
-	std::cout << "PING REQ RECIEVED" << std::endl;
+	std::string response = "PONG " + request.substr(5);
+	std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
+	send(this->_clients[i - 1].sock(), response.c_str(), request.size(), 0);
 }
 
 void Server::handleClientReq(int i)
@@ -93,21 +95,23 @@ void Server::handleClientReq(int i)
 	{
 		std::cout << RED << "Client " << BRED << this->client(i - 1).ipStr() << RED << " disconnected." << RESET << std::endl;
 		close(this->_pollFds[i].fd);
-		std::cout << this->_pollFds.size() << " - " << this->_clients.size() << std::endl;
 		this->_pollFds.erase(this->_pollFds.begin() + i);
 		this->_clients.erase(this->_clients.begin() + (i - 1));
 	}
 	else
 	{
 		this->_clients[i - 1].getCmdQueue().push_back(buffer_arr);
+
 		if (strchr(buffer_arr, '\n'))
 		{
+			std::cout << "#" << buffer_arr << std::endl;
 			std::string command;
 			for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
 				command += *it;
-			std::cout << command << std::endl;
-			if (command.find("PING") != command.npos)
-				this->handleReqPing();
+			if (command.find("PING") != std::string::npos)
+				this->handleReqPing(i, command);
+			else
+				std::cout << "not recognized: " << command << std::flush;
 			this->_clients[i - 1].getCmdQueue().clear();
 		}
 		memset(buffer_arr, 0, RECV_BUF);
