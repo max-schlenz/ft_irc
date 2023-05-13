@@ -114,7 +114,6 @@ void Server::handleClientReq(int i)
 			this->parseReq(command, i);
 			this->_clients[i - 1].getCmdQueue().clear();
 		}
-		std::string client_msg = buffer_arr;
 		if (test)
 		{
 			this->_clients[i - 1].getCmdQueue().push_back(buffer_str.substr(buffer_str_nl + 1));
