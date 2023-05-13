@@ -2,7 +2,7 @@
 
 void Server::handleReqHandshake(int i, std::vector<std::string> reqVec)
 {
-	std::string response = ":127.0.0.1 001 mschlenz :Welcome to the Internet Relay Network mschlenz!mschlenz@mschlenz\r\n";
+	std::string response = ":127.0.0.1 001 mschlenz :\033[1;32mWelcome to the Internet Relay Network mschlenz!mschlenz@mschlenz\r\n\033[1;34m[CAP LS]\033[0m No capabilities here!\r\n";
 	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
 }
 
