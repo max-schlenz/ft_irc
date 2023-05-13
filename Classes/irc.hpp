@@ -16,5 +16,14 @@
 # define RESET "\033[0m"
 
 void	exiting(int error_code);
+void	join(std::string cmd);
+void	leave(std::string cmd);
+void	nick(std::string cmd);
+void	quit(std::string cmd);
+void	msg(std::string cmd);
+void	topic(std::string cmd);
+void	mode(std::string cmd);
+void	kick(std::string cmd);
+void	invite(std::string cmd);
 
 #endif

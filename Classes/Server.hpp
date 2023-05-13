@@ -19,6 +19,7 @@
 # include <iostream>
 # include <sstream>
 # include <regex>
+# include <map>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -72,6 +73,11 @@ class Server {
 		void set_sinLen(socklen_t _saddr_in_len) {
 			this->_saddr_in_len = _saddr_in_len;
 		}
+		void setCommands() ;
+		void exec_cmd(std::string cmd, std::string rest) {
+			this->_commands[cmd](rest);
+		}
+		bool checkCmd(std::vector<std::string> req);
 		const int& sock() const {
 			return (this->_sock);
 		}
@@ -111,6 +117,7 @@ class Server {
 		
 		std::vector<Client> _clients;
 		std::vector<pollfd> _pollFds;
+		std::map<std::string, void(*)(std::string rest)> _commands;
 };
 
 #endif

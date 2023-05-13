@@ -3,28 +3,6 @@
 # include "irc.hpp"
 # include <fcntl.h>
 
-void Server::accept_client(std::vector<pollfd>& poll_fds)
-{
-	sockaddr_in	sin;
-	char*		ipStr;
-	pollfd		client_poll_fd;
-	socklen_t size = sizeof(sin);
-	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
-	if (sock > 0)
-	{
-		getsockname(sock, (struct sockaddr*)&sin, &size);
-		ipStr = inet_ntoa(sin.sin_addr);
-		Client client(sin, size, sock, ipStr);
-
-		this->_clients.push_back(client);
-		client_poll_fd.fd = client.sock();
-		client_poll_fd.events = POLLIN;
-		poll_fds.push_back(client_poll_fd);
-
-		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
-	}
-}
-
 Server::Server(int port)
 {
 	this->_proto = getprotobyname("tcp");
@@ -45,8 +23,53 @@ Server::Server(int port)
     server_poll_fd.fd = this->_sock;
     server_poll_fd.events = POLLIN;
     this->_pollFds.push_back(server_poll_fd);
-	
+	this->setCommands();
 	std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
+}
+
+void Server::setCommands()
+{
+	this->_commands["JOIN"] = &join;
+	this->_commands["LEAVE"] = &leave;
+	this->_commands["QUIT"] = &quit;
+	this->_commands["MSG"] = &msg;
+	this->_commands["NICK"] = &nick;
+	this->_commands["TOPIC"] = &topic;
+	this->_commands["MODE"] = &mode;
+	this->_commands["KICK"] = &kick;
+	this->_commands["INVITE"] = &invite;
+}
+
+bool Server::checkCmd(std::vector<std::string> req)
+{
+	std::map<std::string, void(*)(std::string)>::iterator it = this->_commands.find(req[0]);
+
+	if (it == this->_commands.end()) {
+		return (false);
+	}
+	return (true);
+}
+
+void Server::accept_client(std::vector<pollfd>& poll_fds)
+{
+	sockaddr_in	sin;
+	char*		ipStr;
+	pollfd		client_poll_fd;
+	socklen_t size = sizeof(sin);
+	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
+	if (sock > 0)
+	{
+		getsockname(sock, (struct sockaddr*)&sin, &size);
+		ipStr = inet_ntoa(sin.sin_addr);
+		Client client(sin, size, sock, ipStr);
+
+		this->_clients.push_back(client);
+		client_poll_fd.fd = client.sock();
+		client_poll_fd.events = POLLIN;
+		poll_fds.push_back(client_poll_fd);
+		
+		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
+	}
 }
 
 void Server::startServer()
