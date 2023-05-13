@@ -77,6 +77,31 @@ void Server::startServer()
 	}
 }
 
+void Server::handleReqPing(int i, std::string request)
+{
+	std::string response = "PONG " + request.substr(5);
+	// std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
+	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
+}
+
+void Server::handleReqHandshake(int i, std::string request)
+{
+	std::string response = ":127.0.0.1 001 mschlenz :Welcome to The Internet Relay Network mschlenz!mschlenz@mschlenz\r\n";
+	// std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
+	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
+}
+
+void Server::parseReq(std::string request, int i)
+{
+	if (request.find("CAP LS") != std::string::npos)
+		this->handleReqHandshake(i, request);
+	else if (request.find("PING") != std::string::npos)
+		this->handleReqPing(i, request);
+	else if (request.find("PONG") != std::string::npos)
+		std::cout << GRAY << "pong received" << RESET << std::endl;
+	else
+		std::cout << "not recognized: " << request << std::flush;
+}
 
 void Server::handleClientReq(int i)
 {
