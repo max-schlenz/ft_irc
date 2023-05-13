@@ -90,7 +90,10 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
 		void startServer();
+		void handleReqPing(int i, std::string request);
 		void handleClientReq(int i);
+		void handleReqHandshake(int i, std::string command);
+		void parseReq(std::string command, int i);
 
 	private:
 		int	_sock;

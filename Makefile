@@ -2,8 +2,7 @@ AUTHORS			=	mschlenz, dantonik, tdehne
 DATE			=	$$(date +%Y/%m/%d)
 
 CXX				=	c++
-MAKEFLAGS		=	#j
-CXXFLAGS		=	-std=c++98 -g #-Wall -Wextra -Werror 
+CXXFLAGS		=	-std=c++98 -MMD -g #-Wall -Wextra -Werror 
 
 NAME			=	server
 SRC_NAME		=	main exiting Server Client
@@ -15,6 +14,7 @@ INC_DIR			=	Classes/
 
 OBJ				=	$(addsuffix .o, $(SRC))
 OBJ_FILES		=	$(addsuffix .o, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
+DEP_FILES		=	$(addsuffix .d, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
 SRC_FILES		=	$(addsuffix .cpp, $(addprefix $(SRC_DIR), $(SRC_NAME)))
 INC_FILES		=	$(addsuffix .hpp, $(addprefix $(INC_DIR), $(INC_NAME)))
 
@@ -31,17 +31,19 @@ else
 	exit 1
 endif
 
-$(info Running on $(OS))
+all:
+	@$(MAKE) $(NAME) -j
+	$(info Running on $(OS))
 
-all: $(NAME)
-
-$(NAME): $(OBJ_DIR) $(OBJ_FILES) $(INC_FILES)
+$(NAME): $(OBJ_DIR) $(OBJ_FILES) 
 	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(NAME) -I$(INC_DIR)
+
+-include $(DEP_FILES)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
+$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp 
 	$(CXX) $(CXXFLAGS) -c $< -I$(INC_DIR) -o $@
 
 clean c:

@@ -71,9 +71,8 @@ void Server::startServer()
 		{
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
 				this->accept_client(this->_pollFds);
-			else if (this->_pollFds[i].revents & POLLIN) {
+			else if (this->_pollFds[i].revents & POLLIN)
 				this->handleClientReq(i);
-			}
 		}
 	}
 }
@@ -91,17 +90,35 @@ void Server::handleClientReq(int i)
 		std::cout << RED << "Client " << BRED << this->client(i - 1).ipStr() << RED << " disconnected." << RESET << std::endl;
 		close(this->_pollFds[i].fd);
 		this->_pollFds.erase(this->_pollFds.begin() + i);
+		this->_clients.erase(this->_clients.begin() + (i - 1));
 	}
 	else
 	{
-		this->_clients[i - 1].getCmdQueue().push_back(buffer_arr);
+		std::string buffer_str = buffer_arr;
+		size_t		buffer_str_nl;
+		bool		test = false;
+
+		if ((buffer_str_nl = buffer_str.find('\n')) != std::string::npos)
+		{
+			this->_clients[i - 1].getCmdQueue().push_back(buffer_str.substr(0, buffer_str_nl + 1));
+			test = true;
+		}
+		else
+			this->_clients[i - 1].getCmdQueue().push_back(buffer_str);
+
 		if (strchr(buffer_arr, '\n'))
 		{
+			std::string command;
 			for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
-				std::cout << *it << std::flush;
+				command += *it;
+			this->parseReq(command, i);
 			this->_clients[i - 1].getCmdQueue().clear();
 		}
 		std::string client_msg = buffer_arr;
+		if (test)
+		{
+			this->_clients[i - 1].getCmdQueue().push_back(buffer_str.substr(buffer_str_nl + 1));
+		}
 		memset(buffer_arr, 0, RECV_BUF);
 	}
 }

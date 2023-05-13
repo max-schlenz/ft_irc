@@ -1,4 +1,8 @@
-#include "irc.hpp"
+// #include "irc.hpp"
+
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 
 void	exiting(int error_code)
 {
