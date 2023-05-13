@@ -5,6 +5,7 @@
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <vector>
+# include <poll.h>
 
 typedef struct sockaddr_in sockaddr_in;
 
@@ -66,10 +67,17 @@ class Client
 		std::string& getNickname() {
 			return this->_nickName;
 		}
-		Client(std::string nickname, std::string username, bool op) : _nickName(nickname), _userName(username), _op(op) {}
-		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr);
-		Client(){}
-		~Client(){}
+		// void setPollFd(pollfd& pollFd) {
+		// 	this->_pollFd = pollFd;
+		// }
+		pollfd getPollFd() {
+			return this->_pollFd;
+		}
+		// Client(std::string nickname, std::string username, bool op, pollfd& pollFd) : _nickName(nickname), _userName(username), _op(op) {}
+		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
+		// Client& operator=(const Client& other);
+		// Client(){}
+		// ~Client(){}
 	private:
 		std::string _nickName;
 		std::string _userName;
@@ -80,6 +88,8 @@ class Client
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
 		std::vector<std::string> _cmdQueue;
+
+		pollfd _pollFd;
 		
 };
 

@@ -18,8 +18,8 @@
 # include <stdexcept>
 # include <iostream>
 # include <sstream>
-# include <regex>
 # include <map>
+# include <cstring>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -59,7 +59,6 @@ class Server {
 			public:
 				virtual const char *what() const throw();
 		};
-		void accept_client(std::vector<pollfd>& poll_fds);
 		void set_sock(int sock) {
 			this->_sock = sock;
 		};
@@ -98,13 +97,16 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
 		void startServer();
-		void handleClientReq(int i);
+		void accept_client();
+
+		void handleClientReq(Client& client, int i);
 		void handleReqHandshake(int i, std::vector<std::string> reqVec);
 		void handleReqPing(int i, std::vector<std::string> reqVec);
 		void handleReqNick(int i, std::vector<std::string> reqVec);
 		void handleReqUser(int i, std::vector<std::string> reqVec);
 		void handleReqMode(int i, std::vector<std::string> reqVec);
 		void handleReqQuit(int i);
+
 		bool parseReq(std::string command, int i);
 
 	private:
