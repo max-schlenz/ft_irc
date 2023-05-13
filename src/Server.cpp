@@ -79,24 +79,31 @@ void Server::startServer()
 
 bool Server::parseReq(std::string request, int i)
 {
+	std::vector<std::string> reqVec;
+	std::string reqField;
+
+	std::istringstream iss(request);
+	while (iss >> reqField)
+		reqVec.push_back(reqField);
+
 	if (request.find("CAP LS") != std::string::npos)
-		this->handleReqHandshake(i, request);
+		this->handleReqHandshake(i, reqVec);
 	
 	else if (request.find("PING") != std::string::npos)
-		this->handleReqPing(i, request);
+		this->handleReqPing(i, reqVec);
 		
 	else if (request.find("NICK") != std::string::npos)
-		this->handleReqNick(i, request);
+		this->handleReqNick(i, reqVec);
 
 	else if (request.find("USER") != std::string::npos)
-		this->handleReqUser(i, request);
+		this->handleReqUser(i, reqVec);
 	
 	else if (request.find("MODE") != std::string::npos)
-		this->handleReqMode(i, request);
+		this->handleReqMode(i, reqVec);
 	
 	else if (request.find("QUIT") != std::string::npos)
 	{
-		this->handleReqQuit(i, request);
+		this->handleReqQuit(i);
 		return false;
 	}
 
@@ -113,7 +120,7 @@ void Server::handleClientReq(int i)
 	
 	recv_len = recv(this->_pollFds[i].fd, &buffer_arr, RECV_BUF, 0);
 	if (recv_len <= 0)
-		this->handleReqQuit(i, "QUIT");
+		this->handleReqQuit(i);
 
 	else
 	{		

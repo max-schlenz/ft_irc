@@ -70,6 +70,9 @@
 		"random": "cpp",
 		"numbers": "cpp",
 		"cinttypes": "cpp",
-		"iomanip": "cpp"
+		"iomanip": "cpp",
+		"__tree": "cpp",
+		"map": "cpp",
+		"regex": "cpp"
 	}
 }

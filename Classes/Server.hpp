@@ -9,7 +9,6 @@
 # include <netdb.h>
 # include <unistd.h>
 # include <arpa/inet.h>
-# include <string.h>
 # include <string>
 # include <netinet/in.h>
 # include "Client.hpp"
@@ -19,6 +18,7 @@
 # include <stdexcept>
 # include <iostream>
 # include <sstream>
+# include <regex>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -93,12 +93,12 @@ class Server {
 		~Server(){};
 		void startServer();
 		void handleClientReq(int i);
-		void handleReqHandshake(int i, std::string command);
-		void handleReqPing(int i, std::string request);
-		void handleReqNick(int i, std::string request);
-		void handleReqUser(int i, std::string request);
-		void handleReqMode(int i, std::string request);
-		void handleReqQuit(int i, std::string request);
+		void handleReqHandshake(int i, std::vector<std::string> reqVec);
+		void handleReqPing(int i, std::vector<std::string> reqVec);
+		void handleReqNick(int i, std::vector<std::string> reqVec);
+		void handleReqUser(int i, std::vector<std::string> reqVec);
+		void handleReqMode(int i, std::vector<std::string> reqVec);
+		void handleReqQuit(int i);
 		bool parseReq(std::string command, int i);
 
 	private:
