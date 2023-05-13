@@ -86,7 +86,7 @@ void Server::handleReqPing(int i, std::string request)
 
 void Server::handleReqHandshake(int i, std::string request)
 {
-	std::string response = ":127.0.0.1 001 mschlenz :Welcome to the Internet Relay Network mschlenz!mschlenz@mschlenz\r\n";
+	std::string response = ":127.0.0.1 001 mschlenz :Welcome to The Internet Relay Network mschlenz!mschlenz@mschlenz\r\n";
 	// std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
 	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
 }
