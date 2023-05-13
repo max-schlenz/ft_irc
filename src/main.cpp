@@ -6,11 +6,10 @@
 #include "irc.hpp"
 #include <signal.h>
 
-
 void sigint_handler(int sig) 
 {
-  std::cout << "Exiting programm..." << std::endl;
-  exit(EXIT_SUCCESS);
+	std::cout << "Exiting programm..." << std::endl;
+	exit(EXIT_SUCCESS);
 }
 
 void sig()
@@ -33,3 +32,4 @@ int main(int argc, char **argv)
 
 	return (EXIT_SUCCESS);
 }
+

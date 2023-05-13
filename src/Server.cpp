@@ -77,30 +77,32 @@ void Server::startServer()
 	}
 }
 
-void Server::handleReqPing(int i, std::string request)
-{
-	std::string response = "PONG " + request.substr(5);
-	// std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
-	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
-}
-
-void Server::handleReqHandshake(int i, std::string request)
-{
-	std::string response = ":127.0.0.1 001 mschlenz :Welcome to the Internet Relay Network mschlenz!mschlenz@mschlenz\r\n";
-	// std::cout << GRAY << " << rec: " << request << "; resp: " << response  << RESET << std::endl;
-	send(this->_clients[i - 1].sock(), response.c_str(), response.size(), 0);
-}
-
-void Server::parseReq(std::string request, int i)
+bool Server::parseReq(std::string request, int i)
 {
 	if (request.find("CAP LS") != std::string::npos)
 		this->handleReqHandshake(i, request);
+	
 	else if (request.find("PING") != std::string::npos)
 		this->handleReqPing(i, request);
-	else if (request.find("PONG") != std::string::npos)
-		std::cout << GRAY << "pong received" << RESET << std::endl;
+		
+	else if (request.find("NICK") != std::string::npos)
+		this->handleReqNick(i, request);
+
+	else if (request.find("USER") != std::string::npos)
+		this->handleReqUser(i, request);
+	
+	else if (request.find("MODE") != std::string::npos)
+		this->handleReqMode(i, request);
+	
+	else if (request.find("QUIT") != std::string::npos)
+	{
+		this->handleReqQuit(i, request);
+		return false;
+	}
+
 	else
-		std::cout << "not recognized: " << request << std::flush;
+		std::cout << GRAY << "not recognized: " RESET << request << std::endl;
+	return true;
 }
 
 void Server::handleClientReq(int i)
@@ -111,38 +113,22 @@ void Server::handleClientReq(int i)
 	
 	recv_len = recv(this->_pollFds[i].fd, &buffer_arr, RECV_BUF, 0);
 	if (recv_len <= 0)
-	{
-		std::cout << RED << "Client " << BRED << this->client(i - 1).ipStr() << RED << " disconnected." << RESET << std::endl;
-		close(this->_pollFds[i].fd);
-		this->_pollFds.erase(this->_pollFds.begin() + i);
-		this->_clients.erase(this->_clients.begin() + (i - 1));
-	}
+		this->handleReqQuit(i, "QUIT");
+
 	else
-	{
-		std::string buffer_str = buffer_arr;
-		size_t		buffer_str_nl;
-		bool		test = false;
-
-		if ((buffer_str_nl = buffer_str.find('\n')) != std::string::npos)
-		{
-			this->_clients[i - 1].getCmdQueue().push_back(buffer_str.substr(0, buffer_str_nl + 1));
-			test = true;
-		}
-		else
+	{		
+		std::istringstream iss(buffer_arr);
+		std::string buffer_str;
+		while (std::getline(iss, buffer_str, '\n'))
 			this->_clients[i - 1].getCmdQueue().push_back(buffer_str);
-
-		if (strchr(buffer_arr, '\n'))
+		
+		for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
 		{
-			std::string command;
-			for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
-				command += *it;
-			this->parseReq(command, i);
-			this->_clients[i - 1].getCmdQueue().clear();
+			if (!this->parseReq(*it, i))
+				return ;
 		}
-		if (test)
-		{
-			this->_clients[i - 1].getCmdQueue().push_back(buffer_str.substr(buffer_str_nl + 1));
-		}
+		this->_clients[i - 1].getCmdQueue().clear();
+	
 		memset(buffer_arr, 0, RECV_BUF);
 	}
 }

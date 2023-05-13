@@ -11,33 +11,33 @@ typedef struct sockaddr_in sockaddr_in;
 class Client
 {
 	public:
-		void set_username(std::string username){
-			this->_username = username;
+		void setUsername(std::string username){
+			this->_userName = username;
 		}
-		void set_nickname(std::string nickname){
-			this->_nickname = nickname;
+		void setNickname(std::string nickname){
+			this->_nickName = nickname;
 		}
-		void set_op(bool op){
+		void setOp(bool op){
 			this->_op = op;
 		}
-		void set_ipstr(){
+		void setIpstr(){
 			this->_ipStr = inet_ntoa(this->_saddr_in.sin_addr);
 		}
-		void set_sock(int sock){
+		void setSock(int sock){
 			this->_sock = sock;
 		}
-		void set_sin(sockaddr_in& sin){
+		void setSin(sockaddr_in& sin){
 			this->_saddr_in_len = sizeof(sin);
 			this->_saddr_in = sin;
 		}
-		void set_sinLen(socklen_t sinLen) {
+		void setSinLen(socklen_t sinLen) {
 			this->_saddr_in_len = sinLen;
 		}
 		const std::string& username() const {
-			return (this->_username);
+			return (this->_userName);
 		}
 		const std::string& nickname() const {
-			return (this->_nickname);
+			return (this->_nickName);
 		}
 		const bool& is_operator() const {
 			return (this->_op);
@@ -60,13 +60,20 @@ class Client
 		void setCmdQueue(std::vector<std::string> cmdQueue) {
 			this->_cmdQueue = cmdQueue;
 		}
-		Client(std::string nickname, std::string username, bool op) : _nickname(nickname), _username(username), _op(op) {}
+		std::string& getUsername() {
+			return this->_userName;
+		}
+		std::string& getNickname() {
+			return this->_nickName;
+		}
+		Client(std::string nickname, std::string username, bool op) : _nickName(nickname), _userName(username), _op(op) {}
 		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr);
 		Client(){}
 		~Client(){}
 	private:
-		std::string _nickname;
-		std::string _username;
+		std::string _nickName;
+		std::string _userName;
+		std::string _realName;
 		bool		_op;
 		std::string _ipStr;
 		int 		_sock;

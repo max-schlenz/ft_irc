@@ -5,7 +5,7 @@ CXX				=	c++
 CXXFLAGS		=	-std=c++98 -MMD -g #-Wall -Wextra -Werror 
 
 NAME			=	server
-SRC_NAME		=	main exiting Server Client
+SRC_NAME		=	main exiting Server Client requests
 INC_NAME		=	Channel Client Server irc
 
 SRC_DIR			=	src/

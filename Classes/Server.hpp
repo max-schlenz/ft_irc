@@ -17,6 +17,8 @@
 # include <vector>
 # include <poll.h>
 # include <stdexcept>
+# include <iostream>
+# include <sstream>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -90,10 +92,14 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server(){};
 		void startServer();
-		void handleReqPing(int i, std::string request);
 		void handleClientReq(int i);
 		void handleReqHandshake(int i, std::string command);
-		void parseReq(std::string command, int i);
+		void handleReqPing(int i, std::string request);
+		void handleReqNick(int i, std::string request);
+		void handleReqUser(int i, std::string request);
+		void handleReqMode(int i, std::string request);
+		void handleReqQuit(int i, std::string request);
+		bool parseReq(std::string command, int i);
 
 	private:
 		int	_sock;
