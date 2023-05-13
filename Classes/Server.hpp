@@ -75,6 +75,7 @@ class Server {
 		void exec_cmd(std::string cmd, std::string rest) {
 			this->_commands[cmd](rest);
 		}
+		bool checkCmd(std::vector<std::string> req);
 		const int& sock() const {
 			return (this->_sock);
 		}

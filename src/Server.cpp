@@ -40,6 +40,16 @@ void Server::setCommands()
 	this->_commands["INVITE"] = &invite;
 }
 
+bool Server::checkCmd(std::vector<std::string> req)
+{
+	std::map<std::string, void(*)(std::string)>::iterator it = this->_commands.find(req[0]);
+
+	if (it == this->_commands.end()) {
+		return (false);
+	}
+	return (true);
+}
+
 void Server::accept_client(std::vector<pollfd>& poll_fds)
 {
 	sockaddr_in	sin;
