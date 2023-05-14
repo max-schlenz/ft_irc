@@ -55,11 +55,11 @@ class Client
 		socklen_t& sinLen() {
 			return (this->_saddr_in_len);
 		}
-		std::vector<std::string>& getCmdQueue() {
-			return this->_cmdQueue;
+		std::vector<std::string>& getReqQueue() {
+			return this->_reqQueue;
 		}
-		void setCmdQueue(std::vector<std::string> cmdQueue) {
-			this->_cmdQueue = cmdQueue;
+		void setReqQueue(std::vector<std::string> reqQueue) {
+			this->_reqQueue = reqQueue;
 		}
 		std::string& getUsername() {
 			return this->_userName;
@@ -88,8 +88,8 @@ class Client
 		int 		_sock;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
-		std::vector<std::string> _cmdQueue;
-
+		
+		std::vector<std::string> _reqQueue;
 		pollfd _pollFd;
 		
 };

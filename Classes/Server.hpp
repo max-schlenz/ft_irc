@@ -99,7 +99,7 @@ class Server {
 		void startServer();
 		void accept_client();
 
-		void handleClientReq(Client& client, int i);
+		bool handleClientReq(Client& client);
 		
 		void handleReqHandshake(Client& Client, std::vector<std::string> reqVec);
 		void handleReqPing(Client& Client, std::vector<std::string> reqVec);
@@ -108,7 +108,12 @@ class Server {
 		void handleReqMode(Client& Client, std::vector<std::string> reqVec);
 		void handleReqQuit(Client& Client, int i);
 
-		bool parseReq(std::string command, Client& client, int i);
+		void buildReqQueue(Client& client, char buffer_arr[RECV_BUF]);
+		bool parseReqQueue(Client& client);
+		
+		void disconnectClient(Client& client, int i);
+
+		bool parseReq(Client& client, std::string command);
 
 	private:
 		int	_sock;
