@@ -86,7 +86,7 @@ void Server::startServer()
 	{
 		try
 		{
-			res = poll(this->_pollFds.data(), this->_pollFds.size(), 1000);
+			res = poll(this->_pollFds.data(), this->_pollFds.size(), 5000);
 			if (res == -1)
 				throw Server::ErrorPoll();
 
@@ -111,7 +111,7 @@ void Server::startServer()
 	}
 }
 
-bool Server::parseReq(std::string request, int i)
+bool Server::parseReq(std::string request, Client& client, int i)
 {
 	std::vector<std::string> reqVec;
 	std::string reqField;
@@ -121,23 +121,23 @@ bool Server::parseReq(std::string request, int i)
 		reqVec.push_back(reqField);
 
 	if (request.find("CAP LS") != std::string::npos)
-		this->handleReqHandshake(i, reqVec);
+		this->handleReqHandshake(client, reqVec);
 	
 	else if (request.find("PING") != std::string::npos)
-		this->handleReqPing(i, reqVec);
+		this->handleReqPing(client, reqVec);
 		
 	else if (request.find("NICK") != std::string::npos)
-		this->handleReqNick(i, reqVec);
+		this->handleReqNick(client, reqVec);
 
 	else if (request.find("USER") != std::string::npos)
-		this->handleReqUser(i, reqVec);
+		this->handleReqUser(client, reqVec);
 	
 	else if (request.find("MODE") != std::string::npos)
-		this->handleReqMode(i, reqVec);
+		this->handleReqMode(client, reqVec);
 	
 	else if (request.find("QUIT") != std::string::npos)
 	{
-		this->handleReqQuit(i);
+		this->handleReqQuit(client, i);
 		return false;
 	}
 
@@ -155,7 +155,7 @@ void Server::handleClientReq(Client& client, int i)
 	recv_len = recv(client.getPollFd().fd, &buffer_arr, RECV_BUF, 0);
 
 	if (recv_len <= 0)
-		this->handleReqQuit(i);
+		this->handleReqQuit(client, i);
 
 	else
 	{		
@@ -166,7 +166,7 @@ void Server::handleClientReq(Client& client, int i)
 
 		for (std::vector<std::string>::iterator it = client.getCmdQueue().begin(); it != client.getCmdQueue().end(); ++it)
 		{
-			if (!this->parseReq(*it, i))
+			if (!this->parseReq(*it, client, i))
 				return ;
 		}
 		client.getCmdQueue().clear();

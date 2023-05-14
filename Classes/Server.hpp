@@ -106,9 +106,9 @@ class Server {
 		void handleReqNick(Client& Client, std::vector<std::string> reqVec);
 		void handleReqUser(Client& Client, std::vector<std::string> reqVec);
 		void handleReqMode(Client& Client, std::vector<std::string> reqVec);
-		void handleReqQuit(Client& Client);
+		void handleReqQuit(Client& Client, int i);
 
-		bool parseReq(std::string command, int i);
+		bool parseReq(std::string command, Client& client, int i);
 
 	private:
 		int	_sock;
