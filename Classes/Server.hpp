@@ -72,9 +72,7 @@ class Server {
 		void setSinLen(socklen_t _saddr_in_len) {
 			this->_saddr_in_len = _saddr_in_len;
 		}
-		void exec_cmd(std::string cmd, std::string rest) {
-			this->_commands[cmd](rest);
-		}
+		void setCommands() ;
 		bool checkCmd(std::vector<std::string> req);
 		const int& getSock() const {
 			return (this->_sock);
@@ -96,8 +94,10 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server();
 		void startServer();
-		void setCommands();
 		void accept_client();
+		void exec_cmd(std::vector<std::string> reqVec, Client& client) {
+			this->_commands[reqVec[0]](reqVec, client);
+		}
 
 		bool handleClientReq(Client& client);
 		
@@ -125,7 +125,7 @@ class Server {
 		
 		std::vector<Client> _clients;
 		std::vector<pollfd> _pollFds;
-		std::map<std::string, void(*)(std::string rest)> _commands;
+		std::map<std::string, void(*)(std::vector<std::string> reqVec, Client& client)> _commands;
 };
 
 #endif

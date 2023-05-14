@@ -16,14 +16,16 @@
 # define RESET "\033[0m"
 
 void	exiting(int error_code);
-void	join(std::string cmd);
-void	leave(std::string cmd);
-void	nick(std::string cmd);
-void	quit(std::string cmd);
-void	msg(std::string cmd);
-void	topic(std::string cmd);
-void	mode(std::string cmd);
-void	kick(std::string cmd);
-void	invite(std::string cmd);
+void	join(std::vector<std::string> reqVec, Client& client);
+void	leave(std::vector<std::string> reqVec, Client& client);
+void	nick(std::vector<std::string> reqVec, Client& client);
+void	quit(std::vector<std::string> reqVec, Client& client);
+void	msg(std::vector<std::string> reqVec, Client& client);
+void	topic(std::vector<std::string> reqVec, Client& client);
+void	mode(std::vector<std::string> reqVec, Client& client);
+void	kick(std::vector<std::string> reqVec, Client& client);
+void	invite(std::vector<std::string> reqVec, Client& client);
+void	user(std::vector<std::string> reqVec, Client& client);
+void	ping(std::vector<std::string> reqVec, Client& client);
 
 #endif
