@@ -50,16 +50,6 @@ void Server::setCommands()
 	this->_commands["PING"] = &ping;
 }
 
-bool Server::checkCmd(std::vector<std::string> reqVec)
-{
-	std::map<std::string, void(*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
-	std::cout << "recV:" << reqVec[0] << std::endl;
-	if (it == this->_commands.end()) {
-		return (false);
-	}
-	return (true);
-}
-
 bool Server::parseReq(Client& client, std::string request)
 {
 	std::vector<std::string> reqVec;
@@ -77,7 +67,7 @@ bool Server::parseReq(Client& client, std::string request)
 
 	if (request.find("CAP LS") != std::string::npos)
 		this->handleReqHandshake(client, reqVec);
-	else if (checkCmd(reqVec))
+	else if (this->_commands.find(reqVec[0]) != this->_commands.end())
 		this->_commands[reqVec[0]](reqVec, client);
 	else if (reqVec[0] == "QUIT")
 		return false;
