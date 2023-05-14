@@ -5,6 +5,7 @@
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <vector>
+# include <poll.h>
 
 typedef struct sockaddr_in sockaddr_in;
 
@@ -33,32 +34,32 @@ class Client
 		void setSinLen(socklen_t sinLen) {
 			this->_saddr_in_len = sinLen;
 		}
-		const std::string& username() const {
+		const std::string& getUsername() const {
 			return (this->_userName);
 		}
-		const std::string& nickname() const {
+		const std::string& getNickname() const {
 			return (this->_nickName);
 		}
-		const bool& is_operator() const {
+		const bool& getOp() const {
 			return (this->_op);
 		}
-		const std::string& ipStr() const {
+		const std::string& getIpStr() const {
 			return (this->_ipStr);
 		}
-		const int& sock() const {
+		const int& getSock() const {
 			return (this->_sock);
 		}
-		sockaddr_in& sin() {
+		sockaddr_in& getSin() {
 			return (this->_saddr_in);
 		}
-		socklen_t& sinLen() {
+		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}
-		std::vector<std::string>& getCmdQueue() {
-			return this->_cmdQueue;
+		std::vector<std::string>& getReqQueue() {
+			return this->_reqQueue;
 		}
-		void setCmdQueue(std::vector<std::string> cmdQueue) {
-			this->_cmdQueue = cmdQueue;
+		void setReqQueue(std::vector<std::string> reqQueue) {
+			this->_reqQueue = reqQueue;
 		}
 		std::string& getUsername() {
 			return this->_userName;
@@ -66,10 +67,12 @@ class Client
 		std::string& getNickname() {
 			return this->_nickName;
 		}
-		Client(std::string nickname, std::string username, bool op) : _nickName(nickname), _userName(username), _op(op) {}
-		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr);
-		Client(){}
-		~Client(){}
+		pollfd& getPollFd() {
+			return this->_pollFd;
+		}
+
+		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
+		
 	private:
 		std::string _nickName;
 		std::string _userName;
@@ -79,7 +82,9 @@ class Client
 		int 		_sock;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
-		std::vector<std::string> _cmdQueue;
+		
+		std::vector<std::string> _reqQueue;
+		pollfd _pollFd;
 		
 };
 

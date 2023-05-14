@@ -18,8 +18,8 @@
 # include <stdexcept>
 # include <iostream>
 # include <sstream>
-# include <regex>
 # include <map>
+# include <cstring>
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -59,18 +59,17 @@ class Server {
 			public:
 				virtual const char *what() const throw();
 		};
-		void accept_client(std::vector<pollfd>& poll_fds);
-		void set_sock(int sock) {
+		void setSock(int sock) {
 			this->_sock = sock;
 		};
-		void set_port(int port) {
+		void setPort(int port) {
 			this->_port = port;
 		};
-		void set_sin(sockaddr_in _saddr_in) {
+		void setSin(sockaddr_in _saddr_in) {
 			this->_saddr_in_len = sizeof(_saddr_in);
 			this->_saddr_in = _saddr_in;
 		};
-		void set_sinLen(socklen_t _saddr_in_len) {
+		void setSinLen(socklen_t _saddr_in_len) {
 			this->_saddr_in_len = _saddr_in_len;
 		}
 		void setCommands() ;
@@ -78,34 +77,44 @@ class Server {
 			this->_commands[reqVec[0]](reqVec);
 		}
 		bool checkCmd(std::vector<std::string> req);
-		const int& sock() const {
+		const int& getSock() const {
 			return (this->_sock);
 		}
-		const int& port() const {
+		const int& getPort() const {
 			return (this->_port);
 		}
-		sockaddr_in& sin() {
+		sockaddr_in& getSin() {
 			return (this->_saddr_in);
 		}
-		Client& client(int i) {
+		Client& getClient(int i) {
 			return (this->_clients[i]);
 		}
-		socklen_t& sinLen() {
+		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}
 		// Server(int port, std::vector<pollfd>& poll_fds);
 		Server(int port);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
-		~Server(){};
+		~Server();
 		void startServer();
-		void handleClientReq(int i);
-		void handleReqHandshake(int i, std::vector<std::string> reqVec);
-		void handleReqPing(int i, std::vector<std::string> reqVec);
-		void handleReqNick(int i, std::vector<std::string> reqVec);
-		void handleReqUser(int i, std::vector<std::string> reqVec);
-		void handleReqMode(int i, std::vector<std::string> reqVec);
-		void handleReqQuit(int i);
-		bool parseReq(std::string command, int i);
+		void setCommands();
+		void accept_client();
+
+		bool handleClientReq(Client& client);
+		
+		void handleReqHandshake(Client& Client, std::vector<std::string> reqVec);
+		void handleReqPing(Client& Client, std::vector<std::string> reqVec);
+		void handleReqNick(Client& Client, std::vector<std::string> reqVec);
+		void handleReqUser(Client& Client, std::vector<std::string> reqVec);
+		void handleReqMode(Client& Client, std::vector<std::string> reqVec);
+		void handleReqQuit(Client& Client, int i);
+
+		void buildReqQueue(Client& client, char buffer_arr[RECV_BUF]);
+		bool parseReqQueue(Client& client);
+		
+		void disconnectClient(Client& client, int i);
+
+		bool parseReq(Client& client, std::string command);
 
 	private:
 		int	_sock;

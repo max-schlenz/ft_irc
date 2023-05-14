@@ -3,6 +3,8 @@
 # include "irc.hpp"
 # include <fcntl.h>
 
+extern bool g_run;
+
 Server::Server(int port)
 {
 	this->_proto = getprotobyname("tcp");
@@ -25,6 +27,13 @@ Server::Server(int port)
     this->_pollFds.push_back(server_poll_fd);
 	this->setCommands();
 	std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
+}
+
+Server::~Server()
+{
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		close((*it).getSock());
+	close(this->_sock);
 }
 
 void Server::setCommands()
@@ -50,57 +59,7 @@ bool Server::checkCmd(std::vector<std::string> reqVec)
 	return (true);
 }
 
-void Server::accept_client(std::vector<pollfd>& poll_fds)
-{
-	sockaddr_in	sin;
-	char*		ipStr;
-	pollfd		client_poll_fd;
-	socklen_t size = sizeof(sin);
-	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
-	if (sock > 0)
-	{
-		getsockname(sock, (struct sockaddr*)&sin, &size);
-		ipStr = inet_ntoa(sin.sin_addr);
-		Client client(sin, size, sock, ipStr);
-
-		this->_clients.push_back(client);
-		client_poll_fd.fd = client.sock();
-		client_poll_fd.events = POLLIN;
-		poll_fds.push_back(client_poll_fd);
-		
-		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
-	}
-}
-
-void Server::startServer()
-{
-	int res = 0;
-
-	while (true)
-	{
-		try
-		{
-			res = poll(this->_pollFds.data(), this->_pollFds.size(), 1000);
-			if (res == -1)
-				throw Server::ErrorPoll();
-
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << e.what() << '\n';
-		}
-	
-		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
-		{
-			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
-				this->accept_client(this->_pollFds);
-			else if (this->_pollFds[i].revents & POLLIN)
-				this->handleClientReq(i);
-		}
-	}
-}
-
-bool Server::parseReq(std::string request, int i)
+bool Server::parseReq(Client& client, std::string request)
 {
 	std::vector<std::string> reqVec;
 	std::string reqField;
@@ -109,60 +68,116 @@ bool Server::parseReq(std::string request, int i)
 	while (iss >> reqField)
 		reqVec.push_back(reqField);
 
-	if (request.find("CAP LS") != std::string::npos) {
-		this->handleReqHandshake(i, reqVec);
-		return (true);
-	}
-	else if (request.find("PING") != std::string::npos) {
-		this->handleReqPing(i, reqVec);
-		return (true);
-	}
-	else if (request.find("USER") != std::string::npos)
-		std::cout << "ignore user" << std::endl;
+	if (request.find("CAP LS") != std::string::npos)
+		this->handleReqHandshake(client, reqVec);
+	
+	else if (request.find("PING") != std::string::npos)
+		this->handleReqPing(client, reqVec);
+		
 	else if (request.find("NICK") != std::string::npos)
-		this->handleReqNick(i, reqVec);
+		this->handleReqNick(client, reqVec);
 
 	else if (request.find("USER") != std::string::npos)
-		this->handleReqUser(i, reqVec);
+		this->handleReqUser(client, reqVec);
 	
 	else if (request.find("MODE") != std::string::npos)
-		this->handleReqMode(i, reqVec);
+		this->handleReqMode(client, reqVec);
 	
 	else if (request.find("QUIT") != std::string::npos)
-	{
-		this->handleReqQuit(i);
 		return false;
-	}
+
 	else
 		std::cout << GRAY << "not recognized: " RESET << request << std::endl;
 	return true;
 }
 
-void Server::handleClientReq(int i)
+bool Server::parseReqQueue(Client& client)
 {
-	char	buffer_arr[RECV_BUF];
+	for (std::vector<std::string>::iterator it = client.getReqQueue().begin(); it != client.getReqQueue().end(); ++it)
+	{
+		if (!this->parseReq(client, *it))
+			return false;
+	}
+	client.getReqQueue().clear();
+	return true;
+}
+
+void Server::buildReqQueue(Client& client, char buffer_arr[RECV_BUF])
+{
+	std::istringstream iss(buffer_arr);
+	std::string buffer_str;
+
+	while (std::getline(iss, buffer_str, '\n'))
+		client.getReqQueue().push_back(buffer_str);
+}
+
+bool Server::handleClientReq(Client& client)
+{
+	char buffer_arr[RECV_BUF];
 	memset(buffer_arr, 0, RECV_BUF);
-	int		recv_len = 0;
-	
-	recv_len = recv(this->_pollFds[i].fd, &buffer_arr, RECV_BUF, 0);
+
+	int recv_len = recv(client.getPollFd().fd, &buffer_arr, RECV_BUF, 0);
+
 	if (recv_len <= 0)
-		this->handleReqQuit(i);
+		return false;
 
 	else
 	{		
-		std::istringstream iss(buffer_arr);
-		std::string buffer_str;
-		while (std::getline(iss, buffer_str, '\n'))
-			this->_clients[i - 1].getCmdQueue().push_back(buffer_str);
-		
-		for (std::vector<std::string>::iterator it = this->_clients[i - 1].getCmdQueue().begin(); it != this->_clients[i - 1].getCmdQueue().end(); ++it)
-		{
-			if (!this->parseReq(*it, i))
-				return ;
-		}
-		this->_clients[i - 1].getCmdQueue().clear();
-	
+		this->buildReqQueue(client, buffer_arr);
+		if (!this->parseReqQueue(client))
+			return false;
 		memset(buffer_arr, 0, RECV_BUF);
+	}
+	return true;
+}
+
+void Server::accept_client()
+{
+	sockaddr_in sin;
+	char* ipStr;
+	pollfd client_poll_fd;
+	socklen_t size = sizeof(sin);
+	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
+	if (sock > 0)
+	{
+		getsockname(sock, (struct sockaddr*)&sin, &size);
+		ipStr = inet_ntoa(sin.sin_addr);
+
+		client_poll_fd.fd = sock;
+		client_poll_fd.events = POLLIN;
+		this->_pollFds.push_back(client_poll_fd);
+
+		Client client(sin, size, sock, ipStr, client_poll_fd);
+		this->_clients.push_back(client);
+	}
+}
+
+void Server::disconnectClient(Client& client, int i)
+{
+	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getIpStr() << RED << " disconnected." << RESET << std::endl;
+	close(this->_pollFds[i].fd);
+	this->_pollFds.erase(this->_pollFds.begin() + i);
+	this->_clients.erase(this->_clients.begin() + (i - 1));
+}
+
+void Server::startServer()
+{
+	int res = 0;
+
+	while (g_run)
+	{
+		res = poll(this->_pollFds.data(), this->_pollFds.size(), 5000);
+		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
+		{
+			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
+				this->accept_client();
+
+			else if (this->_pollFds[i].revents & POLLIN)
+			{
+				if (!this->handleClientReq(this->_clients[i - 1]))
+					this->disconnectClient(this->_clients[i - 1], i);
+			}
+		}
 	}
 }
 

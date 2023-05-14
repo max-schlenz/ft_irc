@@ -1,35 +1,42 @@
 #include <iostream>
 #include <vector>
-#include <stdlib.h> //atoi linux
+#include <cstdlib>
 #include "Server.hpp"
 #include "Client.hpp"
 #include "irc.hpp"
 #include <signal.h>
 
+bool g_run = true;
+
 void sigint_handler(int sig) 
 {
-	std::cout << "Exiting programm..." << std::endl;
-	exit(EXIT_SUCCESS);
+	std::cerr << std::endl << "Exiting programm..." << std::endl;
+	g_run = false;
 }
 
 void sig()
 {
 	if (signal(SIGINT, sigint_handler) == SIG_ERR) 
 	{
-		std::cout << "Error: Unable to register signal handler!" << std::endl;
-		exit(EXIT_FAILURE);
+		std::cerr << std::endl << "Error: Unable to register signal handler!" << std::endl;
+		g_run = false;
 	}
 }
 
 int main(int argc, char **argv)
 {
+	int port;
+
 	if (argc != 2)
-		exiting(0);
+		port = 6667;
+	else
+		port = std::atoi(argv[1]);
+
 	sig();
 
-	Server server(atoi(argv[1]));
+	Server server(port);
 	server.startServer();
 
-	return (EXIT_SUCCESS);
+	return (0);
 }
 
