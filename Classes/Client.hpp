@@ -9,6 +9,13 @@
 
 typedef struct sockaddr_in sockaddr_in;
 
+typedef enum emodes {
+	INVISIBLE = 1,
+	OPERATOR = 2,
+	REGISTERED = 4
+
+} usermode;
+
 class Client
 {
 	public:
@@ -34,11 +41,17 @@ class Client
 		void setSinLen(socklen_t sinLen) {
 			this->_saddr_in_len = sinLen;
 		}
+		void setMode(int mode) {
+			this->_mode = mode;
+		}
 		const std::string& getUsername() const {
 			return (this->_userName);
 		}
 		const std::string& getNickname() const {
 			return (this->_nickName);
+		}
+		const int& getMode() const {
+			return (this->_mode);
 		}
 		const bool& getOp() const {
 			return (this->_op);
@@ -70,7 +83,6 @@ class Client
 		pollfd& getPollFd() {
 			return this->_pollFd;
 		}
-
 		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
 		
 	private:
@@ -82,7 +94,7 @@ class Client
 		int 		_sock;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
-		
+		int		_mode;
 		std::vector<std::string> _reqQueue;
 		pollfd _pollFd;
 		

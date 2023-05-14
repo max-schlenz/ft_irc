@@ -3,6 +3,13 @@
 # include "Client.hpp"
 # include <array>
 
+typedef enum ecmode {
+	INVITE = 1,
+	TOPIC = 2,
+	KEY = 4
+
+} channelmode;
+
 class Channel
 {
 	public:
@@ -20,6 +27,12 @@ class Channel
 		}
 		std::vector<Client>& get_clients() {
 			return (this->_clients);
+		}
+		const int& getMode() const {
+			return (this->_mode);
+		}
+		void setMode(int mode) {
+			this->_mode = mode;
 		}
 		void set_topic(std::string topic){
 			this->topic = topic;
@@ -51,7 +64,7 @@ class Channel
 		bool		mode_o;
 		int			num_clients;
 		int			channel_size;
-		int lol;
+		int _mode;
 };
 
 #endif
