@@ -10,7 +10,7 @@ bool g_run = true;
 
 void sigint_handler(int sig) 
 {
-	std::cout << "Exiting programm..." << std::endl;
+	std::cerr << std::endl << "Exiting programm..." << std::endl;
 	g_run = false;
 }
 
@@ -18,7 +18,7 @@ void sig()
 {
 	if (signal(SIGINT, sigint_handler) == SIG_ERR) 
 	{
-		std::cout << "Error: Unable to register signal handler!" << std::endl;
+		std::cerr << std::endl << "Error: Unable to register signal handler!" << std::endl;
 		g_run = false;
 	}
 }
@@ -37,6 +37,6 @@ int main(int argc, char **argv)
 	Server server(port);
 	server.startServer();
 
-	return (EXIT_SUCCESS);
+	return (0);
 }
 

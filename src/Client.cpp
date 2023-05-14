@@ -2,19 +2,7 @@
 #include "Server.hpp"
 
 Client::Client(sockaddr_in sin, socklen_t sinLen, int sock, char* ipStr, pollfd& pollFd):
-	_pollFd(pollFd)
+	_pollFd(pollFd), _saddr_in(sin), _saddr_in_len(sinLen), _sock(sock), _ipStr(ipStr), _nickName("")
 {
-	this->_saddr_in = sin;
-	this->_saddr_in_len = sinLen;
-	this->_sock = sock;
-	this->_ipStr = ipStr;
+	std::cout << GREEN << "Client " << BGREEN << this->_ipStr << GREEN << " connected." << RESET << std::endl;
 }
-
-// Client& Client::operator=(const Client& other)
-// {
-// 	if (this != &other)
-// 	{
-// 		this->_
-// 	}
-// 	return *this;
-// }

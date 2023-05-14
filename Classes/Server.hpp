@@ -59,37 +59,36 @@ class Server {
 			public:
 				virtual const char *what() const throw();
 		};
-		void set_sock(int sock) {
+		void setSock(int sock) {
 			this->_sock = sock;
 		};
-		void set_port(int port) {
+		void setPort(int port) {
 			this->_port = port;
 		};
-		void set_sin(sockaddr_in _saddr_in) {
+		void setSin(sockaddr_in _saddr_in) {
 			this->_saddr_in_len = sizeof(_saddr_in);
 			this->_saddr_in = _saddr_in;
 		};
-		void set_sinLen(socklen_t _saddr_in_len) {
+		void setSinLen(socklen_t _saddr_in_len) {
 			this->_saddr_in_len = _saddr_in_len;
 		}
-		void setCommands() ;
 		void exec_cmd(std::string cmd, std::string rest) {
 			this->_commands[cmd](rest);
 		}
 		bool checkCmd(std::vector<std::string> req);
-		const int& sock() const {
+		const int& getSock() const {
 			return (this->_sock);
 		}
-		const int& port() const {
+		const int& getPort() const {
 			return (this->_port);
 		}
-		sockaddr_in& sin() {
+		sockaddr_in& getSin() {
 			return (this->_saddr_in);
 		}
-		Client& client(int i) {
+		Client& getClient(int i) {
 			return (this->_clients[i]);
 		}
-		socklen_t& sinLen() {
+		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}
 		// Server(int port, std::vector<pollfd>& poll_fds);
@@ -97,6 +96,7 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server();
 		void startServer();
+		void setCommands();
 		void accept_client();
 
 		bool handleClientReq(Client& client);

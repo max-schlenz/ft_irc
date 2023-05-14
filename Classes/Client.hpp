@@ -34,25 +34,25 @@ class Client
 		void setSinLen(socklen_t sinLen) {
 			this->_saddr_in_len = sinLen;
 		}
-		const std::string& username() const {
+		const std::string& getUsername() const {
 			return (this->_userName);
 		}
-		const std::string& nickname() const {
+		const std::string& getNickname() const {
 			return (this->_nickName);
 		}
-		const bool& is_operator() const {
+		const bool& getOp() const {
 			return (this->_op);
 		}
-		const std::string& ipStr() const {
+		const std::string& getIpStr() const {
 			return (this->_ipStr);
 		}
-		const int& sock() const {
+		const int& getSock() const {
 			return (this->_sock);
 		}
-		sockaddr_in& sin() {
+		sockaddr_in& getSin() {
 			return (this->_saddr_in);
 		}
-		socklen_t& sinLen() {
+		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}
 		std::vector<std::string>& getReqQueue() {
@@ -67,17 +67,11 @@ class Client
 		std::string& getNickname() {
 			return this->_nickName;
 		}
-		// void setPollFd(pollfd& pollFd) {
-		// 	this->_pollFd = pollFd;
-		// }
 		pollfd& getPollFd() {
 			return this->_pollFd;
 		}
-		// Client(std::string nickname, std::string username, bool op, pollfd& pollFd) : _nickName(nickname), _userName(username), _op(op) {}
+
 		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
-		// Client& operator=(const Client& other);
-		// Client(){}
-		// ~Client(){}
 		
 	private:
 		std::string _nickName;

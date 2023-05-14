@@ -32,7 +32,7 @@ Server::Server(int port)
 Server::~Server()
 {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
-		close((*it).sock());
+		close((*it).getSock());
 	close(this->_sock);
 }
 
@@ -133,9 +133,9 @@ bool Server::handleClientReq(Client& client)
 
 void Server::accept_client()
 {
-	sockaddr_in	sin;
-	char*		ipStr;
-	pollfd		client_poll_fd;
+	sockaddr_in sin;
+	char* ipStr;
+	pollfd client_poll_fd;
 	socklen_t size = sizeof(sin);
 	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
 	if (sock > 0)
@@ -149,14 +149,12 @@ void Server::accept_client()
 
 		Client client(sin, size, sock, ipStr, client_poll_fd);
 		this->_clients.push_back(client);
-		
-		std::cout << GREEN << "Client " << BGREEN << client.ipStr() << GREEN << " connected." << RESET << std::endl;
 	}
 }
 
 void Server::disconnectClient(Client& client, int i)
 {
-	std::cout << RED << "Client " << BRED << this->_clients[i - 1].ipStr() << RED << " disconnected." << RESET << std::endl;
+	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getIpStr() << RED << " disconnected." << RESET << std::endl;
 	close(this->_pollFds[i].fd);
 	this->_pollFds.erase(this->_pollFds.begin() + i);
 	this->_clients.erase(this->_clients.begin() + (i - 1));
