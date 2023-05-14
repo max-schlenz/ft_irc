@@ -95,7 +95,7 @@ class Server {
 		// Server(int port, std::vector<pollfd>& poll_fds);
 		Server(int port);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
-		~Server(){};
+		~Server();
 		void startServer();
 		void accept_client();
 

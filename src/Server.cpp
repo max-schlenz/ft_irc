@@ -3,6 +3,8 @@
 # include "irc.hpp"
 # include <fcntl.h>
 
+extern bool g_run;
+
 Server::Server(int port)
 {
 	this->_proto = getprotobyname("tcp");
@@ -25,6 +27,13 @@ Server::Server(int port)
     this->_pollFds.push_back(server_poll_fd);
 	this->setCommands();
 	std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
+}
+
+Server::~Server()
+{
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		close((*it).sock());
+	close(this->_sock);
 }
 
 void Server::setCommands()
@@ -157,7 +166,7 @@ void Server::startServer()
 {
 	int res = 0;
 
-	while (true)
+	while (g_run)
 	{
 		res = poll(this->_pollFds.data(), this->_pollFds.size(), 5000);
 		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
