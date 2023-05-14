@@ -152,12 +152,7 @@ void Server::handleClientReq(Client& client, int i)
 	memset(buffer_arr, 0, RECV_BUF);
 	int		recv_len = 0;
 	
-	// std::cout << client.getPollFd().fd << std::endl;
-	// std::cout << this->_clients[i - 1].getPollFd().fd << std::endl;
-	// recv_len = recv(this->_pollFds[i].fd, &buffer_arr, RECV_BUF, 0);
 	recv_len = recv(client.getPollFd().fd, &buffer_arr, RECV_BUF, 0);
-
-	// std::cout << this->_pollFds[i].fd << std::endl;
 
 	if (recv_len <= 0)
 		this->handleReqQuit(i);

@@ -100,12 +100,13 @@ class Server {
 		void accept_client();
 
 		void handleClientReq(Client& client, int i);
-		void handleReqHandshake(int i, std::vector<std::string> reqVec);
-		void handleReqPing(int i, std::vector<std::string> reqVec);
-		void handleReqNick(int i, std::vector<std::string> reqVec);
-		void handleReqUser(int i, std::vector<std::string> reqVec);
-		void handleReqMode(int i, std::vector<std::string> reqVec);
-		void handleReqQuit(int i);
+		
+		void handleReqHandshake(Client& Client, std::vector<std::string> reqVec);
+		void handleReqPing(Client& Client, std::vector<std::string> reqVec);
+		void handleReqNick(Client& Client, std::vector<std::string> reqVec);
+		void handleReqUser(Client& Client, std::vector<std::string> reqVec);
+		void handleReqMode(Client& Client, std::vector<std::string> reqVec);
+		void handleReqQuit(Client& Client);
 
 		bool parseReq(std::string command, int i);
 

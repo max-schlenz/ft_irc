@@ -70,7 +70,7 @@ class Client
 		// void setPollFd(pollfd& pollFd) {
 		// 	this->_pollFd = pollFd;
 		// }
-		pollfd getPollFd() {
+		pollfd& getPollFd() {
 			return this->_pollFd;
 		}
 		// Client(std::string nickname, std::string username, bool op, pollfd& pollFd) : _nickName(nickname), _userName(username), _op(op) {}
@@ -78,6 +78,7 @@ class Client
 		// Client& operator=(const Client& other);
 		// Client(){}
 		// ~Client(){}
+		
 	private:
 		std::string _nickName;
 		std::string _userName;
