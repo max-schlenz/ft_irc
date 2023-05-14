@@ -74,8 +74,8 @@ class Server {
 			this->_saddr_in_len = _saddr_in_len;
 		}
 		void setCommands() ;
-		void exec_cmd(std::string cmd, std::string rest) {
-			this->_commands[cmd](rest);
+		void exec_cmd(std::vector<std::string> reqVec) {
+			this->_commands[reqVec[0]](reqVec);
 		}
 		bool checkCmd(std::vector<std::string> req);
 		const int& sock() const {
@@ -117,7 +117,7 @@ class Server {
 		
 		std::vector<Client> _clients;
 		std::vector<pollfd> _pollFds;
-		std::map<std::string, void(*)(std::string rest)> _commands;
+		std::map<std::string, void(*)(std::vector<std::string> reqVec)> _commands;
 };
 
 #endif

@@ -16,14 +16,14 @@
 # define RESET "\033[0m"
 
 void	exiting(int error_code);
-void	join(std::string cmd);
-void	leave(std::string cmd);
-void	nick(std::string cmd);
-void	quit(std::string cmd);
-void	msg(std::string cmd);
-void	topic(std::string cmd);
-void	mode(std::string cmd);
-void	kick(std::string cmd);
-void	invite(std::string cmd);
+void	join(std::vector<std::string> reqVec);
+void	leave(std::vector<std::string> reqVec);
+void	nick(std::vector<std::string> reqVec);
+void	quit(std::vector<std::string> reqVec);
+void	msg(std::vector<std::string> reqVec);
+void	topic(std::vector<std::string> reqVec);
+void	mode(std::vector<std::string> reqVec);
+void	kick(std::vector<std::string> reqVec);
+void	invite(std::vector<std::string> reqVec);
 
 #endif

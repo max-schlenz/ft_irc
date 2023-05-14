@@ -40,9 +40,9 @@ void Server::setCommands()
 	this->_commands["INVITE"] = &invite;
 }
 
-bool Server::checkCmd(std::vector<std::string> req)
+bool Server::checkCmd(std::vector<std::string> reqVec)
 {
-	std::map<std::string, void(*)(std::string)>::iterator it = this->_commands.find(req[0]);
+	std::map<std::string, void(*)(std::vector<std::string> reqVec)>::iterator it = this->_commands.find(reqVec[0]);
 
 	if (it == this->_commands.end()) {
 		return (false);
@@ -109,12 +109,16 @@ bool Server::parseReq(std::string request, int i)
 	while (iss >> reqField)
 		reqVec.push_back(reqField);
 
-	if (request.find("CAP LS") != std::string::npos)
+	if (request.find("CAP LS") != std::string::npos) {
 		this->handleReqHandshake(i, reqVec);
-	
-	else if (request.find("PING") != std::string::npos)
+		return (true);
+	}
+	else if (request.find("PING") != std::string::npos) {
 		this->handleReqPing(i, reqVec);
-		
+		return (true);
+	}
+	else if (request.find("USER") != std::string::npos)
+		std::cout << "ignore user" << std::endl;
 	else if (request.find("NICK") != std::string::npos)
 		this->handleReqNick(i, reqVec);
 
@@ -129,7 +133,6 @@ bool Server::parseReq(std::string request, int i)
 		this->handleReqQuit(i);
 		return false;
 	}
-
 	else
 		std::cout << GRAY << "not recognized: " RESET << request << std::endl;
 	return true;
