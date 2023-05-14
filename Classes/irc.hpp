@@ -16,14 +16,16 @@
 # define RESET "\033[0m"
 
 void	exiting(int error_code);
-void	join(std::vector<std::string> reqVec);
-void	leave(std::vector<std::string> reqVec);
-void	nick(std::vector<std::string> reqVec);
-void	quit(std::vector<std::string> reqVec);
-void	msg(std::vector<std::string> reqVec);
-void	topic(std::vector<std::string> reqVec);
-void	mode(std::vector<std::string> reqVec);
-void	kick(std::vector<std::string> reqVec);
-void	invite(std::vector<std::string> reqVec);
+void	join(std::vector<std::string> reqVec, Client& client);
+void	leave(std::vector<std::string> reqVec, Client& client);
+void	nick(std::vector<std::string> reqVec, Client& client);
+void	quit(std::vector<std::string> reqVec, Client& client);
+void	msg(std::vector<std::string> reqVec, Client& client);
+void	topic(std::vector<std::string> reqVec, Client& client);
+void	mode(std::vector<std::string> reqVec, Client& client);
+void	kick(std::vector<std::string> reqVec, Client& client);
+void	invite(std::vector<std::string> reqVec, Client& client);
+void	user(std::vector<std::string> reqVec, Client& client);
+void	ping(std::vector<std::string> reqVec, Client& client);
 
 #endif

@@ -40,19 +40,20 @@ void Server::setCommands()
 {
 	this->_commands["JOIN"] = &join;
 	this->_commands["LEAVE"] = &leave;
-	this->_commands["QUIT"] = &quit;
 	this->_commands["MSG"] = &msg;
 	this->_commands["NICK"] = &nick;
 	this->_commands["TOPIC"] = &topic;
 	this->_commands["MODE"] = &mode;
 	this->_commands["KICK"] = &kick;
 	this->_commands["INVITE"] = &invite;
+	this->_commands["USER"] = &user;
+	this->_commands["PING"] = &ping;
 }
 
 bool Server::checkCmd(std::vector<std::string> reqVec)
 {
-	std::map<std::string, void(*)(std::vector<std::string> reqVec)>::iterator it = this->_commands.find(reqVec[0]);
-
+	std::map<std::string, void(*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
+	std::cout << "recV:" << reqVec[0] << std::endl;
 	if (it == this->_commands.end()) {
 		return (false);
 	}
@@ -65,27 +66,21 @@ bool Server::parseReq(Client& client, std::string request)
 	std::string reqField;
 
 	std::istringstream iss(request);
-	while (iss >> reqField)
-		reqVec.push_back(reqField);
+	while (iss >> reqField) {
+		if (iss.fail())
+			std::cout << "iss fail" << std::endl;
+		else if (iss.good())
+			reqVec.push_back(reqField);
+		else
+			std::cout << "iss sth else" << std::endl;
+	}
 
 	if (request.find("CAP LS") != std::string::npos)
 		this->handleReqHandshake(client, reqVec);
-	
-	else if (request.find("PING") != std::string::npos)
-		this->handleReqPing(client, reqVec);
-		
-	else if (request.find("NICK") != std::string::npos)
-		this->handleReqNick(client, reqVec);
-
-	else if (request.find("USER") != std::string::npos)
-		this->handleReqUser(client, reqVec);
-	
-	else if (request.find("MODE") != std::string::npos)
-		this->handleReqMode(client, reqVec);
-	
-	else if (request.find("QUIT") != std::string::npos)
+	else if (checkCmd(reqVec))
+		this->_commands[reqVec[0]](reqVec, client);
+	else if (reqVec[0] == "QUIT")
 		return false;
-
 	else
 		std::cout << GRAY << "not recognized: " RESET << request << std::endl;
 	return true;
