@@ -7,6 +7,12 @@ extern bool g_run;
 
 Server::Server(int port)
 {
+
+	this->_channels.reserve(1024);
+	this->_clients.reserve(1024);
+	this->_pollFds.reserve(1024);
+
+
 	this->_proto = getprotobyname("tcp");
 	this->_sock = socket(AF_INET, SOCK_STREAM, this->_proto->p_proto);
 	this->_port = port;
@@ -49,6 +55,7 @@ void Server::setCommands()
 	this->_commands["INVITE"] = &Server::invite;
 	this->_commands["USER"] = &Server::user;
 	this->_commands["PING"] = &Server::ping;
+	this->_commands["WHOIS"] = &Server::whois;
 }
 
 bool Server::parseReq(Client& client, std::string request)
@@ -98,6 +105,28 @@ void Server::sendUserList(Client& client, Channel& channel)
 	// std::cout << BRED << response << RESET << std::endl;
 }
 
+bool Server::isValidClient(std::string name)
+{
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (it->getNickname() == name)
+			return true;
+	}
+	return false;
+}
+
+// ! use isValidClient() as protection !
+Client &Server::getClientName(std::string name)
+{
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (it->getNickname() == name)
+			return (*it);
+	}
+	Client *err;
+	return *(err);
+}
+
 bool Server::parseReqQueue(Client& client)
 {
 	for (std::vector<std::string>::iterator it = client.getReqQueue().begin(); it != client.getReqQueue().end(); ++it)
@@ -141,20 +170,19 @@ bool Server::handleClientReq(Client& client)
 void Server::accept_client()
 {
 	sockaddr_in sin;
-	char* ipStr;
-	pollfd client_poll_fd;
 	socklen_t size = sizeof(sin);
 	int sock = accept(this->_sock, (struct sockaddr*)&sin, &size);
 	if (sock > 0)
 	{
 		getsockname(sock, (struct sockaddr*)&sin, &size);
-		ipStr = inet_ntoa(sin.sin_addr);
+		std::string ipStr = inet_ntoa(sin.sin_addr);
 
+		pollfd client_poll_fd;
 		client_poll_fd.fd = sock;
 		client_poll_fd.events = POLLIN;
 		this->_pollFds.push_back(client_poll_fd);
 
-		Client client(sin, size, sock, ipStr, client_poll_fd);
+		Client client(sin, sock, ipStr, client_poll_fd);
 		this->_clients.push_back(client);
 	}
 }
@@ -179,7 +207,7 @@ void Server::startServer()
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
 				this->accept_client();
 
-			else if (this->_pollFds[i].revents & POLLIN)
+			else if (i > 0 && this->_pollFds[i].revents & POLLIN)
 			{
 				if (!this->handleClientReq(this->_clients[i - 1]))
 					this->disconnectClient(this->_clients[i - 1], i);

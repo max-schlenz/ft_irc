@@ -2,10 +2,13 @@
 
 void Server::handleReqHandshake(Client& client, std::vector<std::string> reqVec)
 {
-	std::string response = ":127.0.0.1 001 tdehne :\002\037\0038Welcome to our dmt.irc server!\002\037\0038\r\n";
-	send(client.getSock(), response.c_str(), response.size(), 0);
-	response = "\033[0;34m[CAP LS]\033[0m no available capabilities\r\n";
-	send(client.getSock(), response.c_str(), response.size(), 0);
+	// if (client.getNickname() != "default")
+	// {
+		std::string response = ":127.0.0.1 CAP * LS :multi-prefix away-notify account-notify\r\n";
+		send(client.getSock(), response.c_str(), response.size(), 0);
+		response = ":127.0.0.1 001 " + client.getNickname() + " :\002\037\0038Welcome to our dmt.irc server!\002\037\0038\r\n";
+		send(client.getSock(), response.c_str(), response.size(), 0);
+	// }
 }
 
 //MUST NOT contain any of the following characters: space (' ', 0x20), comma (',', 0x2C), asterisk ('*', 0x2A), question mark ('?', 0x3F), exclamation mark ('!', 0x21), at sign ('@', 0x40)

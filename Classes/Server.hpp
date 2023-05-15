@@ -122,6 +122,8 @@ class Server {
 		void	invite(std::vector<std::string> reqVec, Client& client);
 		void	user(std::vector<std::string> reqVec, Client& client);
 		void	ping(std::vector<std::string> reqVec, Client& client);
+		void dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
+		void whois(std::vector<std::string> reqVec, Client &client);
 
 		void buildReqQueue(Client& client, char buffer_arr[RECV_BUF]);
 		bool parseReqQueue(Client& client);
@@ -131,6 +133,9 @@ class Server {
 		bool parseReq(Client& client, std::string command);
 
 		void sendUserList(Client& client, Channel& channel);
+
+		bool isValidClient(std::string name);
+		Client& getClientName(std::string name);
 
 	private:
 		int	_sock;

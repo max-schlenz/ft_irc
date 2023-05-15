@@ -64,12 +64,13 @@ class Client
 		void setReqQueue(std::vector<std::string> reqQueue) {
 			this->_reqQueue = reqQueue;
 		}
-		std::string& getUsername() {
+		std::string getUsername() {
 			return this->_userName;
 		}
-		std::string& getNickname() {
+		std::string getNickname() {
 			return this->_nickName;
 		}
+		std::string getRealName();
 		pollfd& getPollFd() {
 			return this->_pollFd;
 		}
@@ -78,7 +79,10 @@ class Client
 			return this->_joinedChannels;
 		}
 
-		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
+
+		// Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
+		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
+
 		
 	private:
 		std::string _nickName;
@@ -91,6 +95,7 @@ class Client
 		socklen_t _saddr_in_len;
 		
 		pollfd _pollFd;
+
 
 		std::vector<std::string> _reqQueue;
 		std::vector<Channel*> _joinedChannels;

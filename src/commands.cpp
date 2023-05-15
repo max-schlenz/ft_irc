@@ -75,6 +75,7 @@ void Server::join(std::vector<std::string> reqVec, Client& client)
 		this->_channels.push_back(channel);
 
 		Channel& channel_ref = this->_channels.back();
+		
 
 		channel_ref.getClients().push_back(&client);
 		std::cout << GRAY << client.getNickname() << " created channel: " << RESET << channel.getName() << std::endl;
@@ -87,6 +88,26 @@ void Server::join(std::vector<std::string> reqVec, Client& client)
 				send(client.getSock(), response.c_str(), response.size(), 0);
 				this->sendUserList(client, channel_ref);
 	}
+}
+
+// 311 -> found
+// 401 -> not found
+void Server::whois(std::vector<std::string> reqVec, Client& client)
+{
+	if (reqVec.size() > 1 && this->isValidClient(reqVec[1]))
+	{
+		Client target = this->getClientName(reqVec[1]);
+		std::string response = ":127.0.0.1 311 " + client.getNickname() + " " + reqVec[1] + " " + target.getNickname() + " " + target.getUsername() + " * :" + target.getRealName() + "\r\n";
+		send(client.getSock(), response.c_str(), response.size(), 0);
+		return ;
+	}
+	else if (reqVec.size() > 1)
+	{
+		std::string response = ":127.0.0.1 401 " + client.getNickname() + " " + reqVec[1] + " :No such nick/channel";
+		send(client.getSock(), response.c_str(), response.size(), 0);
+	}
+	// std::cout << GRAY << "WHOIS error" << RESET << std::endl;
+	// this->dbgPrintAllUsers(reqVec, client);
 }
 
 void Server::leave(std::vector<std::string> reqVec, Client& client)
@@ -145,4 +166,12 @@ void Server::ping(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), response.c_str(), response.size(), 0);
 		std::cout << GRAY << "PING recieved from " << client.getIpStr() << " (" << client.getNickname() << ")" << RESET << std::endl;
 	}
+}
+
+void Server::dbgPrintAllUsers(std::vector<std::string> reqVec, Client& client)
+{
+	std::cout << "--------------------" << std::endl;
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		std::cout << it->getNickname() << std::endl;
+	std::cout << "--------------------" << std::endl;
 }
