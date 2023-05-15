@@ -1,13 +1,16 @@
+
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
-# include <string>
-# include <iostream>
-# include <netinet/in.h>
-# include <arpa/inet.h>
-# include <vector>
-# include <poll.h>
+
+#include <string>
+#include <vector>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <poll.h>
 
 typedef struct sockaddr_in sockaddr_in;
+
+class Channel;
 
 class Client
 {
@@ -71,6 +74,10 @@ class Client
 			return this->_pollFd;
 		}
 
+		std::vector<Channel*>& getJoinedChannels() {
+			return this->_joinedChannels;
+		}
+
 		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
 		
 	private:
@@ -83,9 +90,10 @@ class Client
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
 		
-		std::vector<std::string> _reqQueue;
 		pollfd _pollFd;
-		
+
+		std::vector<std::string> _reqQueue;
+		std::vector<Channel*> _joinedChannels;
 };
 
 #endif

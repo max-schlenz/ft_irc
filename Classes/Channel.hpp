@@ -1,16 +1,19 @@
+
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
-# include "Client.hpp"
-# include <array>
+
+#include <string>
+#include <vector>
+#include "Client.hpp"
 
 class Channel
 {
 	public:
 		const std::string& get_topic() const {
-			return (this->topic);
+			return (this->_topic);
 		}
 		const std::string& get_password() const {
-			return (this->password);
+			return (this->_password);
 		}
 		const int get_num_clients() const {
 			return (this->num_clients);
@@ -18,40 +21,45 @@ class Channel
 		const int get_channel_size() const {
 			return (this->channel_size);
 		}
-		std::vector<Client>& get_clients() {
+		std::vector<Client*>& getClients() {
 			return (this->_clients);
 		}
 		void set_topic(std::string topic){
-			this->topic = topic;
+			this->_topic = topic;
 		}
 		void set_password(std::string password){
-			this->password = password;
+			this->_password = password;
 		}
 		void set_channel_size(int size) {
 			this->channel_size = size;
 		}
-		void add_client(Client client){
-			this->_clients.push_back(client);
-		}
+		// void add_client(Client client){
+		// 	this->_clients.push_back(client);
+		// }
 		Channel(std::string topic, std::string password, int size) : num_clients(0) {
-			this->topic = topic;
-			this->password = password;
+			this->_topic = topic;
+			this->_password = password;
 			this->channel_size = size;
 		}
+		std::string getName() {
+			return this->_name;
+		}
+		Channel(std::string name);
 		Channel(){}
 		~Channel(){}
 	private:
-		std::vector<Client> _clients;
-		std::string	topic;
-		std::string	password;
-		std::string	modes;
+		std::string	_name;
+		std::string	_topic;
+		std::string	_password;
+		std::string	_modes;
 		bool		mode_i;
 		bool		mode_t;
 		bool		mode_k;
 		bool		mode_o;
 		int			num_clients;
 		int			channel_size;
-		int lol;
+
+		std::vector<Client*> _clients;
 };
 
 #endif

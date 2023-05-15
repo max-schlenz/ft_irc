@@ -38,16 +38,17 @@ Server::~Server()
 
 void Server::setCommands()
 {
-	this->_commands["JOIN"] = &join;
-	this->_commands["LEAVE"] = &leave;
-	this->_commands["MSG"] = &msg;
-	this->_commands["NICK"] = &nick;
-	this->_commands["TOPIC"] = &topic;
-	this->_commands["MODE"] = &mode;
-	this->_commands["KICK"] = &kick;
-	this->_commands["INVITE"] = &invite;
-	this->_commands["USER"] = &user;
-	this->_commands["PING"] = &ping;
+	this->_commands["JOIN"] = &Server::join;
+	this->_commands["PART"] = &Server::part;
+	this->_commands["LEAVE"] = &Server::leave;
+	this->_commands["MSG"] = &Server::msg;
+	this->_commands["NICK"] = &Server::nick;
+	this->_commands["TOPIC"] = &Server::topic;
+	this->_commands["MODE"] = &Server::mode;
+	this->_commands["KICK"] = &Server::kick;
+	this->_commands["INVITE"] = &Server::invite;
+	this->_commands["USER"] = &Server::user;
+	this->_commands["PING"] = &Server::ping;
 }
 
 bool Server::parseReq(Client& client, std::string request)
@@ -56,23 +57,24 @@ bool Server::parseReq(Client& client, std::string request)
 	std::string reqField;
 
 	std::istringstream iss(request);
-	while (iss >> reqField) {
-		if (iss.fail())
-			std::cout << "iss fail" << std::endl;
-		else if (iss.good())
-			reqVec.push_back(reqField);
-		else
-			std::cout << "iss sth else" << std::endl;
-	}
+	while (iss >> reqField)
+		reqVec.push_back(reqField);
 
-	if (request.find("CAP LS") != std::string::npos)
-		this->handleReqHandshake(client, reqVec);
-	else if (this->_commands.find(reqVec[0]) != this->_commands.end())
-		this->_commands[reqVec[0]](reqVec, client);
-	else if (reqVec[0] == "QUIT")
-		return false;
-	else
-		std::cout << GRAY << "not recognized: " RESET << request << std::endl;
+	if (reqVec.size())
+	{
+		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
+		
+		if (request.find("CAP LS") != std::string::npos)
+			this->handleReqHandshake(client, reqVec);
+		
+		else if (it != this->_commands.end())
+			(this->*(it->second))(reqVec, client);
+
+		else if (reqVec[0] == "QUIT")
+			return false;
+		else
+			std::cout << GRAY << "not recognized: " RESET << request << std::endl;
+	}
 	return true;
 }
 
