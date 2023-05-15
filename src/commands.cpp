@@ -39,6 +39,7 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 	}
 }
 
+//:NickName!UserName@host JOIN #channelname
 void Server::join(std::vector<std::string> reqVec, Client& client)
 {
 	if (reqVec.size() > 1)
@@ -56,6 +57,17 @@ void Server::join(std::vector<std::string> reqVec, Client& client)
 				client.getJoinedChannels().push_back(&(*it));
 				(*it).getClients().push_back(&client);
 				std::cout << GRAY << client.getNickname() << " joined channel: " << RESET << it->getName() << std::endl;
+				
+
+				std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 JOIN " + reqVec[1] + "\r\n";
+				// std::string response = ":127.0.0.1 JOIN " + reqVec[1] + "\r\n";
+				// std::string response = ":" + client.getNickname() + " JOIN " + reqVec[1] + "\r\n";
+				std::cout << BRED << response << RESET << std::endl;
+				send(client.getSock(), response.c_str(), response.size(), 0);
+
+
+				this->sendUserList(client, *it);
+
 				return ;
 			}
 		}
@@ -67,6 +79,13 @@ void Server::join(std::vector<std::string> reqVec, Client& client)
 		channel_ref.getClients().push_back(&client);
 		std::cout << GRAY << client.getNickname() << " created channel: " << RESET << channel.getName() << std::endl;
 		client.getJoinedChannels().push_back(&channel_ref);
+				
+				std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 JOIN " + reqVec[1] + "\r\n";
+				// std::string response = ":127.0.0.1 JOIN " + reqVec[1] + "\r\n";
+				// std::string response = ":" + client.getNickname() + " JOIN " + reqVec[1] + "\r\n";
+				std::cout << BRED << response << RESET << std::endl;
+				send(client.getSock(), response.c_str(), response.size(), 0);
+				this->sendUserList(client, channel_ref);
 	}
 }
 

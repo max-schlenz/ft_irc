@@ -130,6 +130,8 @@ class Server {
 	
 		bool parseReq(Client& client, std::string command);
 
+		void sendUserList(Client& client, Channel& channel);
+
 	private:
 		int	_sock;
 		int _port;

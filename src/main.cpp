@@ -5,6 +5,7 @@
 #include "Client.hpp"
 #include "irc.hpp"
 #include <signal.h>
+#include "definitions.hpp"
 
 bool g_run = true;
 

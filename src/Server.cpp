@@ -78,6 +78,26 @@ bool Server::parseReq(Client& client, std::string request)
 	return true;
 }
 
+//:<server> 353 <nick> = <channel> :<space-separated list of nicks>
+void Server::sendUserList(Client& client, Channel& channel)
+{
+	std::string response = ":127.0.0.1 353 " + client.getNickname() + " = " + channel.getName() + " :";
+	for (std::vector<Client*>::iterator it = channel.getClients().begin(); it != channel.getClients().end(); ++it)
+	{
+ 		response += (*it)->getNickname();
+		if (it + 1 != channel.getClients().end())
+			response += " ";
+		else
+			response += "\r\n";
+	}
+	send(client.getSock(), response.c_str(), response.size(), 0);
+	
+	response = ":127.0.0.1 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list\r\n";
+	send(client.getSock(), response.c_str(), response.size(), 0);
+
+	// std::cout << BRED << response << RESET << std::endl;
+}
+
 bool Server::parseReqQueue(Client& client)
 {
 	for (std::vector<std::string>::iterator it = client.getReqQueue().begin(); it != client.getReqQueue().end(); ++it)
