@@ -122,8 +122,10 @@ class Server {
 		void	invite(std::vector<std::string> reqVec, Client& client);
 		void	user(std::vector<std::string> reqVec, Client& client);
 		void	ping(std::vector<std::string> reqVec, Client& client);
-		void dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
-		void whois(std::vector<std::string> reqVec, Client &client);
+		void	whois(std::vector<std::string> reqVec, Client &client);
+		void	capreq(std::vector<std::string> reqVec, Client &client);
+
+		void	dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
 
 		void buildReqQueue(Client& client, char buffer_arr[RECV_BUF]);
 		bool parseReqQueue(Client& client);

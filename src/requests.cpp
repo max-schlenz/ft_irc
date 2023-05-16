@@ -4,9 +4,7 @@ void Server::handleReqHandshake(Client& client, std::vector<std::string> reqVec)
 {
 	// if (client.getNickname() != "default")
 	// {
-		std::string response = ":127.0.0.1 CAP * LS :multi-prefix away-notify account-notify\r\n";
-		send(client.getSock(), response.c_str(), response.size(), 0);
-		response = ":127.0.0.1 001 " + client.getNickname() + " :\002\037\0038Welcome to our dmt.irc server!\002\037\0038\r\n";
+		std::string response = ":127.0.0.1 001 " + client.getNickname() + " :\002\037\0038Welcome to our dmt.irc server!\002\037\0038\r\n";
 		send(client.getSock(), response.c_str(), response.size(), 0);
 	// }
 }

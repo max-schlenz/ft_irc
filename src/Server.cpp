@@ -56,6 +56,7 @@ void Server::setCommands()
 	this->_commands["USER"] = &Server::user;
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
+	this->_commands["CAP"] = &Server::capreq;
 }
 
 bool Server::parseReq(Client& client, std::string request)
