@@ -97,9 +97,6 @@ class Server {
 		~Server();
 		void startServer();
 		void accept_client();
-		// void exec_cmd(std::vector<std::string> reqVec, Client& client) {
-		// 	this->_commands[reqVec[0]](reqVec, client);
-		// }
 
 		bool handleClientReq(Client& client);
 		
@@ -122,10 +119,12 @@ class Server {
 		void	invite(std::vector<std::string> reqVec, Client& client);
 		void	user(std::vector<std::string> reqVec, Client& client);
 		void	ping(std::vector<std::string> reqVec, Client& client);
-		void	whois(std::vector<std::string> reqVec, Client &client);
+		void whois(std::vector<std::string> reqVec, Client &client);
 		void	capreq(std::vector<std::string> reqVec, Client &client);
 
-		void	dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
+		// void	dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
+		// void	dbgPrintAllChannels(std::vector<std::string> reqVec, Client &client);
+		void dbgPrint(std::vector<std::string> reqVec, Client &client);
 
 		void buildReqQueue(Client& client, char buffer_arr[RECV_BUF]);
 		bool parseReqQueue(Client& client);
@@ -134,10 +133,14 @@ class Server {
 	
 		bool parseReq(Client& client, std::string command);
 
+		void broadcastEvent(Client &client, Channel &channel);
 		void sendUserList(Client& client, Channel& channel);
 
 		bool isValidClient(std::string name);
 		Client& getClientName(std::string name);
+
+		void sendMsgToAll(std::string message);
+		void sendMsgToAllInChannel(Client &client, std::string message);
 
 	private:
 		int	_sock;

@@ -57,6 +57,27 @@ void Server::setCommands()
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
 	this->_commands["CAP"] = &Server::capreq;
+
+	this->_commands["dbg"] = &Server::dbgPrint;
+	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
+}
+
+void Server::sendMsgToAll(std::string message)
+{
+	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		send(it->getSock(), message.c_str(), message.size(), 0);
+}
+
+void Server::sendMsgToAllInChannel(Client& client, std::string message)
+{
+	for (std::vector<Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel)
+	{
+		for (std::vector<Client*>::iterator itClient = (*itChannel)->getClients().begin(); itClient != (*itChannel)->getClients().end(); ++itClient)
+		{
+			// if ((*itClient)->getNickname() != client.getNickname())
+				send((*itClient)->getSock(), message.c_str(), message.size(), 0);
+		}
+	}
 }
 
 bool Server::parseReq(Client& client, std::string request)
@@ -86,6 +107,11 @@ bool Server::parseReq(Client& client, std::string request)
 	return true;
 }
 
+void Server::broadcastEvent(Client& client, Channel& channel)
+{
+	// std::string response = :NickName!~UserName@host JOIN #channelname
+}
+
 //:<server> 353 <nick> = <channel> :<space-separated list of nicks>
 void Server::sendUserList(Client& client, Channel& channel)
 {
@@ -95,9 +121,8 @@ void Server::sendUserList(Client& client, Channel& channel)
  		response += (*it)->getNickname();
 		if (it + 1 != channel.getClients().end())
 			response += " ";
-		else
-			response += "\r\n";
 	}
+	response += "\r\n";
 	send(client.getSock(), response.c_str(), response.size(), 0);
 	
 	response = ":127.0.0.1 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list\r\n";

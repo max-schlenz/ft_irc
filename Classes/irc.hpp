@@ -17,6 +17,8 @@
 # define BWHITE "\033[1;37m"
 # define RESET "\033[0m"
 
+# define VERBOSE 0
+
 void	exiting(int error_code);
 
 
