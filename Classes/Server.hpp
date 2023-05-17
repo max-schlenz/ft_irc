@@ -75,6 +75,7 @@ class Server {
 			this->_saddr_in_len = _saddr_in_len;
 		}
 		void setCommands() ;
+		void sendMsgToAll(Client &client, std::string message);
 		bool checkCmd(std::vector<std::string> req);
 		const int& getSock() const {
 			return (this->_sock);
@@ -139,7 +140,7 @@ class Server {
 		bool isValidClient(std::string name);
 		Client& getClientName(std::string name);
 
-		void sendMsgToAll(std::string message);
+		// void sendMsgToAll(std::string message);
 		void sendMsgToAllInChannel(Client &client, std::string message);
 
 	private:

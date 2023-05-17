@@ -2,6 +2,7 @@
 
 void Server::handleReqHandshake(Client& client, std::vector<std::string> reqVec)
 {
+	// std::cout << "HANDSHAKE" << std::endl;
 	// if (client.getNickname() != "default")
 	// {
 		std::string response = ":127.0.0.1 001 " + client.getNickname() + " :\002\037\0038Welcome to our dmt.irc server!\002\037\0038\r\n";

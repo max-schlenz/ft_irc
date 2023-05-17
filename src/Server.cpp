@@ -62,10 +62,13 @@ void Server::setCommands()
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
 }
 
-void Server::sendMsgToAll(std::string message)
+void Server::sendMsgToAll(Client &client, std::string message)
 {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
-		send(it->getSock(), message.c_str(), message.size(), 0);
+	{
+		if (it->getNickname() != client.getNickname())
+			send(it->getSock(), message.c_str(), message.size(), 0);
+	}
 }
 
 void Server::sendMsgToAllInChannel(Client& client, std::string message)
@@ -179,6 +182,8 @@ bool Server::handleClientReq(Client& client)
 	memset(buffer_arr, 0, RECV_BUF);
 
 	int recv_len = recv(client.getPollFd().fd, &buffer_arr, RECV_BUF, 0);
+
+	// std::cout << BLUE << " < " << buffer_arr << RESET << std::endl;
 
 	if (recv_len <= 0)
 		return false;
