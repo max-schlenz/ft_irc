@@ -5,6 +5,7 @@
 #include "Client.hpp"
 #include "irc.hpp"
 #include <signal.h>
+#include "definitions.hpp"
 
 bool g_run = true;
 
@@ -25,11 +26,9 @@ void sig()
 
 int main(int argc, char **argv)
 {
-	int port;
+	int port = 6667;
 
-	if (argc != 2)
-		port = 6667;
-	else
+	if (argc == 2)
 		port = std::atoi(argv[1]);
 
 	sig();

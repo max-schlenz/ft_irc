@@ -1,8 +1,14 @@
 #include "Client.hpp"
 #include "Server.hpp"
 
-Client::Client(sockaddr_in sin, socklen_t sinLen, int sock, char* ipStr, pollfd& pollFd):
-	_pollFd(pollFd), _saddr_in(sin), _saddr_in_len(sinLen), _sock(sock), _ipStr(ipStr), _nickName("")
+std::string Client::getRealName()
 {
+	return this->_realName;
+}
+
+Client::Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd)
+	: _pollFd(pollFd), _saddr_in(sin), _sock(sock), _ipStr(ipStr), _nickName("default"), _userName("default"), _realName("default")
+{
+	
 	std::cout << GREEN << "Client " << BGREEN << this->_ipStr << GREEN << " connected." << RESET << std::endl;
 }

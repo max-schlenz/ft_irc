@@ -1,0 +1,8 @@
+
+#include "Channel.hpp"
+
+Channel::Channel(std::string name):
+	_name(name), _topic(), _password(), _modes()
+{
+
+}

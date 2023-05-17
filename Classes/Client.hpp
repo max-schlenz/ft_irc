@@ -1,20 +1,16 @@
+
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
-# include <string>
-# include <iostream>
-# include <netinet/in.h>
-# include <arpa/inet.h>
-# include <vector>
-# include <poll.h>
+
+#include <string>
+#include <vector>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <poll.h>
 
 typedef struct sockaddr_in sockaddr_in;
 
-typedef enum emodes {
-	INVISIBLE = 1,
-	OPERATOR = 2,
-	REGISTERED = 4
-
-} usermode;
+class Channel;
 
 class Client
 {
@@ -74,16 +70,25 @@ class Client
 		void setReqQueue(std::vector<std::string> reqQueue) {
 			this->_reqQueue = reqQueue;
 		}
-		std::string& getUsername() {
+		std::string getUsername() {
 			return this->_userName;
 		}
-		std::string& getNickname() {
+		std::string getNickname() {
 			return this->_nickName;
 		}
+		std::string getRealName();
 		pollfd& getPollFd() {
 			return this->_pollFd;
 		}
-		Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
+
+		std::vector<Channel*>& getJoinedChannels() {
+			return this->_joinedChannels;
+		}
+
+
+		// Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
+		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
+
 		
 	private:
 		std::string _nickName;
@@ -94,10 +99,12 @@ class Client
 		int 		_sock;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
-		int		_mode;
-		std::vector<std::string> _reqQueue;
-		pollfd _pollFd;
 		
+		pollfd _pollFd;
+
+
+		std::vector<std::string> _reqQueue;
+		std::vector<Channel*> _joinedChannels;
 };
 
 #endif

@@ -13,6 +13,7 @@
 # include <netinet/in.h>
 # include "Client.hpp"
 # include "irc.hpp"
+# include <algorithm>
 # include <vector>
 # include <poll.h>
 # include <stdexcept>
@@ -20,6 +21,7 @@
 # include <sstream>
 # include <map>
 # include <cstring>
+# include "Channel.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -95,25 +97,47 @@ class Server {
 		~Server();
 		void startServer();
 		void accept_client();
-		void exec_cmd(std::vector<std::string> reqVec, Client& client) {
-			this->_commands[reqVec[0]](reqVec, client);
-		}
+		// void exec_cmd(std::vector<std::string> reqVec, Client& client) {
+		// 	this->_commands[reqVec[0]](reqVec, client);
+		// }
 
 		bool handleClientReq(Client& client);
 		
-		void handleReqHandshake(Client& Client, std::vector<std::string> reqVec);
-		void handleReqPing(Client& Client, std::vector<std::string> reqVec);
-		void handleReqNick(Client& Client, std::vector<std::string> reqVec);
-		void handleReqUser(Client& Client, std::vector<std::string> reqVec);
-		void handleReqMode(Client& Client, std::vector<std::string> reqVec);
-		void handleReqQuit(Client& Client, int i);
+		void handleReqHandshake(Client& client, std::vector<std::string> reqVec);
+		void handleReqPing(Client& client, std::vector<std::string> reqVec);
+		void handleReqNick(Client& client, std::vector<std::string> reqVec);
+		void handleReqUser(Client& client, std::vector<std::string> reqVec);
+		void handleReqMode(Client& client, std::vector<std::string> reqVec);
+		void handleReqQuit(Client& client, int i);
+
+		void	join(std::vector<std::string> reqVec, Client& client);
+		void	part(std::vector<std::string> reqVec, Client& client);
+		void	leave(std::vector<std::string> reqVec, Client& client);
+		void	nick(std::vector<std::string> reqVec, Client& client);
+		void	quit(std::vector<std::string> reqVec, Client& client);
+		void	msg(std::vector<std::string> reqVec, Client& client);
+		void	topic(std::vector<std::string> reqVec, Client& client);
+		void	mode(std::vector<std::string> reqVec, Client& client);
+		void	kick(std::vector<std::string> reqVec, Client& client);
+		void	invite(std::vector<std::string> reqVec, Client& client);
+		void	user(std::vector<std::string> reqVec, Client& client);
+		void	ping(std::vector<std::string> reqVec, Client& client);
+		void	whois(std::vector<std::string> reqVec, Client &client);
+		void	capreq(std::vector<std::string> reqVec, Client &client);
+
+		void	dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
 
 		void buildReqQueue(Client& client, char buffer_arr[RECV_BUF]);
 		bool parseReqQueue(Client& client);
 		
 		void disconnectClient(Client& client, int i);
-
+	
 		bool parseReq(Client& client, std::string command);
+
+		void sendUserList(Client& client, Channel& channel);
+
+		bool isValidClient(std::string name);
+		Client& getClientName(std::string name);
 
 	private:
 		int	_sock;
@@ -124,8 +148,11 @@ class Server {
 		socklen_t _saddr_in_len;
 		
 		std::vector<Client> _clients;
+		std::vector<Channel> _channels;
+
 		std::vector<pollfd> _pollFds;
-		std::map<std::string, void(*)(std::vector<std::string> reqVec, Client& client)> _commands;
+		
+		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)> _commands;
 };
 
 #endif
