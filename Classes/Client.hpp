@@ -37,17 +37,11 @@ class Client
 		void setSinLen(socklen_t sinLen) {
 			this->_saddr_in_len = sinLen;
 		}
-		void setMode(int mode) {
-			this->_mode = mode;
-		}
 		const std::string& getUsername() const {
 			return (this->_userName);
 		}
 		const std::string& getNickname() const {
 			return (this->_nickName);
-		}
-		const int& getMode() const {
-			return (this->_mode);
 		}
 		const bool& getOp() const {
 			return (this->_op);

@@ -24,12 +24,6 @@ class Channel
 		std::vector<Client*>& getClients() {
 			return (this->_clients);
 		}
-		const int& getMode() const {
-			return (this->_mode);
-		}
-		void setMode(int mode) {
-			this->_mode = mode;
-		}
 		void set_topic(std::string topic){
 			this->_topic = topic;
 		}
