@@ -113,7 +113,7 @@ void Server::whois(std::vector<std::string> reqVec, Client& client)
 	}
 	else if (reqVec.size() > 1)
 	{
-		std::string response = ":127.0.0.1 401 " + client.getNickname() + " " + reqVec[1] + " :No such nick/channel";
+		std::string response = ":127.0.0.1 401 " + client.getNickname() + " " + reqVec[1] + " :No such nick/channel\r\n";
 		send(client.getSock(), response.c_str(), response.size(), 0);
 	}
 	// std::cout << GRAY << "WHOIS error" << RESET << std::endl;

@@ -21,18 +21,18 @@ bool checkNick(std::vector<std::string> reqVec, Client& client)
 	std::string currentNick = client.getNickname() + " ";
 	std::string err_msg;
 	if (reqVec.size() > 1) {
-		err_msg =  clientIp + currentNick + ":Erroneus nickname";
-		send(client.getSock(), err_msg.c_str(), 3, 0);
+		err_msg =  ERR_INVALIDNICK + clientIp + currentNick + ":Erroneus nickname\r\n";
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	else if (reqVec.size() < 1) {
-		err_msg = clientIp + ":No nickname given";
-		send(client.getSock(), ERR_NONICK.c_str(), 3, 0);
+		err_msg = ERR_NONICK + clientIp + ":No nickname given\r\n";
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	else if (!checkChars(name)) {
-		err_msg =  clientIp + currentNick + ":Erroneus nickname";
-		send(client.getSock(), err_msg.c_str(), 3, 0);
+		err_msg =  ERR_INVALIDNICK + clientIp + currentNick + ":Erroneus nickname\r\n";
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	else if (name.size() > 9)
@@ -45,13 +45,13 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 	std::string clientIp = client.getIpStr() + " ";
 	std::string err_msg;
 	if (client.getUsername().size() < 0) {
-		err_msg = ERR_ALREADYREGISTERED + ":You may not reregister";
-		send(client.getSock(), err_msg.c_str(), 3, 0);
+		err_msg = ERR_ALREADYREGISTERED + ":You may not reregister\r\n";
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	} else {
 		if (reqVec.size() < 1) {
 			err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters";
-			send(client.getSock(), err_msg.c_str(), 3, 0);
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 			return false;
 		}
 	}
