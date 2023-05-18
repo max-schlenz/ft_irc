@@ -1,4 +1,7 @@
+#ifndef DEFINITIONS_HPP
+# define DEFINITIONS_HPP
 
+# include <string>
 # define RPL_WELCOME 001
 # define RPL_YOURHOST 002
 # define RPL_CREATED 003
@@ -8,10 +11,12 @@
 # define RPL_NAMREPLY 353
 # define RPL_ENDOFNAMES 366
 
-# define ERR_NONICK "431"
-# define ERR_INVALIDNICK "432"
-# define ERR_NICKINUSE "433"
-# define ERR_USERNOTINCHANNEL "441"
-# define ERR_NEEDMOREPARAMS "461"
-# define ERR_ALREADYREGISTERED "462"
-# define ERR_INVITEONLYCHAN "473"
+# define ERR_NONICK std::string("431")
+# define ERR_INVALIDNICK std::string("432")
+# define ERR_NICKINUSE std::string("433")
+# define ERR_USERNOTINCHANNEL std::string("441")
+# define ERR_NEEDMOREPARAMS std::string("461")
+# define ERR_ALREADYREGISTERED std::string("462")
+# define ERR_INVITEONLYCHAN std::string("473")
+
+#endif
