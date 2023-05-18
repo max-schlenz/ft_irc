@@ -11,6 +11,7 @@
 # define RPL_NAMREPLY 353
 # define RPL_ENDOFNAMES 366
 
+# define ERR_NOSUCHCHANNEL std::string("403")
 # define ERR_NONICK std::string("431 ")
 # define ERR_INVALIDNICK std::string("432 ")
 # define ERR_NICKINUSE std::string("433 ")

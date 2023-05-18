@@ -6,26 +6,21 @@ static bool checkChars(std::string name)
 	std::string notAllowed = ",*?!@.";
 	std::string notStart = ":$#&";
 	for (int i = 0; i < notAllowed.size(); ++i) {
-		if (name.find(notAllowed[i]))
+		if (name.find(notAllowed[i]) != std::string::npos)
 			return false;
 	}
-	if (notStart.find(name[0]))
+	if (notStart.find(name[0]) != std::string::npos || isdigit(name[0]))
 		return false;
 	return true;
 }
 
 bool checkNick(std::vector<std::string> reqVec, Client& client)
 {
-	std::string name = reqVec[0];
+	std::string name = reqVec[1];
 	std::string clientIp = client.getIpStr() + " ";
 	std::string currentNick = client.getNickname() + " ";
 	std::string err_msg;
-	if (reqVec.size() > 1) {
-		err_msg =  ERR_INVALIDNICK + clientIp + currentNick + ":Erroneus nickname\r\n";
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-		return false;
-	}
-	else if (reqVec.size() < 1) {
+	if (reqVec.size() <= 1) { // there is no need fot this if as the irssi client already handles that case
 		err_msg = ERR_NONICK + clientIp + ":No nickname given\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
@@ -35,8 +30,6 @@ bool checkNick(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	else if (name.size() > 9)
-		std::cout << "SIZE greater 9: what to do" << std::endl;
 	return true;
 }
 
@@ -44,7 +37,7 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 {
 	std::string clientIp = client.getIpStr() + " ";
 	std::string err_msg;
-	if (client.getUsername().size() < 0) {
+	if (client.getUsername().size() <= 0) {
 		err_msg = ERR_ALREADYREGISTERED + ":You may not reregister\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
@@ -58,5 +51,20 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 	return true;
 }
 
-
-
+bool checkPart(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels)
+{
+	std::string clientIp = client.getIpStr() + " ";
+	std::string err_msg;
+	if (reqVec.size() < 2) {
+		err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters";
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	std::string channelToPart = reqVec[2].replace(0, 1, "#");
+	if (!channelExists(channelToPart, channels)) {
+		err_msg = ERR_NOSUCHCHANNEL + channelToPart + " :No such channel";
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	return true;
+}

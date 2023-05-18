@@ -18,6 +18,9 @@
 # define RESET "\033[0m"
 
 void	exiting(int error_code);
-
-
+bool	checkNick(std::vector<std::string> reqVec, Client& client);
+bool	checkUser(std::vector<std::string> reqVec, Client& client);
+bool	checkJoin(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels);
+bool	channelExists(std::string channelName, std::vector<Channel> channels);
+bool	checkPart(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels);
 #endif

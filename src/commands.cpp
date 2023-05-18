@@ -2,7 +2,7 @@
 
 void Server::part(std::vector<std::string> reqVec, Client& client)
 {
-	if (reqVec.size() > 1)
+	if (checkPart(reqVec, client, this->_channels))
 	{
 		for (std::vector<Channel*>::iterator it = client.getJoinedChannels().begin(); it != client.getJoinedChannels().end(); ++it)	//iterating through Clients joined channel list
 		{
@@ -44,7 +44,7 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 //:NickName!UserName@host JOIN #channelname
 void Server::join(std::vector<std::string> reqVec, Client& client)
 {
-	if (reqVec.size() > 1)
+	if (checkJoin(reqVec, client, this->_channels))
 	{
 		for (std::vector<Channel*>::iterator it = client.getJoinedChannels().begin(); it != client.getJoinedChannels().end(); ++it)
 		{
@@ -136,7 +136,7 @@ void Server::leave(std::vector<std::string> reqVec, Client& client)
 
 void Server::nick(std::vector<std::string> reqVec, Client& client)
 {
-	if (reqVec.size() > 1)
+	if (checkNick(reqVec, client))
 	{
 		client.setNickname(reqVec[1]);
 		std::cout << GRAY << "NICK set to " << client.getNickname() << std::endl;
@@ -170,7 +170,7 @@ void Server::invite(std::vector<std::string> reqVec, Client& client)
 
 void Server::user(std::vector<std::string> reqVec, Client& client)
 {
-	if (reqVec.size() > 1)
+	if (checkUser(reqVec, client))
 	{
 		client.setUsername(reqVec[1]);
 		std::cout << GRAY << "USER set to " << client.getUsername() << std::endl;
