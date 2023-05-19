@@ -2,7 +2,7 @@
 
 void Server::part(std::vector<std::string> reqVec, Client& client)
 {
-	if (checkPart(reqVec, client, this->_channels))
+	if (reqVec.size() > 1)
 	{
 		for (std::vector<Channel*>::iterator it = client.getJoinedChannels().begin(); it != client.getJoinedChannels().end(); ++it)	//iterating through Clients joined channel list
 		{
@@ -44,7 +44,7 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 //:NickName!UserName@host JOIN #channelname
 void Server::join(std::vector<std::string> reqVec, Client& client)
 {
-	if (checkJoin(reqVec, client, this->_channels))
+	if (reqVec.size() > 1)
 	{
 		for (std::vector<Channel*>::iterator it = client.getJoinedChannels().begin(); it != client.getJoinedChannels().end(); ++it)
 		{
