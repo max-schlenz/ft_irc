@@ -42,7 +42,7 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	} else {
-		if (reqVec.size() < 7) {
+		if (reqVec.size() < 6) {
 			err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters";
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 			return false;

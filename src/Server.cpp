@@ -63,6 +63,16 @@ void Server::setCommands()
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
 }
 
+bool Server::isUserInChannel(Client &client, std::string channelName)
+{
+	for (std::vector<Channel*>::iterator it = client.getJoinedChannels().begin(); it != client.getJoinedChannels().end(); ++it)
+	{
+		if ((*it)->getName() == channelName)
+			return true;
+	}
+	return false;
+}
+
 void Server::sendMsgToAll(Client &client, std::string message)
 {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)

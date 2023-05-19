@@ -12,14 +12,14 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 			{
 				std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 PART " + reqVec[1] + "\r\n";
 				send(client.getSock(), response.c_str(), response.size(), 0);
-				for (std::vector<Client*>::iterator it2 = (*it)->getClients().begin(); it2 != (*it)->getClients().end(); ++it2)	//iterating through joined channels clients, finding "itself" and erase field in vec
-				{
-					if ((*it2)->getNickname() == client.getNickname())
-					{
-						(*it)->getClients().erase(it2);
-						break ;
-					}
-				}
+				// for (std::vector<Client*>::iterator it2 = (*it)->getClients().begin(); it2 != (*it)->getClients().end(); ++it2)	//iterating through joined channels clients, finding "itself" and erase field in vec
+				// {
+				// 	if ((*it2)->getNickname() == client.getNickname())
+				// 	{
+				// 		(*it)->getClients().erase(it2);
+				// 		break ;
+				// 	}
+				// }
 				this->sendMsgToAll(client, response);
 
 				size_t numClients = (*it)->getClients().size(); //store size to catch empty channel (for channel deletion)
@@ -141,14 +141,27 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 {
 	// for (std::vector<std::string>::iterator it = reqVec.begin(); it != reqVec.end(); ++it)
 	// 	std::cout << ">" << *it << std::endl;
-	// if (reqVec.size() > 2)
-	// {
-	// 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
-	// 	{
-	// 		if ()
-	// 	}
-	// }
-}
+	if (reqVec.size() > 2)
+	{
+		for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		{
+			if ((*it).getNickname() != client.getNickname() && isUserInChannel(*it, reqVec[1]))
+			{
+				std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + reqVec[1] + " :";
+				if (reqVec[2].length() > 1)
+					reqVec[2] = reqVec[2].substr(1);
+				for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
+				{
+					response += *itVec;
+					if (itVec + 1 != reqVec.end())
+						response += " ";
+				}
+				response += "\r\n";
+				send(it->getSock(), response.c_str(), response.size(), 0);
+			}
+		}
+	}
+} 
 
 void Server::leave(std::vector<std::string> reqVec, Client& client)
 {

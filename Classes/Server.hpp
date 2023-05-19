@@ -75,6 +75,7 @@ class Server {
 			this->_saddr_in_len = _saddr_in_len;
 		}
 		void setCommands() ;
+		bool isUserInChannel(Client &client, std::string channelName);
 		void sendMsgToAll(Client &client, std::string message);
 		bool checkCmd(std::vector<std::string> req);
 		const int& getSock() const {
