@@ -38,6 +38,14 @@ class Channel
 		// void add_client(Client client){
 		// 	this->_clients.push_back(client);
 		// }
+		// std::vector<std::string>& getClientNames() {
+		// 	return this->_clientNames;
+		// }
+		
+		// std::map<std::string, Client*>& getClientMap() {
+		// 	return this->_clientMap;
+		// }
+
 		Channel(std::string topic, std::string password, int size) : num_clients(0) {
 			this->_topic = topic;
 			this->_password = password;
@@ -62,6 +70,8 @@ class Channel
 		int			channel_size;
 
 		std::vector<Client*> _clients;
+		// std::vector<std::string> _clientNames;
+		// std::map<std::string, Client*> _clientMap;
 };
 
 #endif

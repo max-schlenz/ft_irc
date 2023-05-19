@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <poll.h>
+#include <map>
 
 typedef struct sockaddr_in sockaddr_in;
 
@@ -84,8 +85,12 @@ class Client
 			return this->_pollFd;
 		}
 
-		std::vector<Channel*>& getJoinedChannels() {
-			return this->_joinedChannels;
+		// std::vector<std::string>& getChannelNames() {
+		// 	return this->_channelNames;
+		// }
+		
+		std::map<std::string, Channel*>& getJoinedChannelMap() {
+			return this->_joinedChannelMap;
 		}
 
 
@@ -108,7 +113,9 @@ class Client
 		bool _registered;
 
 		std::vector<std::string> _reqQueue;
-		std::vector<Channel*> _joinedChannels;
+		// std::vector<Channel*> _joinedChannels;
+		// std::vector<std::string> _channelNames;
+		std::map<std::string, Channel*> _joinedChannelMap;
 };
 
 #endif

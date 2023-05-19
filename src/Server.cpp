@@ -74,9 +74,16 @@ void Server::sendMsgToAll(Client &client, std::string message)
 
 void Server::sendMsgToAllInChannel(Client& client, std::string message)
 {
-	for (std::vector<Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel)
-	{
-		for (std::vector<Client*>::iterator itClient = (*itChannel)->getClients().begin(); itClient != (*itChannel)->getClients().end(); ++itClient)
+	// for (std::vector<Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel)
+	// {
+		// for (std::vector<Client*>::iterator itClient = (*itChannel)->getClients().begin(); itClient != (*itChannel)->getClients().end(); ++itClient)
+		// {
+		// 	// if ((*itClient)->getNickname() != client.getNickname())
+		// 		send((*itClient)->getSock(), message.c_str(), message.size(), 0);
+		// }
+	// }
+	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannelMap().begin(); itChannel != client.getJoinedChannelMap().end(); ++itChannel) {
+		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
 		{
 			// if ((*itClient)->getNickname() != client.getNickname())
 				send((*itClient)->getSock(), message.c_str(), message.size(), 0);
