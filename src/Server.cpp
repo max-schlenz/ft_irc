@@ -57,6 +57,7 @@ void Server::setCommands()
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
 	this->_commands["CAP"] = &Server::capreq;
+	this->_commands["PRIVMSG"] = &Server::privmsg;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;

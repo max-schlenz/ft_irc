@@ -36,6 +36,7 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 						else
 							++it2;	
 					}
+						std::cout << GRAY << "removed channel: " << RESET << reqVec[1] << std::endl;
 				}
 				break ;
 			}
@@ -64,22 +65,13 @@ void Server::join(std::vector<std::string> reqVec, Client& client)
 				(*it).getClients().push_back(&client);
 				std::cout << GRAY << client.getNickname() << " joined channel: " << RESET << it->getName() << std::endl;
 				
-
-				// std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 JOIN :" + reqVec[1] + "\r\n";
-				// std::string response = ":" + client.getNickname() + " JOIN :" + reqVec[1] + "\r\n";
-				// std::string response = ":127.0.0.1 331 " + client.getNickname() + " " + reqVec[1] + ":\r\n";
 				std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@localhost JOIN " + reqVec[1] + "\r\n";
-
-				// std::string response = ":127.0.0.1 JOIN " + reqVec[1] + "\r\n";
-				// std::string response = ":" + client.getNickname() + " JOIN " + reqVec[1] + "\r\n";
-				// std::cout << BRED << response << RESET << std::flush;
-
 				send(client.getSock(), response.c_str(), response.size(), 0);
+
 				this->sendMsgToAll(client, response);
 				for (std::vector<Client>::iterator it3 = this->_clients.begin(); it3 != this->_clients.end(); ++it3)
 					this->sendUserList(*it3, *it);
 
-				// this->sendUserList(client, *it);
 				return ;
 			}
 		}
@@ -92,17 +84,7 @@ void Server::join(std::vector<std::string> reqVec, Client& client)
 			client.getJoinedChannels().push_back(&channel_ref);
 			std::cout << GRAY << client.getNickname() << " joined channel: " << RESET << reqVec[1] << std::endl;
 					
-			// std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 JOIN :" + reqVec[1] + "\r\n";
-			// std::string response = ":" + client.getNickname() + " JOIN :" + reqVec[1] + "\r\n";
-			// std::string response = ":127.0.0.1 JOIN " + reqVec[1] + "\r\n";
-			// std::string response = ":" + client.getNickname() + " JOIN " + reqVec[1] + "\r\n";
-
- 				//:server-name 331 <client> <channel> :No topic is set
-			// std::string response = ":127.0.0.1 331 " + client.getNickname() + " " + reqVec[1] + ":\r\n";
 			std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@localhost JOIN " + reqVec[1] + "\r\n";
-
-			// std::cout << BRED << response << RESET << std::flush;
-			
 			send(client.getSock(), response.c_str(), response.size(), 0);
 			this->sendMsgToAll(client, response);
 			for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
@@ -153,6 +135,21 @@ void Server::capreq(std::vector<std::string> reqVec, Client &client)
 	std::cout << RESET << std::endl;
 }
 
+//:NICK!USER@host PRIVMSG <recipient> :<text>
+//PRIVMSG <recipient>{,<recipient>} <text to be sent>
+void Server::privmsg(std::vector<std::string> reqVec, Client &client)
+{
+	// for (std::vector<std::string>::iterator it = reqVec.begin(); it != reqVec.end(); ++it)
+	// 	std::cout << ">" << *it << std::endl;
+	// if (reqVec.size() > 2)
+	// {
+	// 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	// 	{
+	// 		if ()
+	// 	}
+	// }
+}
+
 void Server::leave(std::vector<std::string> reqVec, Client& client)
 {
 	std::cout << "leave" << std::endl;
@@ -185,6 +182,8 @@ void Server::nick(std::vector<std::string> reqVec, Client& client)
 		}
 	}
 }
+
+
 
 void Server::msg(std::vector<std::string> reqVec, Client& client)
 {

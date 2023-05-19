@@ -9,5 +9,5 @@ Channel::Channel(std::string name):
 
 Channel::~Channel()
 {
-	std::cout << GRAY << "   + removed channel: " << RESET << this->_name << std::endl;
+	;
 }
