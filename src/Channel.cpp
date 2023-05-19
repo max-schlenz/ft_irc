@@ -6,3 +6,8 @@ Channel::Channel(std::string name):
 {
 	std::cout << "channel: " << name << " created" << std::endl;
 }
+
+Channel::~Channel()
+{
+	std::cout << GRAY << "   + removed channel: " << RESET << this->_name << std::endl;
+}

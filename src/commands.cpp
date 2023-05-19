@@ -10,7 +10,7 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 		{
 			if ((*it)->getName() == reqVec[1])
 			{
-				std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 PART " + reqVec[1] + ":parted\r\n";
+				std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 PART " + reqVec[1] + "\r\n";
 				send(client.getSock(), response.c_str(), response.size(), 0);
 				for (std::vector<Client*>::iterator it2 = (*it)->getClients().begin(); it2 != (*it)->getClients().end(); ++it2)	//iterating through joined channels clients, finding "itself" and erase field in vec
 				{
@@ -23,21 +23,18 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 				this->sendMsgToAll(client, response);
 
 				size_t numClients = (*it)->getClients().size(); //store size to catch empty channel (for channel deletion)
-
 				
 				std::cout << GRAY << client.getNickname() << " left channel: " << RESET << (*it)->getName() << std::endl;
 				
 				it = client.getJoinedChannels().erase(it); //removing channel from clients joined channels
 				if (numClients == 0) // if no user left, remove channel
 				{
-					std::cout << GRAY << "   + removed channel: " << RESET << reqVec[1] << std::endl;
 					for (std::vector<Channel>::iterator it2 = this->_channels.begin(); it2 != this->_channels.end();)
 					{
 						if ((*it2).getName() == reqVec[1])
 							it2 = this->_channels.erase(it2);
 						else
-							++it2;
-							
+							++it2;	
 					}
 				}
 				break ;
@@ -131,7 +128,7 @@ void Server::whois(std::vector<std::string> reqVec, Client& client)
 	}
 	else if (reqVec.size() > 1)
 	{
-		std::string response = ":127.0.0.1 401 " + client.getNickname() + " " + reqVec[1] + " :No such nick/channel";
+		std::string response = ":127.0.0.1 401 " + client.getNickname() + " " + reqVec[1] + " :No such nick/channel\r\n";
 		send(client.getSock(), response.c_str(), response.size(), 0);
 	}
 	else
@@ -164,7 +161,7 @@ void Server::leave(std::vector<std::string> reqVec, Client& client)
 //:oldNick!~UserName@host NICK newNick
 void Server::nick(std::vector<std::string> reqVec, Client& client)
 {
-	if (reqVec.size() > 1)
+	if (checkNick(reqVec, client))
 	{
 		std::string oldNick = client.getNickname();
 		client.setNickname(reqVec[1]);
@@ -232,13 +229,7 @@ recVec[7] == http://kvirc.net/
 */
 void Server::user(std::vector<std::string> reqVec, Client& client)
 {
-	// int i = 0;
-	// for (std::vector<std::string>::iterator it = reqVec.begin(); it != reqVec.end(); ++it)
-	// {
-	// 	std::cout << i << ":" << *it << std::endl;
-	// 	i++;
-	// }
-	if (reqVec.size() > 1)
+	if (checkUser(reqVec, client))
 	{
 		std::cout << client.getNickname() << GRAY << " USER set to " << reqVec[1] << RESET << std::endl;
 		client.setUsername(reqVec[1]);

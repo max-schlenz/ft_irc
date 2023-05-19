@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include "irc.hpp"
 #include "Client.hpp"
 #include <iostream>
 
@@ -46,8 +47,8 @@ class Channel
 			return this->_name;
 		}
 		Channel(std::string name);
-		Channel(){}
-		~Channel(){}
+		~Channel();
+
 	private:
 		std::string	_name;
 		std::string	_topic;
