@@ -113,7 +113,8 @@ class Server {
 		void	part(std::vector<std::string> reqVec, Client& client);
 		void	leave(std::vector<std::string> reqVec, Client& client);
 		void	nick(std::vector<std::string> reqVec, Client& client);
-		void	quit(std::vector<std::string> reqVec, Client& client);
+		void	who(std::vector<std::string> reqVec, Client &client);
+		void	quit(std::vector<std::string> reqVec, Client &client);
 		void	msg(std::vector<std::string> reqVec, Client& client);
 		void	topic(std::vector<std::string> reqVec, Client& client);
 		void	mode(std::vector<std::string> reqVec, Client& client);
@@ -121,7 +122,7 @@ class Server {
 		void	invite(std::vector<std::string> reqVec, Client& client);
 		void	user(std::vector<std::string> reqVec, Client& client);
 		void	ping(std::vector<std::string> reqVec, Client& client);
-		void whois(std::vector<std::string> reqVec, Client &client);
+		void	whois(std::vector<std::string> reqVec, Client &client);
 		void	capreq(std::vector<std::string> reqVec, Client &client);
 		void	privmsg(std::vector<std::string> reqVec, Client &client);
 

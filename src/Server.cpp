@@ -58,6 +58,7 @@ void Server::setCommands()
 	this->_commands["WHOIS"] = &Server::whois;
 	this->_commands["CAP"] = &Server::capreq;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
+	this->_commands["WHO"] = &Server::who;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
@@ -115,6 +116,7 @@ bool Server::parseReq(Client& client, std::string request)
 
 		else if (reqVec[0] == "QUIT")
 			return false;
+
 		else
 			std::cout << GRAY << "not recognized: " RESET << request << std::endl;
 	}
@@ -231,7 +233,7 @@ void Server::accept_client()
 
 void Server::disconnectClient(Client& client, int i)
 {
-	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getIpStr() << RED << " disconnected." << RESET << std::endl;
+	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getHostname() << RED << " disconnected." << RESET << std::endl;
 	close(this->_pollFds[i].fd);
 	this->_pollFds.erase(this->_pollFds.begin() + i);
 	this->_clients.erase(this->_clients.begin() + (i - 1));
@@ -243,7 +245,7 @@ void Server::startServer()
 
 	while (g_run)
 	{
-		res = poll(this->_pollFds.data(), this->_pollFds.size(), 5000);
+		res = poll(this->_pollFds.data(), this->_pollFds.size(), 500);
 		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
 		{
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)

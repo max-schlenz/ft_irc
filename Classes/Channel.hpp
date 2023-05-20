@@ -11,41 +11,38 @@
 class Channel
 {
 	public:
-		const std::string& get_topic() const {
+		const std::string& getTopic() const {
 			return (this->_topic);
 		}
-		const std::string& get_password() const {
+		const std::string& getPassword() const {
 			return (this->_password);
-		}
-		const int get_num_clients() const {
-			return (this->num_clients);
-		}
-		const int get_channel_size() const {
-			return (this->channel_size);
 		}
 		std::vector<Client*>& getClients() {
 			return (this->_clients);
 		}
-		void set_topic(std::string topic){
+		void setTopic(std::string topic){
 			this->_topic = topic;
 		}
-		void set_password(std::string password){
+		void setPassword(std::string password){
 			this->_password = password;
-		}
-		void set_channel_size(int size) {
-			this->channel_size = size;
 		}
 		// void add_client(Client client){
 		// 	this->_clients.push_back(client);
 		// }
-		Channel(std::string topic, std::string password, int size) : num_clients(0) {
+		Channel(std::string topic, std::string password){
 			this->_topic = topic;
 			this->_password = password;
-			this->channel_size = size;
 		}
 		std::string getName() {
 			return this->_name;
 		}
+		void setLimit(int limit) {
+			this->_limit = limit;
+		}
+		int getLimit() {
+			return this->_limit;
+		}
+
 		Channel(std::string name);
 		~Channel();
 
@@ -54,12 +51,11 @@ class Channel
 		std::string	_topic;
 		std::string	_password;
 		std::string	_modes;
+		int			_limit;
 		bool		mode_i;
 		bool		mode_t;
 		bool		mode_k;
 		bool		mode_o;
-		int			num_clients;
-		int			channel_size;
 
 		std::vector<Client*> _clients;
 };

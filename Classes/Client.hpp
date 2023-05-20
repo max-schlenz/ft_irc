@@ -31,7 +31,7 @@ class Client
 			this->_op = op;
 		}
 		void setIpstr(){
-			this->_ipStr = inet_ntoa(this->_saddr_in.sin_addr);
+			this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
 		}
 		void setSock(int sock){
 			this->_sock = sock;
@@ -52,8 +52,8 @@ class Client
 		const bool& getOp() const {
 			return (this->_op);
 		}
-		const std::string& getIpStr() const {
-			return (this->_ipStr);
+		const std::string& getHostname() const {
+			return (this->_hostname);
 		}
 		const int& getSock() const {
 			return (this->_sock);
@@ -98,7 +98,7 @@ class Client
 		std::string _userName;
 		std::string _realName;
 		bool		_op;
-		std::string _ipStr;
+		std::string _hostname;
 		int 		_sock;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;

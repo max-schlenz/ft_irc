@@ -17,7 +17,7 @@ static bool checkChars(std::string name)
 bool checkNick(std::vector<std::string> reqVec, Client& client)
 {
 	std::string name = reqVec[1];
-	std::string clientIp = client.getIpStr() + " ";
+	std::string clientIp = client.getHostname() + " ";
 	std::string currentNick = client.getNickname() + " ";
 	std::string err_msg;
 	if (reqVec.size() <= 1) { // there is no need fot this if as the irssi client already handles that case
@@ -35,14 +35,14 @@ bool checkNick(std::vector<std::string> reqVec, Client& client)
 
 bool checkUser(std::vector<std::string> reqVec, Client& client)
 {
-	std::string clientIp = client.getIpStr() + " ";
+	std::string clientIp = client.getHostname() + " ";
 	std::string err_msg;
 	if (client.getUsername().size() <= 0) {
 		err_msg = ERR_ALREADYREGISTERED + ":You may not reregister\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	} else {
-		if (reqVec.size() < 6) {
+		if (reqVec.size() < 5) {
 			err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters";
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 			return false;
@@ -53,7 +53,7 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 
 // bool checkPart(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels)
 // {
-// 	std::string clientIp = client.getIpStr() + " ";
+// 	std::string clientIp = client.getHostname() + " ";
 // 	std::string err_msg;
 // 	if (reqVec.size() < 2) {
 // 		err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters";
@@ -76,7 +76,7 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 
 
 // bool checkInvite(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels) {
-// 	std::string clientIp = client.getIpStr() + " ";
+// 	std::string clientIp = client.getHostname() + " ";
 // 	std::string err_msg;
 // 	if (reqVec.size() < 2) {
 // 		err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters";
