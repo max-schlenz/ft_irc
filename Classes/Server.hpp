@@ -119,7 +119,8 @@ class Server {
 		void	topic(std::vector<std::string> reqVec, Client& client);
 		void	mode(std::vector<std::string> reqVec, Client& client);
 		void	kick(std::vector<std::string> reqVec, Client& client);
-		void	invite(std::vector<std::string> reqVec, Client& client);
+		void	notice(std::vector<std::string> reqVec, Client &client);
+		void	invite(std::vector<std::string> reqVec, Client &client);
 		void	user(std::vector<std::string> reqVec, Client& client);
 		void	ping(std::vector<std::string> reqVec, Client& client);
 		void	whois(std::vector<std::string> reqVec, Client &client);

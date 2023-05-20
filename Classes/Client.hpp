@@ -91,8 +91,8 @@ class Client
 
 		// Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
 		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
+		Client();
 
-		
 	private:
 		std::string _nickName;
 		std::string _userName;

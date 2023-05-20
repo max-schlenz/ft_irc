@@ -36,7 +36,7 @@ void Server::part(std::vector<std::string> reqVec, Client& client)
 						else
 							++itChannel;	
 					}
-						std::cout << GRAY << "removed channel: " << RESET << reqVec[1] << std::endl;
+					std::cout << GRAY << "removed channel: " << RESET << reqVec[1] << std::endl;
 				}
 				break ;
 			}
@@ -290,7 +290,7 @@ void Server::mode(std::vector<std::string> reqVec, Client& client)
 //441 not on that channel
 void Server::kick(std::vector<std::string> reqVec, Client& client)
 {
-	if (reqVec.size() > 3)
+	if (reqVec.size() > 2)
 	{
 		for (std::vector<Channel>::iterator itChannel = this->_channels.begin(); itChannel != this->_channels.end(); ++itChannel)
 		{
@@ -300,19 +300,55 @@ void Server::kick(std::vector<std::string> reqVec, Client& client)
 				{
 					if ((*itClient)->getNickname() == reqVec[2])
 					{
-						std::string response = ":nickname!~username@hostname KICK #channelname nickname :Kick message\r\n";
-						for (std::vector<Client*>::iterator itClient = itChannel->getClients().begin(); itClient != itChannel->getClients().end(); ++itClient)
-							send((*itClient)->getSock(), response.c_str(), response.size(), 0);
+						std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 KICK " + itChannel->getName() + " " + (*itClient)->getNickname() + " :Kick message\r\n";
+						for (std::vector<Client*>::iterator itClient2 = itChannel->getClients().begin(); itClient2 != itChannel->getClients().end(); ++itClient2)
+							send((*itClient2)->getSock(), response.c_str(), response.size(), 0);
+						itClient = itChannel->getClients().erase(itClient);
 						return ;
 					}
 				}
-				std::string response = ":nickname!~username@hostname 441 nickname target_nickname #channelname :They aren't on that channel\r\n";
+				std::string response = "441 " + client.getNickname() + " " + reqVec[2] + " " + reqVec[1] + " :They aren't on that channel\r\n";
 				send(client.getSock(), response.c_str(), response.size(), 0);
 				return ;
 			}
 		}
-		std::string response = ":nickname!~username@hostname 403 nickname #channelname :No such channel\r\n";
+		std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 403 " + client.getNickname() + " " + reqVec[2] + " " + reqVec[1] + " :No such channel\r\n";
 		send(client.getSock(), response.c_str(), response.size(), 0);
+	}
+}
+
+//NOTICE <nickname|channel> :<message>
+//
+void Server::notice(std::vector<std::string> reqVec, Client& client)
+{
+	if (reqVec.size() > 2)
+	{
+		std::string response =  ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 NOTICE " + reqVec[1] + " ";
+		for (std::vector<std::string>::iterator it = reqVec.begin() + 2; it != reqVec.end(); ++it)
+		{
+			response += *it;
+			if (it + 1 != reqVec.end())
+				response += " ";
+			else
+				response += "\r\n";
+		}
+		for (std::vector<Client>::iterator itClient = this->_clients.begin(); itClient != this->_clients.end(); ++itClient)
+		{
+			if (itClient->getNickname() == reqVec[1])
+			{
+				send(itClient->getSock(), response.c_str(), response.size(), 0);
+				return ;
+			}
+		}
+		for (std::vector<Channel>::iterator itChannel = this->_channels.begin(); itChannel != this->_channels.end(); ++itChannel)
+		{
+			if (itChannel->getName() == reqVec[1])
+			{
+				for (std::vector<Client*>::iterator itChanClient = itChannel->getClients().begin(); itChanClient != itChannel->getClients().end(); ++itChanClient)
+					send((*itChanClient)->getSock(), response.c_str(), response.size(), 0);
+				return ;
+			}
+		}
 	}
 }
 
@@ -354,7 +390,7 @@ void Server::ping(std::vector<std::string> reqVec, Client& client)
 	{
 		std::string response = "PONG " + reqVec[1] + "\r\n";
 		send(client.getSock(), response.c_str(), response.size(), 0);
-		std::cout << client.getNickname() << GRAY << " PING recieved (" << reqVec[1] << ")" << RESET << std::endl;
+		// std::cout << client.getNickname() << GRAY << " PING recieved (" << reqVec[1] << ")" << RESET << std::endl;
 	}
 }
 

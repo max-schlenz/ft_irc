@@ -59,6 +59,7 @@ void Server::setCommands()
 	this->_commands["CAP"] = &Server::capreq;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
 	this->_commands["WHO"] = &Server::who;
+	this->_commands["NOTICE"] = &Server::notice;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
@@ -196,7 +197,7 @@ bool Server::handleClientReq(Client& client)
 
 	int recv_len = recv(client.getPollFd().fd, &buffer_arr, RECV_BUF, 0);
 
-	// std::cout << BLUE << " < " << buffer_arr << RESET << std::endl;
+	std::cout << BLUE << " < " << buffer_arr << RESET << std::flush;
 
 	if (recv_len <= 0)
 		return false;

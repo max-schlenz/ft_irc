@@ -12,3 +12,8 @@ Client::Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd)
 	
 	std::cout << GREEN << "Client " << BGREEN << this->_hostname << GREEN << " connected." << RESET << std::endl;
 }
+
+Client::Client()
+{
+	;
+}
