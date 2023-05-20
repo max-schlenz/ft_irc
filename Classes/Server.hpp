@@ -89,6 +89,9 @@ class Server {
 		Client& getClient(int i) {
 			return (this->_clients[i]);
 		}
+		std::vector<Client>& getClients() {
+			return this->_clients;
+		}
 		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}

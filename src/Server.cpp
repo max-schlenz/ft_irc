@@ -52,7 +52,7 @@ void Server::setCommands()
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["MODE"] = &Server::mode;
 	this->_commands["KICK"] = &Server::kick;
-	this->_commands["INVITE"] = &Server::invite;
+	this->_commands["invite"] = &Server::invite;   // lets pleaase make a to lower in the beginning for all
 	this->_commands["USER"] = &Server::user;
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
@@ -74,14 +74,6 @@ void Server::sendMsgToAll(Client &client, std::string message)
 
 void Server::sendMsgToAllInChannel(Client& client, std::string message)
 {
-	// for (std::vector<Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel)
-	// {
-		// for (std::vector<Client*>::iterator itClient = (*itChannel)->getClients().begin(); itClient != (*itChannel)->getClients().end(); ++itClient)
-		// {
-		// 	// if ((*itClient)->getNickname() != client.getNickname())
-		// 		send((*itClient)->getSock(), message.c_str(), message.size(), 0);
-		// }
-	// }
 	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannelMap().begin(); itChannel != client.getJoinedChannelMap().end(); ++itChannel) {
 		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
 		{
@@ -191,7 +183,7 @@ bool Server::handleClientReq(Client& client)
 
 	int recv_len = recv(client.getPollFd().fd, &buffer_arr, RECV_BUF, 0);
 
-	// std::cout << BLUE << " < " << buffer_arr << RESET << std::endl;
+	std::cout << BLUE << " < " << buffer_arr << RESET << std::endl;
 
 	if (recv_len <= 0)
 		return false;
