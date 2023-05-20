@@ -89,8 +89,8 @@ class Client
 		// 	return this->_channelNames;
 		// }
 		
-		std::map<std::string, Channel*>& getJoinedChannelMap() {
-			return this->_joinedChannelMap;
+		std::map<std::string, Channel*>& getJoinedChannels() {
+			return this->_joinedChannels;
 		}
 
 
@@ -115,7 +115,7 @@ class Client
 		std::vector<std::string> _reqQueue;
 		// std::vector<Channel*> _joinedChannels;
 		// std::vector<std::string> _channelNames;
-		std::map<std::string, Channel*> _joinedChannelMap;
+		std::map<std::string, Channel*> _joinedChannels;
 };
 
 #endif

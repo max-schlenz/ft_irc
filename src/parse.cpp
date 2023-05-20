@@ -66,7 +66,7 @@ bool checkPart(std::vector<std::string> reqVec, Client& client, std::vector<Chan
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	if (client.getJoinedChannelMap().find(channelToPart) == client.getJoinedChannelMap().end()) {
+	if (client.getJoinedChannels().find(channelToPart) == client.getJoinedChannels().end()) {
 		err_msg = ERR_NOTONCHANNEL + clientIp + channelToPart + " :You're not on that channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
@@ -128,7 +128,7 @@ bool checkInvite(std::vector<std::string> reqVec, Client& client, std::vector<Ch
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	if (client.getJoinedChannelMap().find(channelToInvite) == client.getJoinedChannelMap().end()) {
+	if (client.getJoinedChannels().find(channelToInvite) == client.getJoinedChannels().end()) {
 		err_msg = ERR_NOTONCHANNEL + clientIp + channelToInvite + " :You're not on that channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
@@ -163,7 +163,7 @@ bool checkTopic(std::vector<std::string> reqVec, Client& client)
 	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 	// 	return false;
 	// }
-	// if (client.getJoinedChannelMap().find(channel) == client.getJoinedChannelMap().end()) {
+	// if (client.getJoinedChannels().find(channel) == client.getJoinedChannels().end()) {
 	// 	err_msg = ERR_NOTONCHANNEL + clientIp + channel + " :You're not on that channel\r\n";
 	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 	// 	return false;

@@ -3,6 +3,7 @@
 # define SERVER_HPP
 
 # define RECV_BUF 1024
+# define USR_LIMIT 1000
 
 # include <sys/socket.h>
 # include <sys/types.h>
@@ -96,6 +97,12 @@ class Server {
 		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}
+		std::map<std::string, Client*>& getClientsM() {
+			return this->_clientsM;
+		}
+		std::map<std::string, Channel>& getChannelsM() {
+			return this->_channelsM;
+		}
 		// Server(int port, std::vector<pollfd>& poll_fds);
 		Server(int port);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
@@ -159,7 +166,10 @@ class Server {
 		socklen_t _saddr_in_len;
 		
 		std::vector<Client> _clients;
-		std::vector<Channel> _channels;
+		std::map<std::string, Client*> _clientsM;
+
+		// std::vector<Channel> _channels;
+		std::map<std::string, Channel> _channelsM;
 
 		std::vector<pollfd> _pollFds;
 		

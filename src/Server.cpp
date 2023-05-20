@@ -8,7 +8,7 @@ extern bool g_run;
 Server::Server(int port)
 {
 
-	this->_channels.reserve(1024);
+	// this->_channels.reserve(1024);
 	this->_clients.reserve(1024);
 	this->_pollFds.reserve(1024);
 
@@ -67,7 +67,7 @@ void Server::setCommands()
 
 bool Server::isUserInChannel(Client &client, std::string channelName)
 {
-	for (std::map<std::string, Channel*>::iterator it = client.getJoinedChannelMap().begin(); it != client.getJoinedChannelMap().end(); ++it)
+	for (std::map<std::string, Channel*>::iterator it = client.getJoinedChannels().begin(); it != client.getJoinedChannels().end(); ++it)
 	{
 		if (it->second->getName() == channelName)
 			return true;
@@ -86,7 +86,7 @@ void Server::sendMsgToAll(Client &client, std::string message)
 
 void Server::sendMsgToAllInChannel(Client& client, std::string message)
 {
-	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannelMap().begin(); itChannel != client.getJoinedChannelMap().end(); ++itChannel) {
+	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel) {
 		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
 		{
 			// if ((*itClient)->getNickname() != client.getNickname())
@@ -248,7 +248,7 @@ void Server::startServer()
 		res = poll(this->_pollFds.data(), this->_pollFds.size(), 500);
 		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
 		{
-			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
+			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN && this->_clients.size() < USR_LIMIT)
 				this->accept_client();
 
 			else if (i > 0 && this->_pollFds[i].revents & POLLIN)

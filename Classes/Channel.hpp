@@ -20,6 +20,9 @@ class Channel
 		std::vector<Client*>& getClients() {
 			return (this->_clients);
 		}
+		std::map<std::string, Client*>& getClientsM() {
+			return (this->_clientsM);
+		}
 		void setTopic(std::string topic){
 			this->_topic = topic;
 		}
@@ -52,6 +55,7 @@ class Channel
 		}
 
 		Channel(std::string name);
+		Channel(): _name(""), _topic(""), _password(""), _modes(""), _limit(0), mode_i(false), mode_t(false), mode_k(false), mode_o(false), num_clients(0) {};
 		~Channel();
 
 	private:
@@ -68,7 +72,7 @@ class Channel
 
 		std::vector<Client*> _clients;
 		// std::vector<std::string> _clientNames;
-		// std::map<std::string, Client*> _clientMap;
+		std::map<std::string, Client*> _clientsM;
 };
 
 #endif
