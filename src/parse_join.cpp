@@ -27,7 +27,7 @@ bool channelExists(std::string channelName, std::vector<Channel> channels) {
 // absolutely not working yet
 bool checkJoin(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels)
 {
-	std::string clientIp = client.getIpStr() + " ";
+	std::string clientIp = client.getHostname() + " ";
 	std::string err_msg;
 	std::vector<std::string> channelsToJoin;
 	std::vector<std::string> passwords;
@@ -52,7 +52,7 @@ bool checkJoin(std::vector<std::string> reqVec, Client& client, std::vector<Chan
 			// if (!channelExists(channels[i].getName(), channels)
 			// 	//handle channel not yet existing
 			// 	return false
-			if (channels[i].get_password() != passwords[i]) {
+			if (channels[i].getPassword() != passwords[i]) {
 				err_msg = ERR_BADCHANNELKEY + clientIp + ":Cannot join channel (+k)";
 				send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 				return false;
