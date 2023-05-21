@@ -1,11 +1,12 @@
 AUTHORS			=	mschlenz, dantonik, tdehne
+MAKEFLAGS 		=	--no-print-directory
 DATE			=	$$(date +%Y/%m/%d)
 
 CXX				=	c++
 CXXFLAGS		=	-std=c++98 -MMD -g #-Wall -Wextra -Werror 
 
 NAME			=	server
-SRC_NAME		=	main exiting Server Client commands requests Channel parse parse_join
+SRC_NAME		=	main Server Client misc requests Channel parse parse_join commands/capreq commands/invite commands/join commands/kick commands/leave commands/mode commands/msg commands/nick commands/notice commands/part commands/ping commands/privmsg commands/quit commands/topic commands/user commands/who commands/whois
 INC_NAME		=	Channel Client Server irc
 
 SRC_DIR			=	src/
@@ -17,6 +18,9 @@ OBJ_FILES		=	$(addsuffix .o, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
 DEP_FILES		=	$(addsuffix .d, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
 SRC_FILES		=	$(addsuffix .cpp, $(addprefix $(SRC_DIR), $(SRC_NAME)))
 INC_FILES		=	$(addsuffix .hpp, $(addprefix $(INC_DIR), $(INC_NAME)))
+
+PCH_H			= Classes/common.hpp
+PCH				= $(OBJ_DIR)$(PCH_H).gch
 
 ifeq ($(shell uname -s),Linux)
 	OS := Linux
@@ -40,11 +44,15 @@ $(NAME): $(OBJ_DIR) $(OBJ_FILES)
 
 -include $(DEP_FILES)
 
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
+$(PCH): $(PCH_H)
+	@mkdir -p $(OBJ_DIR)/Classes
+	$(CXX) $(CXXFLAGS) -x c++-header $< -o $@
 
-$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp 
-	$(CXX) $(CXXFLAGS) -c $< -I$(INC_DIR) -o $@
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)/commands
+
+$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(PCH)
+	$(CXX) $(CXXFLAGS) -include $(PCH_H) -I $(INC_DIR) -c $< -o $@
 
 clean c:
 	@rm -rf $(OBJ_DIR)

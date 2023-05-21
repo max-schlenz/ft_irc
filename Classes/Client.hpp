@@ -2,12 +2,8 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-#include <string>
-#include <vector>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <poll.h>
-#include <map>
+# include "common.hpp"
+# include "irc.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 

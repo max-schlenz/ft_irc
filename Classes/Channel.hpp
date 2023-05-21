@@ -2,11 +2,10 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-#include <string>
-#include <vector>
-#include "irc.hpp"
-#include "Client.hpp"
-#include <iostream>
+# include "common.hpp"
+# include "irc.hpp"
+
+class Client;
 
 class Channel
 {
@@ -69,6 +68,7 @@ class Channel
 		bool		mode_k;
 		bool		mode_o;
 		int			num_clients;
+		// int			num_clients;
 
 		// std::vector<Client*> _clients;
 		// std::vector<std::string> _clientNames;

@@ -73,6 +73,7 @@
 		"iomanip": "cpp",
 		"__tree": "cpp",
 		"map": "cpp",
-		"regex": "cpp"
+		"regex": "cpp",
+		"out": "cpp"
 	}
 }

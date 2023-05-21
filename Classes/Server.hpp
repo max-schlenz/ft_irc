@@ -5,24 +5,8 @@
 # define RECV_BUF 1024
 # define USR_LIMIT 1000
 
-# include <sys/socket.h>
-# include <sys/types.h>
-# include <netdb.h>
-# include <unistd.h>
-# include <arpa/inet.h>
-# include <string>
-# include <netinet/in.h>
-# include "Client.hpp"
+# include "common.hpp"
 # include "irc.hpp"
-# include <algorithm>
-# include <vector>
-# include <poll.h>
-# include <stdexcept>
-# include <iostream>
-# include <sstream>
-# include <map>
-# include <cstring>
-# include "Channel.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
