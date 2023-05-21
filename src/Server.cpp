@@ -62,6 +62,7 @@ void Server::setCommands()
 	this->_commands["NOTICE"] = &Server::notice;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
+	this->_commands["dcc"] = &Server::dcc;
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
 }
 

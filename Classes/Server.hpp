@@ -120,6 +120,7 @@ class Server {
 		void	whois(std::vector<std::string> reqVec, Client &client);
 		void	capreq(std::vector<std::string> reqVec, Client &client);
 		void	privmsg(std::vector<std::string> reqVec, Client &client);
+		void	dcc(std::vector<std::string> reqVeq, Client &client);
 
 		// void	dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
 		// void	dbgPrintAllChannels(std::vector<std::string> reqVec, Client &client);

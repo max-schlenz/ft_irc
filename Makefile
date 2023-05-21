@@ -6,7 +6,7 @@ CXX				=	c++
 CXXFLAGS		=	-std=c++98 -MMD -g #-Wall -Wextra -Werror 
 
 NAME			=	server
-SRC_NAME		=	main Server Client misc requests Channel parse parse_join commands/capreq commands/invite commands/join commands/kick commands/leave commands/mode commands/msg commands/nick commands/notice commands/part commands/ping commands/privmsg commands/quit commands/topic commands/user commands/who commands/whois
+SRC_NAME		=	main Server Client misc requests Channel parse parse_join commands/capreq commands/invite commands/join commands/kick commands/leave commands/mode commands/msg commands/nick commands/notice commands/part commands/ping commands/privmsg commands/quit commands/topic commands/user commands/who commands/whois commands/dcc
 INC_NAME		=	Channel Client Server irc
 
 SRC_DIR			=	src/
