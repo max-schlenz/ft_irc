@@ -1,13 +1,9 @@
 # include "Server.hpp"
-# include "Client.hpp"
-# include "irc.hpp"
-# include <fcntl.h>
 
 extern bool g_run;
 
 Server::Server(int port)
 {
-
 	// this->_channels.reserve(1024);
 	this->_clients.reserve(1024);
 	this->_pollFds.reserve(1024);
@@ -47,22 +43,24 @@ void Server::setCommands()
 	this->_commands["JOIN"] = &Server::join;
 	this->_commands["PART"] = &Server::part;
 	this->_commands["LEAVE"] = &Server::leave;
-	this->_commands["MSG"] = &Server::msg;
 	this->_commands["NICK"] = &Server::nick;
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["MODE"] = &Server::mode;
 	this->_commands["KICK"] = &Server::kick;
-	this->_commands["invite"] = &Server::invite;   // lets pleaase make a to lower in the beginning for all
+	this->_commands["invite"] = &Server::invite;   // lets pleaase make a to lower in the beginning for all ; but lc /join shouldn't work :D 
+	this->_commands["INVITE"] = &Server::invite;   // how about this? :) 
 	this->_commands["USER"] = &Server::user;
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
 	this->_commands["CAP"] = &Server::capreq;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
+	this->_commands["MSG"] = &Server::privmsg; // same as privmsg
 	this->_commands["WHO"] = &Server::who;
 	this->_commands["NOTICE"] = &Server::notice;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
 	this->_commands["dcc"] = &Server::dcc;
+
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
 }
 
@@ -214,7 +212,7 @@ bool Server::handleClientReq(Client& client)
 	return true;
 }
 
-void Server::accept_client()
+void Server::acceptClient()
 {
 	sockaddr_in sin;
 	socklen_t size = sizeof(sin);
@@ -252,7 +250,7 @@ void Server::startServer()
 		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
 		{
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN && this->_clients.size() < USR_LIMIT)
-				this->accept_client();
+				this->acceptClient();
 
 			else if (i > 0 && this->_pollFds[i].revents & POLLIN)
 			{

@@ -92,7 +92,7 @@ class Server {
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server();
 		void startServer();
-		void accept_client();
+		void acceptClient();
 
 		bool handleClientReq(Client& client);
 		

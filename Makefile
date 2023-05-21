@@ -6,12 +6,38 @@ CXX				=	c++
 CXXFLAGS		=	-std=c++98 -MMD -g #-Wall -Wextra -Werror 
 
 NAME			=	server
-SRC_NAME		=	main Server Client misc requests Channel parse parse_join commands/capreq commands/invite commands/join commands/kick commands/leave commands/mode commands/msg commands/nick commands/notice commands/part commands/ping commands/privmsg commands/quit commands/topic commands/user commands/who commands/whois commands/dcc
+
+SRC_NAME      	=	main \
+					Server \
+					Client \
+					misc \
+					requests \
+					Channel \
+					parse \
+					parse_join \
+					commands/capreq \
+					commands/invite \
+					commands/join \
+					commands/kick \
+					commands/leave \
+					commands/mode \
+					commands/nick \
+					commands/notice \
+					commands/part \
+					commands/ping \
+					commands/privmsg \
+					commands/quit \
+					commands/topic \
+					commands/user \
+					commands/who \
+					commands/whois \
+					commands/dcc
+
 INC_NAME		=	Channel Client Server irc
 
 SRC_DIR			=	src/
 OBJ_DIR			=	.obj/
-INC_DIR			=	Classes/
+INC_DIR			=	include/
 
 OBJ				=	$(addsuffix .o, $(SRC))
 OBJ_FILES		=	$(addsuffix .o, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
@@ -19,8 +45,8 @@ DEP_FILES		=	$(addsuffix .d, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
 SRC_FILES		=	$(addsuffix .cpp, $(addprefix $(SRC_DIR), $(SRC_NAME)))
 INC_FILES		=	$(addsuffix .hpp, $(addprefix $(INC_DIR), $(INC_NAME)))
 
-PCH_H			= Classes/common.hpp
-PCH				= $(OBJ_DIR)$(PCH_H).gch
+PCH_H			= include/common.hpp
+PCH				= $(PCH_H).gch
 
 ifeq ($(shell uname -s),Linux)
 	OS := Linux
@@ -40,7 +66,7 @@ all:
 	$(info Running on $(OS))
 
 $(NAME): $(OBJ_DIR) $(OBJ_FILES) 
-	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(NAME) -I$(INC_DIR)
+	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(NAME) -I $(INC_DIR)
 
 -include $(DEP_FILES)
 

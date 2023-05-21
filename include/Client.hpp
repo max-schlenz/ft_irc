@@ -94,11 +94,12 @@ class Client
 		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
 		Client();
 
-	private:
+	protected:
 		std::string _nickName;
 		std::string _userName;
 		std::string _realName;
 		bool		_op;
+		bool		_bot;
 		std::string _hostname;
 		int 		_sock;
 		sockaddr_in _saddr_in;

@@ -2,7 +2,6 @@
 # define DEFINITIONS_HPP
 
 # include "common.hpp"
-# include "irc.hpp"
 
 # define RPL_WELCOME 001
 # define RPL_YOURHOST 002

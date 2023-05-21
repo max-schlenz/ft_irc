@@ -1,3 +1,4 @@
+#include "common.hpp"
 #include "irc.hpp"
 
 bool g_run = true;
