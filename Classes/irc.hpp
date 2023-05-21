@@ -19,6 +19,8 @@
 
 # define VERBOSE 0
 
+# define PRNT std::cout << BRED << "HERE" << RESET << std::endl
+ 
 class Server;
 
 void	exiting(int error_code);

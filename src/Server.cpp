@@ -67,33 +67,30 @@ void Server::setCommands()
 
 bool Server::isUserInChannel(Client &client, std::string channelName)
 {
-	for (std::map<std::string, Channel*>::iterator it = client.getJoinedChannels().begin(); it != client.getJoinedChannels().end(); ++it)
-	{
-		if (it->second->getName() == channelName)
-			return true;
-	}
+	if (client.getJoinedChannels().find(channelName) != client.getJoinedChannels().end())
+		return true;
 	return false;
 }
 
 void Server::sendMsgToAll(Client &client, std::string message)
 {
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	for (std::map<std::string, Client*>::iterator it = this->_clientsM.begin(); it != this->_clientsM.end(); ++it)
 	{
-		if (it->getNickname() != client.getNickname())
-			send(it->getSock(), message.c_str(), message.size(), 0);
+		if (it->first != client.getNickname())
+			send(it->second->getSock(), message.c_str(), message.size(), 0);
 	}
 }
 
-void Server::sendMsgToAllInChannel(Client& client, std::string message)
-{
-	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel) {
-		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
-		{
-			// if ((*itClient)->getNickname() != client.getNickname())
-				send((*itClient)->getSock(), message.c_str(), message.size(), 0);
-		}
-	}
-}
+// void Server::sendMsgToAllInChannel(Client& client, std::string message)
+// {
+// 	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel) {
+// 		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
+// 		{
+// 			// if ((*itClient)->getNickname() != client.getNickname())
+// 				send((*itClient)->getSock(), message.c_str(), message.size(), 0);
+// 		}
+// 	}
+// }
 
 bool Server::parseReq(Client& client, std::string request)
 {
@@ -132,14 +129,19 @@ void Server::broadcastEvent(Client& client, Channel& channel)
 void Server::sendUserList(Client& client, Channel& channel)
 {
 	std::string response = ":127.0.0.1 353 " + client.getNickname() + " = " + channel.getName() + " :";
-	for (std::vector<Client*>::iterator it = channel.getClients().begin(); it != channel.getClients().end(); ++it)
+	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)
 	{
- 		response += (*it)->getNickname();
-		if (it + 1 != channel.getClients().end())
+ 		response += it->first;
+		std::map<std::string, Client*>::iterator itNext = it;
+		++itNext;
+		if (itNext != channel.getClientsM().end())
 			response += " ";
+		else
+		{
+			response += "\r\n";
+			send(client.getSock(), response.c_str(), response.size(), 0);
+		}
 	}
-	response += "\r\n";
-	send(client.getSock(), response.c_str(), response.size(), 0);
 	
 	response = ":127.0.0.1 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list\r\n";
 	send(client.getSock(), response.c_str(), response.size(), 0);

@@ -155,7 +155,7 @@ class Server {
 		Client& getClientName(std::string name);
 
 		// void sendMsgToAll(std::string message);
-		void sendMsgToAllInChannel(Client &client, std::string message);
+		// void sendMsgToAllInChannel(Client &client, std::string message);
 
 	private:
 		int	_sock;

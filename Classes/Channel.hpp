@@ -17,9 +17,9 @@ class Channel
 		const std::string& getPassword() const {
 			return (this->_password);
 		}
-		std::vector<Client*>& getClients() {
-			return (this->_clients);
-		}
+		// std::vector<Client*>& getClients() {
+		// 	return (this->_clients);
+		// }
 		std::map<std::string, Client*>& getClientsM() {
 			return (this->_clientsM);
 		}
@@ -70,7 +70,7 @@ class Channel
 		bool		mode_o;
 		int			num_clients;
 
-		std::vector<Client*> _clients;
+		// std::vector<Client*> _clients;
 		// std::vector<std::string> _clientNames;
 		std::map<std::string, Client*> _clientsM;
 };

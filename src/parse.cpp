@@ -42,7 +42,7 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	} else {
-		if (reqVec.size() < 6) {
+		if (reqVec.size() < 5) {
 			err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters\r\n";
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 			return false;
@@ -96,16 +96,17 @@ static bool nickExists(std::string nickname, std::vector<Client*> clients)
 
 static bool userOnChannel(std::string nickname, std::string channelname, std::vector<Channel> channels)
 {
-	for (std::vector<Channel>::iterator it = channels.begin(); it != channels.end(); ++it) {
-		if (it->getName() == channelname) {
-			if (nickExists(nickname, it->getClients())) {
-				std::cout << "working :)" << std::endl;
-				return true;
-			}
-			std::cout << "not working" << std::endl;
-			return false;
-		}
-	}
+	return true ;
+	// for (std::vector<Channel>::iterator it = channels.begin(); it != channels.end(); ++it) {
+	// 	if (it->getName() == channelname) {
+	// 		if (nickExists(nickname, it->getClients())) {
+	// 			std::cout << "working :)" << std::endl;
+	// 			return true;
+	// 		}
+	// 		std::cout << "not working" << std::endl;
+	// 		return false;
+	// 	}
+	// }
 	return false;
 }
 
