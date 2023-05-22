@@ -3,7 +3,7 @@
 //: NICK!USER@HOST PART #channelname :optional_part_message
 void Server::part(std::vector<std::string> reqVec, Client &client)
 {
-	if (checkPart(reqVec, client, this->_channelsM, this->_hostname))
+	if (this->checkPart(reqVec, client))
 	{
 		std::map<std::string, Channel *>::iterator itChannel = client.getJoinedChannels().find(reqVec[1]);
 

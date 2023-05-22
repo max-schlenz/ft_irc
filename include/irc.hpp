@@ -25,14 +25,10 @@
 class Server;
 
 void	exiting(int error_code);
-bool	checkNick(std::vector<std::string> reqVec, Client& client);
-bool	checkUser(std::vector<std::string> reqVec, Client& client, std::string hostname);
-bool	checkJoin(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels);
 bool	channelExists(std::string channelName, std::vector<Channel> channels);
-bool	checkPart(std::vector<std::string> reqVec, Client& client, std::map<std::string, Channel> channels, std::string hostname);
-bool	checkInvite(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels, Server& server);
 
 
+std::string msg_0 (std::string host, std::string num, std::string msg);
 std::string msg_1 (std::string host, std::string num, std::string arg1, std::string msg);
 std::string msg_2 (std::string host, std::string num, std::string arg1, std::string arg2, std::string msg);
 std::string msg_3 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string msg);
