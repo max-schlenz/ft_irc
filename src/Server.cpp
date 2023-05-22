@@ -104,10 +104,10 @@ bool Server::parseReq(Client& client, std::string request)
 	{
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
 		
-		if (request.find("CAP LS") != std::string::npos)
-			this->handleReqHandshake(client, reqVec);
+		// if (request.find("CAP LS") != std::string::npos)
+		// 	this->handleReqHandshake(client, reqVec);
 		
-		else if (it != this->_commands.end())
+		if (it != this->_commands.end())
 			(this->*(it->second))(reqVec, client);
 
 		else if (reqVec[0] == "QUIT")

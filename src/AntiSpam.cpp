@@ -8,6 +8,6 @@ AntiSpamBot::AntiSpamBot(): Client()
 	this->_userName = "AntiSpam";
 	this->_realName = "AntiSpam";
 
-	std::cout << GREEN << "AntSpam-Bot constructed" << RESET << std::endl;
+	std::cout << GREEN << "AntiSpam-Bot constructed" << RESET << std::endl;
 }
 
