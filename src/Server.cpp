@@ -21,15 +21,16 @@ Server::Server(int port)
 	int optval = 1;
     setsockopt(this->_sock, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
 	fcntl(this->_sock, F_SETFL, O_NONBLOCK);
-	bind(this->_sock, (struct sockaddr*)&this->_saddr_in, this->_saddr_in_len);
-	listen(this->_sock, 5);
+	if ((bind(this->_sock, (struct sockaddr*)&this->_saddr_in, this->_saddr_in_len)) < 0)
+		error_handling("Error: bind failed!");
+	if ((listen(this->_sock, 5)) < 0)
+		error_handling("Error: listen failed!");
 
 	pollfd server_poll_fd;
     server_poll_fd.fd = this->_sock;
     server_poll_fd.events = POLLIN;
     this->_pollFds.push_back(server_poll_fd);
 	this->setCommands();
-	std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
 }
 
 Server::~Server()
@@ -104,7 +105,6 @@ bool Server::parseReq(Client& client, std::string request)
 	if (reqVec.size())
 	{
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
-		
 		// if (request.find("CAP LS") != std::string::npos)
 		// 	this->handleReqHandshake(client, reqVec);
 		
@@ -245,6 +245,8 @@ void Server::startServer()
 {
 	int res = 0;
 
+	if (g_run)
+		std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
 	while (g_run)
 	{
 		res = poll(this->_pollFds.data(), this->_pollFds.size(), 500);
