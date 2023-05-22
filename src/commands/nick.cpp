@@ -19,6 +19,7 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 			send(client.getSock(), response.c_str(), response.size(), 0);
 			client.setRegistered(true);
 			this->_clientsM[client.getNickname()] = &client;
+			PRNT;
 		}
 	}
 }
