@@ -4,7 +4,10 @@ ignore/
 test.*
 *test.*
 .vscode
+.vscode/
+.vscode/*
 server
+
 ### C ###
 # Prerequisites
 *.d
