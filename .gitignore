@@ -19,6 +19,8 @@ server
 .obj
 .obj/*
 *.elf
+*.hpp.d
+*.hpp.gch
 
 # Linker output
 *.ilk

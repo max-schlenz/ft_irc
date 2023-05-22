@@ -14,6 +14,7 @@
 # include <string>
 # include <vector>
 # include <csignal>
+# include <cstdio>
 
 // C
 # include <arpa/inet.h>
@@ -25,5 +26,7 @@
 # include <unistd.h>
 # include <netdb.h>
 # include <fcntl.h>
+
+void	error_handling(const char *fmt, ...);
 
 #endif
