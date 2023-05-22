@@ -26,7 +26,7 @@ bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	else if (!checkChars(name) || reqVec.size() > 2) {
+	if (!checkChars(name) || reqVec.size() > 2) {
 		err_msg = msg_2(this->_hostname, ERR_INVALIDNICK, clientIp, reqVec[1], "Erroneus nickname");
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
@@ -36,7 +36,7 @@ bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 
 bool Server::checkUser(std::vector<std::string> reqVec, Client& client)
 {
-	std::string clientIp = client.getHostname() + " ";
+	std::string clientIp = client.getHostname();
 	std::string err_msg;
 	if (client.getUsername().size() <= 0) {
 		err_msg = msg_0(this->_hostname, ERR_ALREADYREGISTERED, "You may not reregister");
@@ -102,8 +102,8 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 	if (this->_channelsM[channelToInvite].getClientsM().find(reqVec[1]) != this->_channelsM[channelToInvite].getClientsM().end()) { ///not working why????
 		std::cout << "catch user on channel error" << std::endl;
 		std::cout << "clients size: " << this->_clientsM.size() << std::endl;
-		for(std::map<std::string, Client*>::iterator it = this->_clientsM.begin();
-			it != this->_clientsM.end(); ++it)
+		for(std::map<std::string, Client*>::iterator it = this->_channelsM[channelToInvite].getClientsM().begin();
+			it != this->_channelsM[channelToInvite].getClientsM().end(); ++it)
 		{
 			std::cout << it->first << "\n";
 		}
