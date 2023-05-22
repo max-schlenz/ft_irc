@@ -5,17 +5,39 @@ bool g_run = true;
 
 void	error_handling(const char *fmt, ...)
 {
-	int	errnum;
-	va_list	ap;
+	int					errnum;
+	va_list				ap;
+	std::ostringstream	oss;
 
 	errnum = errno;
 	va_start(ap, fmt);
-	vfprintf(stdout,fmt,ap);
-	fprintf(stdout,"\n");
-	fflush(stdout);
+	while (*fmt != '\0')
+	{
+		if (*fmt == '%')
+		{
+			if (*(fmt + 1) == 's')
+			{
+				const char *arg = va_arg(ap, const char*);
+				oss << arg;
+				fmt += 2;
+			}
+			if (*(fmt + 1) == 'i')
+			{
+				int	arg = va_arg(ap, int);
+				oss << arg;
+				fmt += 2;
+			}
+		}
+		else
+		{
+			oss << *fmt;
+			fmt++;
+		}
+	}
+	va_end(ap);
+	std::cerr << oss.str() << std::endl;
 	if (errnum != 0)
 		std::cerr << "errno = (" << errno << ") : " << strerror(errno) << std::endl;
-	va_end(ap);
 	g_run = false;
 }
 
@@ -57,6 +79,8 @@ int main(int argc, char **argv)
 {
 	int port = 6667;
 
+	if (argc == 1)
+		error_handling("Error code: %i\nMore C++ like?", 42);
 	if (argc == 2)
 		port = to_int(argv[1]);
 
