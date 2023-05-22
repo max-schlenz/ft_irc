@@ -1,5 +1,8 @@
 # ft_irc
 
+### Needs Fixing
+Wahrscheinlich werden nicht alle Clients in der Map gespeichert. Wenn man zwei Clients mit demselben nick joinen und man dann den nick umbenennt, ist die size von der client map trotzdem nur 1
+
 ### Ressources
 ***[rfc 1459](https://www.rfc-editor.org/rfc/rfc1459) Internet Relay Chat Protocol (1993)***  
 [rfc 2810](https://www.rfc-editor.org/rfc/rfc2810) Internet Relay Chat: Architecture (2000)  
