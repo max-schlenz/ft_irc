@@ -16,6 +16,7 @@ Server::Server(int port)
 	this->_saddr_in.sin_port = htons(this->_port);
 	this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
 	this->_saddr_in_len = sizeof(this->_saddr_in);
+	this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
 
 	int optval = 1;
     setsockopt(this->_sock, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
@@ -104,11 +105,10 @@ bool Server::parseReq(Client& client, std::string request)
 	if (reqVec.size())
 	{
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
-
-		if (request.find("CAP LS") != std::string::npos)
-			this->handleReqHandshake(client, reqVec);
+		// if (request.find("CAP LS") != std::string::npos)
+		// 	this->handleReqHandshake(client, reqVec);
 		
-		else if (it != this->_commands.end())
+		if (it != this->_commands.end())
 			(this->*(it->second))(reqVec, client);
 
 		else if (reqVec[0] == "QUIT")

@@ -15,6 +15,7 @@ SRC_NAME      	=	main \
 					Channel \
 					parse \
 					parse_join \
+					print_msg \
 					commands/capreq \
 					commands/invite \
 					commands/join \
@@ -31,7 +32,7 @@ SRC_NAME      	=	main \
 					commands/user \
 					commands/who \
 					commands/whois \
-					commands/dcc
+					commands/dcc \
 
 INC_NAME		=	Channel Client Server irc
 

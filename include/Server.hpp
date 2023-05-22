@@ -69,6 +69,9 @@ class Server {
 		const int& getPort() const {
 			return (this->_port);
 		}
+		const std::string& getHostname() const {
+			return (this->_hostname);
+		}
 		sockaddr_in& getSin() {
 			return (this->_saddr_in);
 		}
@@ -149,6 +152,7 @@ class Server {
 		int _client;
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
+		std::string _hostname;
 		
 		std::vector<Client> _clients;
 		std::map<std::string, Client*> _clientsM;
