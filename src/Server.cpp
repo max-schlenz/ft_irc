@@ -23,13 +23,12 @@ Server::Server(int port)
 	fcntl(this->_sock, F_SETFL, O_NONBLOCK);
 	if ((bind(this->_sock, (struct sockaddr*)&this->_saddr_in, this->_saddr_in_len)) < 0)
 		error_handling("Error: bind failed!");
-	if ((listen(this->_sock, 5)) < 0)
+	if ((listen(this->_sock, USR_LIMIT)) < 0)
 		error_handling("Error: listen failed!");
-
 	pollfd server_poll_fd;
-    server_poll_fd.fd = this->_sock;
-    server_poll_fd.events = POLLIN;
-    this->_pollFds.push_back(server_poll_fd);
+	server_poll_fd.fd = this->_sock;
+	server_poll_fd.events = POLLIN;
+	this->_pollFds.push_back(server_poll_fd);
 	this->setCommands();
 }
 
