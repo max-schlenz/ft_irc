@@ -2,7 +2,7 @@
 
 //PRIVMSG Receiver :\x01DCC SEND file.txt 3232235776 12345 128\x01
 //PRIVMSG User1 :DCC SEND file 2130706433 60052 4
-void Server::dcc(std::vector<std::string> reqVeq, Client &client)
+void Server::dcc(std::vector<std::string> reqVec, Client &client)
 {
 	uint32_t ipRecDec = htonl(inet_addr(client.getHostname().c_str()));
 	std::map<std::string, Client*>::iterator itClient = this->_clientsM.find(reqVec[1]);
