@@ -42,7 +42,7 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	} else {
-		if (reqVec.size() < 6) {
+		if (reqVec.size() < 5) {
 			err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters\r\n";
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 			return false;
@@ -66,7 +66,7 @@ bool checkPart(std::vector<std::string> reqVec, Client& client, std::vector<Chan
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	if (client.getJoinedChannelMap().find(channelToPart) == client.getJoinedChannelMap().end()) {
+	if (client.getJoinedChannels().find(channelToPart) == client.getJoinedChannels().end()) {
 		err_msg = ERR_NOTONCHANNEL + clientIp + channelToPart + " :You're not on that channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
@@ -96,16 +96,17 @@ static bool nickExists(std::string nickname, std::vector<Client*> clients)
 
 static bool userOnChannel(std::string nickname, std::string channelname, std::vector<Channel> channels)
 {
-	for (std::vector<Channel>::iterator it = channels.begin(); it != channels.end(); ++it) {
-		if (it->getName() == channelname) {
-			if (nickExists(nickname, it->getClients())) {
-				std::cout << "working :)" << std::endl;
-				return true;
-			}
-			std::cout << "not working" << std::endl;
-			return false;
-		}
-	}
+	return true ;
+	// for (std::vector<Channel>::iterator it = channels.begin(); it != channels.end(); ++it) {
+	// 	if (it->getName() == channelname) {
+	// 		if (nickExists(nickname, it->getClients())) {
+	// 			std::cout << "working :)" << std::endl;
+	// 			return true;
+	// 		}
+	// 		std::cout << "not working" << std::endl;
+	// 		return false;
+	// 	}
+	// }
 	return false;
 }
 
@@ -128,7 +129,7 @@ bool checkInvite(std::vector<std::string> reqVec, Client& client, std::vector<Ch
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	if (client.getJoinedChannelMap().find(channelToInvite) == client.getJoinedChannelMap().end()) {
+	if (client.getJoinedChannels().find(channelToInvite) == client.getJoinedChannels().end()) {
 		err_msg = ERR_NOTONCHANNEL + clientIp + channelToInvite + " :You're not on that channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
@@ -163,7 +164,7 @@ bool checkTopic(std::vector<std::string> reqVec, Client& client)
 	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 	// 	return false;
 	// }
-	// if (client.getJoinedChannelMap().find(channel) == client.getJoinedChannelMap().end()) {
+	// if (client.getJoinedChannels().find(channel) == client.getJoinedChannels().end()) {
 	// 	err_msg = ERR_NOTONCHANNEL + clientIp + channel + " :You're not on that channel\r\n";
 	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 	// 	return false;

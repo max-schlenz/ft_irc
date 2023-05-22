@@ -2,12 +2,8 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-#include <string>
-#include <vector>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <poll.h>
-#include <map>
+# include "common.hpp"
+# include "irc.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 
@@ -89,8 +85,8 @@ class Client
 		// 	return this->_channelNames;
 		// }
 		
-		std::map<std::string, Channel*>& getJoinedChannelMap() {
-			return this->_joinedChannelMap;
+		std::map<std::string, Channel*>& getJoinedChannels() {
+			return this->_joinedChannels;
 		}
 
 
@@ -98,11 +94,12 @@ class Client
 		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
 		Client();
 
-	private:
+	protected:
 		std::string _nickName;
 		std::string _userName;
 		std::string _realName;
 		bool		_op;
+		bool		_bot;
 		std::string _hostname;
 		int 		_sock;
 		sockaddr_in _saddr_in;
@@ -115,7 +112,7 @@ class Client
 		std::vector<std::string> _reqQueue;
 		// std::vector<Channel*> _joinedChannels;
 		// std::vector<std::string> _channelNames;
-		std::map<std::string, Channel*> _joinedChannelMap;
+		std::map<std::string, Channel*> _joinedChannels;
 };
 
 #endif

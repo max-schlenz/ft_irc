@@ -1,14 +1,10 @@
 # include "Server.hpp"
-# include "Client.hpp"
-# include "irc.hpp"
-# include <fcntl.h>
 
 extern bool g_run;
 
 Server::Server(int port)
 {
-
-	this->_channels.reserve(1024);
+	// this->_channels.reserve(1024);
 	this->_clients.reserve(1024);
 	this->_pollFds.reserve(1024);
 
@@ -47,53 +43,53 @@ void Server::setCommands()
 	this->_commands["JOIN"] = &Server::join;
 	this->_commands["PART"] = &Server::part;
 	this->_commands["LEAVE"] = &Server::leave;
-	this->_commands["MSG"] = &Server::msg;
 	this->_commands["NICK"] = &Server::nick;
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["MODE"] = &Server::mode;
 	this->_commands["KICK"] = &Server::kick;
-	this->_commands["invite"] = &Server::invite;   // lets pleaase make a to lower in the beginning for all
+	this->_commands["invite"] = &Server::invite;   // lets pleaase make a to lower in the beginning for all ; but lc /join shouldn't work :D 
+	this->_commands["INVITE"] = &Server::invite;   // how about this? :) 
 	this->_commands["USER"] = &Server::user;
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
 	this->_commands["CAP"] = &Server::capreq;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
+	this->_commands["MSG"] = &Server::privmsg; // same as privmsg
 	this->_commands["WHO"] = &Server::who;
 	this->_commands["NOTICE"] = &Server::notice;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
+	this->_commands["dcc"] = &Server::dcc;
+
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
 }
 
 bool Server::isUserInChannel(Client &client, std::string channelName)
 {
-	for (std::map<std::string, Channel*>::iterator it = client.getJoinedChannelMap().begin(); it != client.getJoinedChannelMap().end(); ++it)
-	{
-		if (it->second->getName() == channelName)
-			return true;
-	}
+	if (client.getJoinedChannels().find(channelName) != client.getJoinedChannels().end())
+		return true;
 	return false;
 }
 
 void Server::sendMsgToAll(Client &client, std::string message)
 {
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	for (std::map<std::string, Client*>::iterator it = this->_clientsM.begin(); it != this->_clientsM.end(); ++it)
 	{
-		if (it->getNickname() != client.getNickname())
-			send(it->getSock(), message.c_str(), message.size(), 0);
+		if (it->first != client.getNickname())
+			send(it->second->getSock(), message.c_str(), message.size(), 0);
 	}
 }
 
-void Server::sendMsgToAllInChannel(Client& client, std::string message)
-{
-	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannelMap().begin(); itChannel != client.getJoinedChannelMap().end(); ++itChannel) {
-		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
-		{
-			// if ((*itClient)->getNickname() != client.getNickname())
-				send((*itClient)->getSock(), message.c_str(), message.size(), 0);
-		}
-	}
-}
+// void Server::sendMsgToAllInChannel(Client& client, std::string message)
+// {
+// 	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel) {
+// 		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
+// 		{
+// 			// if ((*itClient)->getNickname() != client.getNickname())
+// 				send((*itClient)->getSock(), message.c_str(), message.size(), 0);
+// 		}
+// 	}
+// }
 
 bool Server::parseReq(Client& client, std::string request)
 {
@@ -132,14 +128,19 @@ void Server::broadcastEvent(Client& client, Channel& channel)
 void Server::sendUserList(Client& client, Channel& channel)
 {
 	std::string response = ":127.0.0.1 353 " + client.getNickname() + " = " + channel.getName() + " :";
-	for (std::vector<Client*>::iterator it = channel.getClients().begin(); it != channel.getClients().end(); ++it)
+	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)
 	{
- 		response += (*it)->getNickname();
-		if (it + 1 != channel.getClients().end())
+ 		response += it->first;
+		std::map<std::string, Client*>::iterator itNext = it;
+		++itNext;
+		if (itNext != channel.getClientsM().end())
 			response += " ";
+		else
+		{
+			response += "\r\n";
+			send(client.getSock(), response.c_str(), response.size(), 0);
+		}
 	}
-	response += "\r\n";
-	send(client.getSock(), response.c_str(), response.size(), 0);
 	
 	response = ":127.0.0.1 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list\r\n";
 	send(client.getSock(), response.c_str(), response.size(), 0);
@@ -211,7 +212,7 @@ bool Server::handleClientReq(Client& client)
 	return true;
 }
 
-void Server::accept_client()
+void Server::acceptClient()
 {
 	sockaddr_in sin;
 	socklen_t size = sizeof(sin);
@@ -248,8 +249,8 @@ void Server::startServer()
 		res = poll(this->_pollFds.data(), this->_pollFds.size(), 500);
 		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
 		{
-			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN)
-				this->accept_client();
+			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN && this->_clients.size() < USR_LIMIT)
+				this->acceptClient();
 
 			else if (i > 0 && this->_pollFds[i].revents & POLLIN)
 			{

@@ -1,7 +1,8 @@
 #ifndef DEFINITIONS_HPP
 # define DEFINITIONS_HPP
 
-# include <string>
+# include "common.hpp"
+
 # define RPL_WELCOME 001
 # define RPL_YOURHOST 002
 # define RPL_CREATED 003

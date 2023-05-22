@@ -1,11 +1,5 @@
-#include <iostream>
-#include <vector>
-#include <cstdlib>
-#include "Server.hpp"
-#include "Client.hpp"
+#include "common.hpp"
 #include "irc.hpp"
-#include <signal.h>
-#include "definitions.hpp"
 
 bool g_run = true;
 

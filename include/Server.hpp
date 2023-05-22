@@ -3,25 +3,10 @@
 # define SERVER_HPP
 
 # define RECV_BUF 1024
+# define USR_LIMIT 1000
 
-# include <sys/socket.h>
-# include <sys/types.h>
-# include <netdb.h>
-# include <unistd.h>
-# include <arpa/inet.h>
-# include <string>
-# include <netinet/in.h>
-# include "Client.hpp"
+# include "common.hpp"
 # include "irc.hpp"
-# include <algorithm>
-# include <vector>
-# include <poll.h>
-# include <stdexcept>
-# include <iostream>
-# include <sstream>
-# include <map>
-# include <cstring>
-# include "Channel.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -96,12 +81,18 @@ class Server {
 		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}
+		std::map<std::string, Client*>& getClientsM() {
+			return this->_clientsM;
+		}
+		std::map<std::string, Channel>& getChannelsM() {
+			return this->_channelsM;
+		}
 		// Server(int port, std::vector<pollfd>& poll_fds);
 		Server(int port);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server();
 		void startServer();
-		void accept_client();
+		void acceptClient();
 
 		bool handleClientReq(Client& client);
 		
@@ -129,6 +120,7 @@ class Server {
 		void	whois(std::vector<std::string> reqVec, Client &client);
 		void	capreq(std::vector<std::string> reqVec, Client &client);
 		void	privmsg(std::vector<std::string> reqVec, Client &client);
+		void	dcc(std::vector<std::string> reqVeq, Client &client);
 
 		// void	dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
 		// void	dbgPrintAllChannels(std::vector<std::string> reqVec, Client &client);
@@ -148,7 +140,7 @@ class Server {
 		Client& getClientName(std::string name);
 
 		// void sendMsgToAll(std::string message);
-		void sendMsgToAllInChannel(Client &client, std::string message);
+		// void sendMsgToAllInChannel(Client &client, std::string message);
 
 	private:
 		int	_sock;
@@ -159,7 +151,10 @@ class Server {
 		socklen_t _saddr_in_len;
 		
 		std::vector<Client> _clients;
-		std::vector<Channel> _channels;
+		std::map<std::string, Client*> _clientsM;
+
+		// std::vector<Channel> _channels;
+		std::map<std::string, Channel> _channelsM;
 
 		std::vector<pollfd> _pollFds;
 		

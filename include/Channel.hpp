@@ -2,11 +2,10 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-#include <string>
-#include <vector>
-#include "irc.hpp"
-#include "Client.hpp"
-#include <iostream>
+# include "common.hpp"
+# include "irc.hpp"
+
+class Client;
 
 class Channel
 {
@@ -17,8 +16,11 @@ class Channel
 		const std::string& getPassword() const {
 			return (this->_password);
 		}
-		std::vector<Client*>& getClients() {
-			return (this->_clients);
+		// std::vector<Client*>& getClients() {
+		// 	return (this->_clients);
+		// }
+		std::map<std::string, Client*>& getClientsM() {
+			return (this->_clientsM);
 		}
 		void setTopic(std::string topic){
 			this->_topic = topic;
@@ -52,6 +54,7 @@ class Channel
 		}
 
 		Channel(std::string name);
+		Channel(): _name(""), _topic(""), _password(""), _modes(""), _limit(0), mode_i(false), mode_t(false), mode_k(false), mode_o(false), num_clients(0) {};
 		~Channel();
 
 	private:
@@ -65,10 +68,11 @@ class Channel
 		bool		mode_k;
 		bool		mode_o;
 		int			num_clients;
+		// int			num_clients;
 
-		std::vector<Client*> _clients;
+		// std::vector<Client*> _clients;
 		// std::vector<std::string> _clientNames;
-		// std::map<std::string, Client*> _clientMap;
+		std::map<std::string, Client*> _clientsM;
 };
 
 #endif

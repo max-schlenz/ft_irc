@@ -2,10 +2,11 @@
 #ifndef IRC_H
 # define IRC_H
 
-#include <string>
-#include <iostream>
-#include <cstdlib>
-#include "Server.hpp"
+# include "common.hpp"
+# include "Channel.hpp"
+# include "Client.hpp"
+# include "Server.hpp"
+# include "definitions.hpp"
 
 # define RED "\033[0;31m"
 # define BRED "\033[1;31m"
@@ -19,6 +20,8 @@
 
 # define VERBOSE 0
 
+# define PRNT std::cout << BRED << "HERE" << RESET << std::endl
+ 
 class Server;
 
 void	exiting(int error_code);
