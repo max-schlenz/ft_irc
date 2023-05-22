@@ -13,7 +13,7 @@ recVec[7] == http://kvirc.net/
 */
 void Server::user(std::vector<std::string> reqVec, Client &client)
 {
-	if (checkUser(reqVec, client))
+	if (checkUser(reqVec, client, this->_hostname))
 	{
 		std::cout << client.getNickname() << GRAY << " USER set to " << reqVec[1] << RESET << std::endl;
 		client.setUsername(reqVec[1]);
