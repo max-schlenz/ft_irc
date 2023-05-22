@@ -33,12 +33,12 @@ bool checkNick(std::vector<std::string> reqVec, Client& client)
 	return true;
 }
 
-bool checkUser(std::vector<std::string> reqVec, Client& client)
+bool checkUser(std::vector<std::string> reqVec, Client& client, std::string hostname)
 {
 	std::string clientIp = client.getHostname() + " ";
 	std::string err_msg;
 	if (client.getUsername().size() <= 0) {
-		err_msg = ERR_ALREADYREGISTERED + ":You may not reregister\r\n";
+		err_msg = ":" + hostname + " " + ERR_ALREADYREGISTERED + ":You may not reregister\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	} else {
@@ -51,7 +51,7 @@ bool checkUser(std::vector<std::string> reqVec, Client& client)
 	return true;
 }
 
-bool checkPart(std::vector<std::string> reqVec, Client& client, std::vector<Channel> channels)
+bool checkPart(std::vector<std::string> reqVec, Client& client, std::map<std::string, Channel> channels, std::string hostname)
 {
 	std::string clientIp = client.getHostname() + " ";
 	std::string err_msg;
@@ -61,13 +61,16 @@ bool checkPart(std::vector<std::string> reqVec, Client& client, std::vector<Chan
 		return false;
 	}
 	std::string channelToPart = reqVec[1];
-	if (!channelExists(channelToPart, channels)) {
-		err_msg = ERR_NOSUCHCHANNEL + channelToPart + " :No such channel\r\n";
+	if (channels.find(channelToPart) == channels.end()) {
+		std::cout << "lol" << std::endl;
+		std::string err_msg = msg_2(hostname, ERR_NOSUCHCHANNEL, clientIp, channelToPart, "No such channel");
+		// err_msg = ":" + hostname + " " + ERR_NOSUCHCHANNEL + clientIp + channelToPart + " :No such channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	if (client.getJoinedChannels().find(channelToPart) == client.getJoinedChannels().end()) {
-		err_msg = ERR_NOTONCHANNEL + clientIp + channelToPart + " :You're not on that channel\r\n";
+		err_msg = msg_2(hostname, ERR_NOTONCHANNEL, clientIp, channelToPart, "You're not on that channel");
+		// err_msg = ":" + hostname + " " + ERR_NOTONCHANNEL + clientIp + channelToPart + " :You're not on that channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
@@ -120,12 +123,12 @@ bool checkInvite(std::vector<std::string> reqVec, Client& client, std::vector<Ch
 	}
 	std::string channelToInvite = reqVec[2];
 	if (!channelExists(channelToInvite, channels)) {
-		err_msg = ERR_NOSUCHCHANNEL + clientIp +  channelToInvite + ":No such channel\r\n";
+		err_msg = ERR_NOSUCHCHANNEL + clientIp +  channelToInvite + " :No such channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	if (!nickExists(reqVec[1], server.getClients())) {
-		err_msg = ERR_NOSUCHNICK + clientIp +  reqVec[1] + ":No such nick/channel\r\n";
+		err_msg = ERR_NOSUCHNICK + clientIp +  reqVec[1] + " :No such nick/channel\r\n";
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
@@ -150,14 +153,13 @@ bool checkInvite(std::vector<std::string> reqVec, Client& client, std::vector<Ch
 
 bool checkTopic(std::vector<std::string> reqVec, Client& client)
 {
-	return true;
-	// std::string clientIp = client.getHostname() + " ";
-	// std::string err_msg;
-	// if (reqVec.size() < 3) {
-	// 	err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters\r\n";
-	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-	// 	return false;
-	// }
+	std::string clientIp = client.getHostname() + " ";
+	std::string err_msg;
+	if (reqVec.size() < 3) {
+		err_msg = ERR_NEEDMOREPARAMS + clientIp + reqVec[0] + " :Not enough parameters\r\n";
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
 	// std::string channel = reqVec[2];
 	// if (!channelExists(channel, channels)) {
 	// 	err_msg = ERR_NOSUCHCHANNEL + clientIp +  channel + ":No such channel\r\n";
@@ -174,5 +176,6 @@ bool checkTopic(std::vector<std::string> reqVec, Client& client)
 	// // 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 	// // 	return false;
 	// // }
+	return true;
 
 }

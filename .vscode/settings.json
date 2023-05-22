@@ -74,6 +74,9 @@
 		"__tree": "cpp",
 		"map": "cpp",
 		"regex": "cpp",
-		"out": "cpp"
+		"out": "cpp",
+		"csignal": "cpp",
+		"fstream": "cpp",
+		"stack": "cpp"
 	}
 }

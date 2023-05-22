@@ -16,6 +16,7 @@ Server::Server(int port)
 	this->_saddr_in.sin_port = htons(this->_port);
 	this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
 	this->_saddr_in_len = sizeof(this->_saddr_in);
+	this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
 
 	int optval = 1;
     setsockopt(this->_sock, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
