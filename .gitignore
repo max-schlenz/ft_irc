@@ -16,6 +16,8 @@ server
 *.o
 *.ko
 *.obj
+.obj
+.obj/*
 *.elf
 
 # Linker output
