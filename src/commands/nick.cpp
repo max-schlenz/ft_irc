@@ -3,7 +3,7 @@
 //: oldNick!~UserName@host NICK newNick
 void Server::nick(std::vector<std::string> reqVec, Client &client)
 {
-	if (checkNick(reqVec, client))
+	if (this->checkNick(reqVec, client))
 	{
 		std::string oldNick = client.getNickname();
 		client.setNickname(reqVec[1]);

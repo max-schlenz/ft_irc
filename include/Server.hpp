@@ -163,6 +163,13 @@ class Server {
 		std::vector<pollfd> _pollFds;
 		
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)> _commands;
+
+		bool checkNick(std::vector<std::string> reqVec, Client& client);
+		bool checkUser(std::vector<std::string> reqVec, Client& client);
+		bool checkPart(std::vector<std::string> reqVec, Client& client);
+		bool checkInvite(std::vector<std::string> reqVec, Client& client);
+		bool checkTopic(std::vector<std::string> reqVec, Client& client);
+		bool checkJoin(std::vector<std::string> reqVec, Client& client);
 };
 
 #endif
