@@ -13,20 +13,17 @@ void	error_handling(const char *fmt, ...)
 	va_start(ap, fmt);
 	while (*fmt != '\0')
 	{
-		if (*fmt == '%')
+		if (*fmt == '%' && *(fmt + 1) == 's')
 		{
-			if (*(fmt + 1) == 's')
-			{
-				const char *arg = va_arg(ap, const char*);
-				oss << arg;
-				fmt += 2;
-			}
-			if (*(fmt + 1) == 'i')
-			{
-				int	arg = va_arg(ap, int);
-				oss << arg;
-				fmt += 2;
-			}
+			const char *arg = va_arg(ap, const char*);
+			oss << arg;
+			fmt += 2;
+		}
+		if (*fmt == '%' && *(fmt + 1) == 'i')
+		{
+			int	arg = va_arg(ap, int);
+			oss << arg;
+			fmt += 2;
 		}
 		else
 		{
@@ -57,21 +54,21 @@ static int to_int(char const *s)
 	long long result = 0;
 
 	if ( s == NULL || *s == '\0' )
-		error_handling("null or empty string argument");
+		return(error_handling("null or empty string argument"), -1);
 	bool negate = (s[0] == '-');
 	if ( *s == '+' || *s == '-' ) 
 		++s;
 	if ( *s == '\0')
-		error_handling("sign character only.");
+		return(error_handling("sign character only."), -1);
 	while(*s)
 	{
 		if ( *s < '0' || *s > '9' )
-			error_handling("invalid input string.");
+			return(error_handling("invalid input string."), -1);
 		result = result * 10  - (*s - '0');
 		++s;
 	}
 	if ( result > INT_MAX || result < INT_MIN )
-		error_handling("invalid number.");
+		return(error_handling("invalid number."), -1);
 	return negate ? result : -result;
 }
 
