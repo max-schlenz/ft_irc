@@ -24,10 +24,16 @@ void Server::sendUserList(Client& client, Channel& channel)
 	// std::cout << BRED << response << RESET << std::endl;
 }
 
+// void Server::joinAsOp(std::vector<std::string> reqVec, Client &client)
+// {
+
+// }
+
+
 //: NickName!UserName@host JOIN #channelname
 void Server::join(std::vector<std::string> reqVec, Client &client)
 {
-	if (reqVec.size() > 1)
+	if (checkJoin(reqVec, client))
 	{
 		if (client.getJoinedChannels().find(reqVec[1]) != client.getJoinedChannels().end())
 			return;
@@ -58,8 +64,7 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 
 			std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@localhost JOIN " + reqVec[1] + "\r\n";
 			this->sendResponse(client, response);
-			this->sendMsgToAllInChannel(channel, response, client);
-			// this->sendMsgToAll(client, response);
+			this->sendMsgToAllInChannel(channel, response, client); //brauch man das?
 			for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 				this->sendUserList(*it, channel);
 		}

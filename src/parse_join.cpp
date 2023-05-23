@@ -1,17 +1,15 @@
 # include "irc.hpp"
 # include "definitions.hpp"
 
-std::vector<std::string> getLst(std::string req)
+static void createLst(std::string req, std::vector<std::string>& lst)
 {
 	std::string buffer;
-	std::vector<std::string> lst;
 	std::istringstream iss(req);
 
 	while (getline(iss, buffer, ',')){
 		lst.push_back(buffer);
 		buffer.clear();
 	}
-	return lst;
 }
 
 bool channelExists(std::string channelName, std::vector<Channel> channels) {
@@ -23,6 +21,10 @@ bool channelExists(std::string channelName, std::vector<Channel> channels) {
 	}
 	return false;
 }
+
+// bool checkChannelJoin(std::string channelName) {
+
+// }
 
 // absolutely not working yet
 bool Server::checkJoin(std::vector<std::string> reqVec, Client& client)
@@ -37,38 +39,27 @@ bool Server::checkJoin(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	std::string channelToJoin = reqVec[1];
-	if (this->_channelsM.find(channelToJoin) == this->_channelsM.end()) {
-		std::cout << "lol" << std::endl;
-		std::string err_msg = msg_2(this->_hostname, ERR_NOSUCHCHANNEL, clientIp, channelToJoin, "No such channel");
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-		return false;
-	}
-	// if (!channelExists(reqVec[1], channels)) {
-	// 	std::cout << "Channel doesnt exist yet, creaate operaator" << std::endl; // logic ist still missing here
-	// } else if (reqVec.size() == 2) {
-	// 	channelsToJoin = getLst(reqVec[1]);
-	// 	// for (int i = 0; i < channels.size(); ++i) {
-	// 	// 	if (!channelExists(channels[i].getName(), channels))
-	// 	// 			//handle what should happen in channel doesnt exist?
-	// 	// 			return false
-	// 	// }
-	// } else if (reqVec.size() == 3) {
-	// 	channelsToJoin = getLst(reqVec[1]);
-	// 	passwords = getLst(reqVec[2]);
-	// 	for (int i = 0; i <= channels.size(); ++i) {
-	// 		// if (!channelExists(channels[i].getName(), channels)
-	// 		// 	//handle channel not yet existing
-	// 		// 	return false
-	// 		if (channels[i].getPassword() != passwords[i]) {
-	// 			err_msg = ERR_BADCHANNELKEY + clientIp + ":Cannot join channel (+k)";
+	
+	// std::string channelToJoin = reqVec[1];
+	// if (this->_channelsM.find(channelToJoin) == this->_channelsM.end()) {
+	// 	std::string err_msg = msg_2(this->_hostname, ERR_NOSUCHCHANNEL, clientIp, channelToJoin, "No such channel");
+	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+	// 	return false;
+	// }
+	// if (reqVec.size() == 2) {
+	// 	createLst(reqVec[1], channelsToJoin);
+	// 	for (int i = 0; i < channelsToJoin.size(); ++i) {
+	// 		// if (this->_channelsM.find(channelToJoin) == this->_channelsM.end()) {
+	// 		// 	joinAsOp();
+	// 		// } else {
+	// 		// 	join();
+	// 		// }
+	// 		if (/*invite only channe*/) {
+	// 			err_msg = msg_2(this->_hostname, ERR_INVITEONLYCHAN, clientIp, reqVec[0], "Cannot join channel (+i)");
 	// 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 	// 			return false;
 	// 		}
-	// 		///otherwise join channel? or coomplete knockoff
 	// 	}
-	// } else {
-	// 	std::cout << "Join too many arguments" << std::endl;
 	// }
 	return true;
 }
