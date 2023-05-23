@@ -26,7 +26,8 @@ class Server;
 
 void	exiting(int error_code);
 bool	channelExists(std::string channelName, std::vector<Channel> channels);
-
+std::string itos(const int i);
+void printReqVec(std::vector<std::string> reqVec);
 
 std::string msg_0 (std::string host, std::string num, std::string msg);
 std::string msg_1 (std::string host, std::string num, std::string arg1, std::string msg);

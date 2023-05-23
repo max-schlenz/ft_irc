@@ -12,7 +12,7 @@ void Server::part(std::vector<std::string> reqVec, Client &client)
 			Channel *channel = itChannel->second;
 
 			std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 PART " + reqVec[1] + "\r\n";
-			send(client.getSock(), response.c_str(), response.size(), 0);
+			this->sendResponse(client, response);
 			this->sendMsgToAll(client, response);
 
 			std::map<std::string, Client *>::iterator itClient = channel->getClientsM().find(client.getNickname());
@@ -23,11 +23,8 @@ void Server::part(std::vector<std::string> reqVec, Client &client)
 
 			client.getJoinedChannels().erase(reqVec[1]);
 
-			if (numClients == 0)
-			{
+			if (!numClients)
 				this->_channelsM.erase(channel->getName());
-				std::cout << GRAY << "removed channel: " << RESET << reqVec[1] << std::endl;
-			}
 		}
 	}
 }

@@ -1,5 +1,7 @@
 #include "common.hpp"
 #include "irc.hpp"
+#include <climits>
+#include <cstdarg>
 
 bool g_run = true;
 
@@ -76,8 +78,8 @@ int main(int argc, char **argv)
 {
 	int port = 6667;
 
-	if (argc == 1)
-		error_handling("Error code: %i\nMore C++ like?", 42);
+	// if (argc == 1)
+	// 	error_handling("Error code: %i\nMore C++ like?", 42);
 	if (argc == 2)
 		port = to_int(argv[1]);
 

@@ -24,7 +24,7 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 						response += " ";
 				}
 				response += "\r\n";
-				send(itClient->second->getSock(), response.c_str(), response.size(), 0);
+				this->sendResponse(*itClient->second, response);
 			}
 		}
 	}
