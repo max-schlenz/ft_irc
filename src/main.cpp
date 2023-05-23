@@ -1,5 +1,7 @@
 #include "common.hpp"
 #include "irc.hpp"
+#include <climits>
+#include <cstdarg>
 
 bool g_run = true;
 

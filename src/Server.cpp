@@ -81,16 +81,10 @@ void Server::sendMsgToAll(Client &client, std::string message)
 	}
 }
 
-// void Server::sendMsgToAllInChannel(Client& client, std::string message)
-// {
-// 	for (std::map<std::string, Channel*>::iterator itChannel = client.getJoinedChannels().begin(); itChannel != client.getJoinedChannels().end(); ++itChannel) {
-// 		for (std::vector<Client*>::iterator itClient = itChannel->second->getClients().begin(); itClient != itChannel->second->getClients().end(); ++itClient)
-// 		{
-// 			// if ((*itClient)->getNickname() != client.getNickname())
-// 				send((*itClient)->getSock(), message.c_str(), message.size(), 0);
-// 		}
-// 	}
-// }
+void Server::sendResponse(Client &client, const std::string& response)
+{
+	send(client.getSock(), response.c_str(), response.size(), 0);
+}
 
 bool Server::parseReq(Client& client, std::string request)
 {
@@ -117,35 +111,6 @@ bool Server::parseReq(Client& client, std::string request)
 			std::cout << GRAY << "not recognized: " RESET << request << std::endl;
 	}
 	return true;
-}
-
-void Server::broadcastEvent(Client& client, Channel& channel)
-{
-	// std::string response = :NickName!~UserName@host JOIN #channelname
-}
-
-//:<server> 353 <nick> = <channel> :<space-separated list of nicks>
-void Server::sendUserList(Client& client, Channel& channel)
-{
-	std::string response = ":127.0.0.1 353 " + client.getNickname() + " = " + channel.getName() + " :";
-	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)
-	{
- 		response += it->first;
-		std::map<std::string, Client*>::iterator itNext = it;
-		++itNext;
-		if (itNext != channel.getClientsM().end())
-			response += " ";
-		else
-		{
-			response += "\r\n";
-			send(client.getSock(), response.c_str(), response.size(), 0);
-		}
-	}
-	
-	response = ":127.0.0.1 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list\r\n";
-	send(client.getSock(), response.c_str(), response.size(), 0);
-
-	// std::cout << BRED << response << RESET << std::endl;
 }
 
 bool Server::isValidClient(std::string name)
@@ -181,9 +146,11 @@ bool Server::parseReqQueue(Client& client)
 	return true;
 }
 
-void Server::buildReqQueue(Client& client, char buffer_arr[RECV_BUF])
+// void Server::buildReqQueue(Client& client, std::vector<char> buf)
+// void Server::buildReqQueue(Client& client, std::vector<char>& buf)
+void Server::buildReqQueue(Client& client, const std::string& buffer)
 {
-	std::istringstream iss(buffer_arr);
+	std::istringstream iss(buffer);
 	std::string buffer_str;
 
 	while (std::getline(iss, buffer_str, '\n'))
@@ -192,22 +159,22 @@ void Server::buildReqQueue(Client& client, char buffer_arr[RECV_BUF])
 
 bool Server::handleClientReq(Client& client)
 {
-	char buffer_arr[RECV_BUF];
-	memset(buffer_arr, 0, RECV_BUF);
+	std::vector<char> buffer(RECV_BUF);
+	std::fill(buffer.begin(), buffer.end(), '\0');
 
-	int recv_len = recv(client.getPollFd().fd, &buffer_arr, RECV_BUF, 0);
-
-	std::cout << BLUE << " < " << buffer_arr << RESET << std::flush;
+	int recv_len = recv(client.getPollFd().fd, buffer.data(), RECV_BUF, 0);
 
 	if (recv_len <= 0)
 		return false;
 
 	else
 	{		
-		this->buildReqQueue(client, buffer_arr);
+		std::string buf(buffer.begin(), buffer.begin() + recv_len);
+		
+		std::cout << BLUE << " < " << buf << RESET << std::flush;
+		this->buildReqQueue(client, buf);
 		if (!this->parseReqQueue(client))
 			return false;
-		memset(buffer_arr, 0, RECV_BUF);
 	}
 	return true;
 }
@@ -236,6 +203,7 @@ void Server::disconnectClient(Client& client, int i)
 {
 	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getHostname() << RED << " disconnected." << RESET << std::endl;
 	close(this->_pollFds[i].fd);
+	this->_clientsM.erase(this->_clients[i - 1].getNickname());
 	this->_pollFds.erase(this->_pollFds.begin() + i);
 	this->_clients.erase(this->_clients.begin() + (i - 1));
 }

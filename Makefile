@@ -67,7 +67,7 @@ all:
 	$(info Running on $(OS))
 
 $(NAME): $(OBJ_DIR) $(OBJ_FILES) 
-	@$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(NAME) -I $(INC_DIR)
+	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(NAME) -I $(INC_DIR)
 
 -include $(DEP_FILES)
 

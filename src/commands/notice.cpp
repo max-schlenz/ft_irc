@@ -17,16 +17,13 @@ void Server::notice(std::vector<std::string> reqVec, Client &client)
 		}
 		std::map<std::string, Client*>::iterator itClient = this->_clientsM.find(reqVec[1]);
 		if (itClient != this->_clientsM.end())
-		{
-			send(itClient->second->getSock(), response.c_str(), response.size(), 0);
-			return ;
-		}
+			return this->sendResponse(*itClient->second, response);
 
 		std::map<std::string, Channel>::iterator itChannel = this->_channelsM.find(reqVec[1]);
 		if (itChannel != this->_channelsM.end())
 		{
 			for (std::map<std::string, Client*>::iterator itChanClient = itChannel->second.getClientsM().begin(); itChanClient != itChannel->second.getClientsM().end(); ++itChanClient)
-					send(itChanClient->second->getSock(), response.c_str(), response.size(), 0);
+					this->sendResponse(*itClient->second, response);
 			return ;
 		}
 	}
