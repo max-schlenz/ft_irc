@@ -54,22 +54,20 @@ bool Server::checkUser(std::vector<std::string> reqVec, Client& client)
 
 bool Server::checkPart(std::vector<std::string> reqVec, Client& client)
 {
-	std::string clientIp = client.getHostname() + " ";
-	std::string err_msg;
+	const char*	cIp		=	client.getHostname().c_str();
+	int			sock	=	client.getSock();
+
 	if (reqVec.size() < 2) {
-		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		send_msg(sock, ":%s %s %s %s :Not enough parameters", this->_hostname.c_str(), ERR_NEEDMOREPARAMS.c_str(), cIp, reqVec[0].c_str());
 		return false;
 	}
 	std::string channelToPart = reqVec[1];
 	if (this->_channelsM.find(channelToPart) == this->_channelsM.end()) {
-		std::string err_msg = msg_2(this->_hostname, ERR_NOSUCHCHANNEL, clientIp, channelToPart, "No such channel");
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		send_msg(sock, ":%s %s %s %s :No such channel", this->_hostname.c_str(), ERR_NOSUCHCHANNEL.c_str(), client.getHostname().c_str(), channelToPart.c_str());
 		return false;
 	}
 	if (client.getJoinedChannels().find(channelToPart) == client.getJoinedChannels().end()) {
-		err_msg = msg_2(this->_hostname, ERR_NOTONCHANNEL, clientIp, channelToPart, "You're not on that channel");
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		send_msg(sock, ":%s %s %s %s :You're not on that channel", this->_hostname.c_str(), ERR_NOTONCHANNEL.c_str(), cIp, channelToPart.c_str());
 		return false;
 	}
 	return true;
