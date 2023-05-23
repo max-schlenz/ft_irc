@@ -14,5 +14,5 @@ Client::Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd)
 
 Client::Client()
 {
-	;
+	std::cout << GREEN << "Client DEFAULT CONST" RESET << std::endl;
 }

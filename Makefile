@@ -67,19 +67,19 @@ all:
 	$(info Running on $(OS))
 
 $(NAME): $(OBJ_DIR) $(OBJ_FILES) 
-	@$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(NAME) -I $(INC_DIR)
+	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(NAME) -I $(INC_DIR)
 
 -include $(DEP_FILES)
 
 $(PCH): $(PCH_H)
 	@mkdir -p $(OBJ_DIR)/Classes
-	@$(CXX) $(CXXFLAGS) -x c++-header $< -o $@
+	$(CXX) $(CXXFLAGS) -x c++-header $< -o $@
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/commands
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(PCH)
-	@$(CXX) $(CXXFLAGS) -include $(PCH_H) -I $(INC_DIR) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -include $(PCH_H) -I $(INC_DIR) -c $< -o $@
 
 clean c:
 	@rm -rf $(OBJ_DIR)

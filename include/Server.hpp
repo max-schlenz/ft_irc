@@ -62,6 +62,7 @@ class Server {
 		void setCommands() ;
 		bool isUserInChannel(Client &client, std::string channelName);
 		void sendMsgToAll(Client &client, std::string message);
+		void sendResponse(Client &client, const std::string &response);
 		bool checkCmd(std::vector<std::string> req);
 		const int& getSock() const {
 			return (this->_sock);
@@ -97,8 +98,9 @@ class Server {
 		void startServer();
 		void acceptClient();
 
-		bool handleClientReq(Client& client);
-		
+
+		bool handleClientReq(Client &client);
+
 		void handleReqHandshake(Client& client, std::vector<std::string> reqVec);
 		void handleReqPing(Client& client, std::vector<std::string> reqVec);
 		void handleReqNick(Client& client, std::vector<std::string> reqVec);
@@ -125,13 +127,13 @@ class Server {
 		void	privmsg(std::vector<std::string> reqVec, Client &client);
 		void	dcc(std::vector<std::string> reqVeq, Client &client);
 
-		// void	dbgPrintAllUsers(std::vector<std::string> reqVec, Client &client);
-		// void	dbgPrintAllChannels(std::vector<std::string> reqVec, Client &client);
+		void sendMsgToAllInChannel(Channel &channel, const std::string &response, Client& except);
+
 		void dbgPrint(std::vector<std::string> reqVec, Client &client);
 
-		void buildReqQueue(Client& client, char buffer_arr[RECV_BUF]);
 		bool parseReqQueue(Client& client);
-		
+		void buildReqQueue(Client &client, const std::string &buffer);
+
 		void disconnectClient(Client& client, int i);
 	
 		bool parseReq(Client& client, std::string command);

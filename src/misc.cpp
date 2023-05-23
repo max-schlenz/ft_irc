@@ -1,5 +1,22 @@
 #include "Server.hpp"
 
+std::string itos(const int i)
+{
+	std::ostringstream oss;
+	oss << i;
+
+	return oss.str();
+}
+
+void Server::sendMsgToAllInChannel(Channel& channel, const std::string& response, Client& except)
+{
+	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)
+	{
+		if (it->first != except.getNickname())
+			this->sendResponse(*it->second, response);
+	}
+}
+
 void Server::dbgPrint(std::vector<std::string> reqVec, Client &client)
 {
 	std::map<std::string, Client*>::iterator clientIt = this->_clientsM.begin();
