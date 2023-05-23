@@ -17,6 +17,7 @@ server
 *.ko
 *.obj
 .obj
+.obj/
 .obj/*
 *.elf
 *.hpp.d
