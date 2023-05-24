@@ -92,11 +92,9 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 		createLst(reqVec[1], channelsToJoin);
 		if (reqVec.size() == 2) {
 			for (int i = 0; i < channelsToJoin.size(); ++i) {
-				std::cout << "in for" << std::endl;
 				if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 					this->joinAsOperator(channelsToJoin[i], client);
 				else
-					std::cout << "in else" << std::endl;
 					if (this->checkPassword(channelsToJoin[i], "", client)) {
 						this->joinAsNormal(channelsToJoin[i], client);
 					}

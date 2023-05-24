@@ -148,3 +148,18 @@ bool Server::checkTopic(std::vector<std::string> reqVec, Client& client)
 	return true;
 
 }
+
+bool Server::checkJoin(std::vector<std::string> reqVec, Client& client)
+{
+	std::string clientIp = client.getHostname();
+	std::string err_msg;
+	std::vector<std::string> channelsToJoin;
+	std::vector<std::string> passwords;
+
+	if (reqVec.size() < 2) {
+		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	return true;
+}

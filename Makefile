@@ -14,7 +14,6 @@ SRC_NAME      	=	main \
 					requests \
 					Channel \
 					parse \
-					parse_join \
 					print_msg \
 					commands/capreq \
 					commands/invite \
