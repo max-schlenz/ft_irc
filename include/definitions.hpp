@@ -11,9 +11,10 @@
 # define RPL_TOPIC 332
 # define RPL_NAMREPLY 353
 # define RPL_ENDOFNAMES 366
-# define ERR_ERRONEUSNICKNAME 432
 
-#define ERR_NOSUCHNICK std::string("401")
+# define RPL_YOUREOPER std::string("381")
+
+# define ERR_NOSUCHNICK std::string("401")
 # define ERR_NOSUCHCHANNEL std::string("403")
 # define ERR_NONICK std::string("431")
 # define ERR_INVALIDNICK std::string("432")

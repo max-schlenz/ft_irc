@@ -9,8 +9,11 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 		std::string oldNick = client.getNickname();
 		std::string newNick = reqVec[1];
 		int i = 2;
-		while (this->_clientsM.find(newNick) != this->_clientsM.end()) {
+		if (this->_clientsM.find(newNick) == this->_clientsM.end()) {
 			newNick = newNick + "|" + itos(i);
+		}
+		while (this->_clientsM.find(newNick) != this->_clientsM.end()) {
+			newNick = newNick + itos(i);
 			++i;
 		}
 

@@ -52,7 +52,18 @@ class Channel
 		int getLimit() {
 			return this->_limit;
 		}
-
+		bool getModeO() const {
+			return this->mode_o;
+		}
+		bool getModeI() const {
+			return this->mode_i;
+		}
+		bool getModeT() const {
+			return this->mode_t;
+		}
+		bool getModeK() const {
+			return this->mode_k;
+		}
 		Channel(std::string name);
 		Channel(): _name(""), _topic(""), _password(""), _modes(""), _limit(0), mode_i(false), mode_t(false), mode_k(false), mode_o(false), num_clients(0) {};
 		~Channel();
