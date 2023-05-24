@@ -175,6 +175,7 @@ class Server {
 		void joinAsOperator(std::string channelName, Client &client);
 		void joinAsNormal(std::string channelName, Client &client);
 		bool checkPassword(std::string channelName, std::string password, Client& client);
+		bool checkMode(std::vector<std::string> reqVec, Client& client);
 };
 
 #endif

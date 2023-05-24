@@ -153,13 +153,55 @@ bool Server::checkJoin(std::vector<std::string> reqVec, Client& client)
 {
 	std::string clientIp = client.getHostname();
 	std::string err_msg;
-	std::vector<std::string> channelsToJoin;
-	std::vector<std::string> passwords;
 
 	if (reqVec.size() < 2) {
 		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
+	}
+	return true;
+}
+
+static std::string getUserModes(Client& client)
+{
+	std::string modes = "+";
+	if (client.getModeI())
+		modes += "i";
+	if (client.getModeO())
+		modes += "o";
+	return modes;
+}
+
+bool Server::checkMode(std::vector<std::string> reqVec, Client& client)
+{
+	std::string clientIp = client.getHostname();
+	std::string err_msg;
+	if (reqVec.size() < 2) {
+		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	std::string nickname = reqVec[1];
+	if (this->_clientsM.find(nickname) == this->_clientsM.end()) {
+		err_msg = msg_2(this->_hostname, ERR_NOSUCHNICK, clientIp, nickname, "No such nick/channel");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	if (client.getNickname() != nickname) {
+
+		err_msg = msg_1(this->_hostname, ERR_USERSDONTMATCH, clientIp, "Cant change mode for other users");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	if (reqVec.size() < 3) {
+		std::string modes = getUserModes(client);
+		err_msg = msg_1(this->_hostname, RPL_UMODEIS, clientIp, modes);
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	if (!validUserModes()) {
+
+		"<client> :Unknown MODE flag"
 	}
 	return true;
 }

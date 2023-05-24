@@ -24,8 +24,11 @@ class Client
 		void setRegistered(bool registered){
 			this->_registered = registered;
 		}
-		void setOp(bool op){
-			this->_op = op;
+		void setModeO(bool mode_o){
+			this->_mode_o = mode_o;
+		}
+		void setModeI(bool mode_i){
+			this->_mode_i = mode_i;
 		}
 		void setIpstr(){
 			this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
@@ -46,8 +49,11 @@ class Client
 		const std::string& getNickname() const {
 			return (this->_nickName);
 		}
-		const bool& getOp() const {
-			return (this->_op);
+		const bool& getModeO() const {
+			return (this->_mode_o);
+		}
+		const bool& getModeI() const {
+			return (this->_mode_i);
 		}
 		const std::string& getHostname() const {
 			return (this->_hostname);
@@ -98,7 +104,8 @@ class Client
 		std::string _nickName;
 		std::string _userName;
 		std::string _realName;
-		bool		_op;
+		bool		_mode_o;
+		bool		_mode_i;
 		bool		_bot;
 		std::string _hostname;
 		int 		_sock;

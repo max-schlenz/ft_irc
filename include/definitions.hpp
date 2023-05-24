@@ -12,6 +12,8 @@
 # define RPL_NAMREPLY 353
 # define RPL_ENDOFNAMES 366
 
+
+# define RPL_UMODEIS std::string("221")
 # define RPL_YOUREOPER std::string("381")
 
 # define ERR_NOSUCHNICK std::string("401")
@@ -28,5 +30,5 @@
 # define ERR_CHANOPRIVSNEEDED std::string("482")
 # define ERR_USERONCHANNEL std::string("443") 
 # define ERR_CHANOPRIVSNEEDED std::string("482")
-
+# define ERR_USERSDONTMATCH std::string("502")
 #endif
