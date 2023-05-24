@@ -1,7 +1,7 @@
 # ft_irc
 
 ### Needs Fixing
-Client und Channel Map wird nicht geupdated wenn nickname gechanged wird
+toupper implementierung fuer invite
 
 ### Ressources
 ***[rfc 1459](https://www.rfc-editor.org/rfc/rfc1459) Internet Relay Chat Protocol (1993)***  
