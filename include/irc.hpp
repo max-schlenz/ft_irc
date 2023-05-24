@@ -8,6 +8,7 @@
 # include "Server.hpp"
 # include "definitions.hpp"
 
+# define BOLD "\033[1m"
 # define RED "\033[0;31m"
 # define BRED "\033[1;31m"
 # define GREEN "\033[0;32m"
@@ -16,9 +17,11 @@
 # define BBLUE "\033[1;34m"
 # define GRAY "\033[0m\033[38;5;239m"
 # define BWHITE "\033[1;37m"
+# define YELLOW "\033[0;33m"
 # define RESET "\033[0m"
 
 # define VERBOSE 0
+# define BUFFER 512
 
 # define PRNT std::cout << BRED << "HERE" << RESET << std::endl
  
@@ -34,5 +37,6 @@ std::string msg_1 (std::string host, std::string num, std::string arg1, std::str
 std::string msg_2 (std::string host, std::string num, std::string arg1, std::string arg2, std::string msg);
 std::string msg_3 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string msg);
 std::string msg_4 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string msg);
+void	send_msg(int sock, const char *fmt, ...);
 
 #endif

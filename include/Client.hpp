@@ -21,8 +21,11 @@ class Client
 		void setRealname(std::string realname){
 			this->_realName = realname;
 		}
-		void setRegistered(bool registered){
-			this->_registered = registered;
+		void setNickRegistered(bool registered){
+			this->_nick_registered = registered;
+		}
+		void setUserRegistered(bool registered){
+			this->_user_registered = registered;
 		}
 		void setOp(bool op){
 			this->_op = op;
@@ -73,8 +76,11 @@ class Client
 		std::string getNickname() {
 			return this->_nickName;
 		}
-		bool getRegistered(){
-			return this->_registered;
+		bool getNickRegistered(){
+			return this->_nick_registered;
+		}
+		bool getUserRegistered(){
+			return this->_user_registered;
 		}
 		std::string getRealName();
 		pollfd& getPollFd() {
@@ -107,7 +113,8 @@ class Client
 		
 		pollfd _pollFd;
 
-		bool _registered;
+		bool _nick_registered;
+		bool _user_registered;
 
 		std::vector<std::string> _reqQueue;
 		// std::vector<Channel*> _joinedChannels;

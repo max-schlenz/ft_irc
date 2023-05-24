@@ -21,16 +21,15 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 		// send(client.getSock(), response.c_str(), response.size(), 0);
 		std::string response;
 
-		if (!client.getRegistered())
+		if (!client.getNickRegistered())
 		{
-			std::cout << "if" << std::endl;
-
-			this->sendResponse(client, ":127.0.0.1 001 " + client.getNickname() + " :welcome, " + client.getNickname() + "!" + client.getUsername() + "@" + "127.0.0.1\r\n");
-			this->sendMsgToAll(client, ":" + oldNick + "!" + client.getUsername() + "@127.0.0.1 NICK " + reqVec[1] + "\r\n");
-			client.setRegistered(true);
+			// std::cout << "if" << std::endl;
+			// this->sendResponse(client, ":127.0.0.1 001 " + client.getNickname() + " :welcome, " + client.getNickname() + "!" + client.getUsername() + "@" + "127.0.0.1\r\n");
+			// this->sendMsgToAll(client, ":" + oldNick + "!" + client.getUsername() + "@127.0.0.1 NICK " + reqVec[1] + "\r\n");
+			client.setNickRegistered(true);
 			this->_clientsM[client.getNickname()] = &client;
 		} else {
-			std::cout << "else"<< std::endl;
+			// std::cout << "else"<< std::endl;
 
 			this->sendMsgToAll(client, ":" + oldNick + "!" + client.getUsername() + "@127.0.0.1 NICK " + reqVec[1] + "\r\n");
 			for (std::map<std::string, Channel>::iterator it = this->_channelsM.begin(); it != this->_channelsM.end(); ++it) //this is not workin yet
@@ -42,7 +41,7 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 				}
 			}
 			this->_clientsM.erase(oldNick);
-			client.setRegistered(true);
+			client.setNickRegistered(true);
 			this->_clientsM[newNick] = &client;
 		}
 	}
