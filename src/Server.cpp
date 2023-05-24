@@ -243,7 +243,7 @@ void Server::startServer()
 
 			else if (i > 0 && this->_pollFds[i].revents & POLLIN)
 			{
-				if (!this->handleClientReq(this->_clients[i - 1]))
+				if (!this->handleClientReq(this->_clients[i - 1]) || this->_clients[i - 1].getKick())
 					this->disconnectClient(this->_clients[i - 1], i);
 			}
 		}

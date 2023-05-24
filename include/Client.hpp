@@ -36,6 +36,9 @@ class Client
 		void setSock(int sock){
 			this->_sock = sock;
 		}
+		void setKick(bool kick){
+			this->_kick = kick;
+		}
 		void setSin(sockaddr_in& sin){
 			this->_saddr_in_len = sizeof(sin);
 			this->_saddr_in = sin;
@@ -51,6 +54,9 @@ class Client
 		}
 		const bool& getOp() const {
 			return (this->_op);
+		}
+		const bool& getKick() const {
+			return (this->_kick);
 		}
 		const std::string& getHostname() const {
 			return (this->_hostname);
@@ -106,6 +112,7 @@ class Client
 		std::string _realName;
 		bool		_op;
 		bool		_bot;
+		bool		_kick;
 		std::string _hostname;
 		int 		_sock;
 		sockaddr_in _saddr_in;
