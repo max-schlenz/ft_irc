@@ -34,7 +34,7 @@ SRC_NAME      	=	main \
 					commands/whois \
 					commands/dcc \
 
-INC_NAME		=	Channel Client Server irc
+INC_NAME		=	Channel Client Server irc common
 
 SRC_DIR			=	src/
 OBJ_DIR			=	.obj/
@@ -46,8 +46,8 @@ DEP_FILES		=	$(addsuffix .d, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
 SRC_FILES		=	$(addsuffix .cpp, $(addprefix $(SRC_DIR), $(SRC_NAME)))
 INC_FILES		=	$(addsuffix .hpp, $(addprefix $(INC_DIR), $(INC_NAME)))
 
-PCH_H			= include/common.hpp
-PCH				= $(PCH_H).gch
+# PCH_H			= include/common.hpp
+# PCH				= $(PCH_H).gch
 
 ifeq ($(shell uname -s),Linux)
 	OS := Linux
@@ -71,18 +71,24 @@ $(NAME): $(OBJ_DIR) $(OBJ_FILES)
 
 -include $(DEP_FILES)
 
-$(PCH): $(PCH_H)
-	@mkdir -p $(OBJ_DIR)/Classes
-	$(CXX) $(CXXFLAGS) -x c++-header $< -o $@
+# $(PCH): $(PCH_H)
+# 	@mkdir -p $(OBJ_DIR)/Classes
+# 	@$(CXX) $(CXXFLAGS) -x c++-header $< -o $@
 
 $(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)/commands
 
-$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(PCH)
-	$(CXX) $(CXXFLAGS) -include $(PCH_H) -I $(INC_DIR) -c $< -o $@
+# $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(PCH)
+# 	@$(CXX) $(CXXFLAGS) -include $(PCH_H) -I $(INC_DIR) -c $< -o $@
+$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
+	@$(CXX) $(CXXFLAGS) -c $< -I$(INC_DIR) -o $@
 
 clean c:
 	@rm -rf $(OBJ_DIR)
+	@rm -rf *.vscode
+	@rm -rf *.dSYM
+	@rm -rf *.gch
 
 fclean f: clean
 	@rm -rf $(NAME)
