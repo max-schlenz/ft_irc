@@ -2,29 +2,45 @@
 
 extern bool g_run;
 
-Server::Server(int port)
+Server::Server(int port, std::string key)
 {
 	// this->_channels.reserve(1024);
 	this->_clients.reserve(1024);
 	this->_pollFds.reserve(1024);
 
-
+	if (key != "")
+	{
+		this->_key = key;
+		this->_key_set = true;
+	}
+	else
+		this->_key_set = false;
 	this->_proto = getprotobyname("tcp");
-	this->_sock = socket(AF_INET, SOCK_STREAM, this->_proto->p_proto);
+	if (((this->_sock = socket(AF_INET, SOCK_STREAM, this->_proto->p_proto)) < 0 ))
+		error_handling("[-] Error, socket invalid!");
+	std::cout << GREEN << "[+] Socket " << this->_sock << " is open through the TCP/IP protocol." << RESET << std::endl;
 	this->_port = port;
 	this->_saddr_in.sin_family = AF_INET;
 	this->_saddr_in.sin_port = htons(this->_port);
 	this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
 	this->_saddr_in_len = sizeof(this->_saddr_in);
 	this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
+	this->_num_channels = 0;
+	this->_num_ops = 0;
+	this->_num_users = 0;
 
 	int optval = 1;
     setsockopt(this->_sock, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
 	fcntl(this->_sock, F_SETFL, O_NONBLOCK);
-	if ((bind(this->_sock, (struct sockaddr*)&this->_saddr_in, this->_saddr_in_len)) < 0)
-		error_handling("Error: bind failed!");
+	while ((bind(this->_sock, (struct sockaddr*)&this->_saddr_in, this->_saddr_in_len)) < 0)
+	{
+		std::cout << YELLOW << "\terrno = (" << errno << ") : " << strerror(errno) << std::endl;
+		this->_saddr_in.sin_port = htons(++this->_port);
+	}
+	std::cout << GREEN << "[+] Bind successful on port " << this->_port << "!" << RESET << std::endl;
 	if ((listen(this->_sock, USR_LIMIT)) < 0)
 		error_handling("Error: listen failed!");
+	std::cout << GREEN << "[+] Socket is listening.\n" << RESET << std::endl;
 	pollfd server_poll_fd;
 	server_poll_fd.fd = this->_sock;
 	server_poll_fd.events = POLLIN;
@@ -54,6 +70,7 @@ void Server::setCommands()
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
 	this->_commands["CAP"] = &Server::capreq;
+	this->_commands["PASS"] = &Server::pass;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
 	this->_commands["MSG"] = &Server::privmsg; // same as privmsg
 	this->_commands["WHO"] = &Server::who;
@@ -83,6 +100,7 @@ void Server::sendMsgToAll(Client &client, std::string message)
 
 void Server::sendResponse(Client &client, const std::string& response)
 {
+	std::cout << "\t" << response << std::flush;
 	send(client.getSock(), response.c_str(), response.size(), 0);
 }
 
@@ -213,7 +231,8 @@ void Server::startServer()
 	int res = 0;
 
 	if (g_run)
-		std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
+		std::cout << "~~~ Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << " ~~~\n" << RESET <<  std::endl;
+		// std::cout << "Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << RESET <<  std::endl;
 	while (g_run)
 	{
 		res = poll(this->_pollFds.data(), this->_pollFds.size(), 500);

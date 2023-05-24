@@ -77,15 +77,29 @@ static int to_int(char const *s)
 int main(int argc, char **argv)
 {
 	int port = 6667;
+	std::string key;
 
-	if (argc == 100)
-		error_handling("Error code: %i\nError handling example.", 42);
-	if (argc == 2)
+	if (argc == 1)
+	{
+		std::cout << BRED << "Error!\n" << RED << "[Usage]: ./ircserv <port> <password>\n" << RESET << std::endl;
+		std::cout << YELLOW << "Starting on default port 6667 without a password!" << std::endl;
+		std::cout << "Exit here if you don't want this behavior!\n" << RESET << std::endl;
+		// return (42);
+	}
+	else
 		port = to_int(argv[1]);
-
+	if (argc == 3)
+	{
+		std::cout << "Password required!\n" << std::endl;
+		key = argv[2];
+	}
+	else
+	{
+		std::cout << "No password required!\n" << std::endl;
+		key = "";
+	}
 	sig();
-
-	Server server(port);
+	Server server(port, key);
 	server.startServer();
 
 	return (0);

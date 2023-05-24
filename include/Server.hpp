@@ -52,6 +52,10 @@ class Server {
 		void setPort(int port) {
 			this->_port = port;
 		};
+		void setKey(std::string key) {
+			this->_key_set = true;
+			this->_key = key;
+		};
 		void setSin(sockaddr_in _saddr_in) {
 			this->_saddr_in_len = sizeof(_saddr_in);
 			this->_saddr_in = _saddr_in;
@@ -73,6 +77,12 @@ class Server {
 		const std::string& getHostname() const {
 			return (this->_hostname);
 		}
+		const std::string& getKey() const {
+			return (this->_key);
+		}
+		const bool& getKeySet() const {
+			return (this->_key_set);
+		}
 		sockaddr_in& getSin() {
 			return (this->_saddr_in);
 		}
@@ -92,7 +102,7 @@ class Server {
 			return this->_channelsM;
 		}
 		// Server(int port, std::vector<pollfd>& poll_fds);
-		Server(int port);
+		Server(int port, std::string key);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server();
 		void startServer();
@@ -126,6 +136,7 @@ class Server {
 		void	capreq(std::vector<std::string> reqVec, Client &client);
 		void	privmsg(std::vector<std::string> reqVec, Client &client);
 		void	dcc(std::vector<std::string> reqVeq, Client &client);
+		void	pass(std::vector<std::string> reqVec, Client &client);
 
 		void sendMsgToAllInChannel(Channel &channel, const std::string &response, Client& except);
 
@@ -150,6 +161,11 @@ class Server {
 	private:
 		int	_sock;
 		int _port;
+		std::string _key;
+		bool _key_set;
+		size_t _num_channels;
+		size_t _num_ops;
+		size_t _num_users;
 		protoent* _proto;
 		int _client;
 		sockaddr_in _saddr_in;

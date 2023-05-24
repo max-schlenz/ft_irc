@@ -5,7 +5,7 @@ DATE			=	$$(date +%Y/%m/%d)
 CXX				=	c++
 CXXFLAGS		=	-std=c++98 -MMD -g #-Wall -Wextra -Werror 
 
-NAME			=	server
+NAME			=	ircserv
 
 SRC_NAME      	=	main \
 					Server \
@@ -33,6 +33,7 @@ SRC_NAME      	=	main \
 					commands/who \
 					commands/whois \
 					commands/dcc \
+					commands/pass
 
 INC_NAME		=	Channel Client Server irc common
 
@@ -86,7 +87,7 @@ $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
 
 clean c:
 	@rm -rf $(OBJ_DIR)
-	@rm -rf *.vscode
+	@rm -rf .vscode
 	@rm -rf *.dSYM
 	@rm -rf *.gch
 
