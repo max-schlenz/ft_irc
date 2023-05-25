@@ -24,6 +24,30 @@ void Server::sendResponse(Client &client, const std::string& response)
 	send(client.getSock(), response.c_str(), response.size(), 0);
 }
 
+bool Server::parseReq(Client& client, std::string request)
+{
+	std::vector<std::string> reqVec;
+	std::string reqField;
+
+	std::istringstream iss(request);
+	while (iss >> reqField)
+		reqVec.push_back(reqField);
+
+	if (reqVec.size())
+	{
+		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
+		
+		if (it != this->_commands.end())
+			(this->*(it->second))(reqVec, client);
+
+		else if (reqVec[0] == "QUIT")
+			return false;
+		else
+			std::cout << GRAY << "not recognized: " RESET << request << std::endl;
+	}
+	return true;
+}
+
 bool Server::isValidClient(std::string name)
 {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)

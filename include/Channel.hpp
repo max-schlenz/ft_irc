@@ -83,6 +83,7 @@ class Channel
 
 		// std::vector<Client*> _clients;
 		// std::vector<std::string> _clientNames;
+		std::vector<std::string> operators;
 		std::map<std::string, Client*> _clientsM;
 };
 
