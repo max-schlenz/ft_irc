@@ -7,6 +7,7 @@
 
 # include "common.hpp"
 # include "irc.hpp"
+# include "definitions.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;

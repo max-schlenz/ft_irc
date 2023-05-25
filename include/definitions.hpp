@@ -33,17 +33,19 @@
 # define ERR_UMODEUNKNOWNFLAG std::string("501")
 # define ERR_USERSDONTMATCH std::string("502")
 
+# define SERV_ADDR "127.0.0.1"
 // <-------- RESPONSE CODES ---------->
 // #define ERR_ ":127.0.0.1 4 "
 // START
 
 
 // PASS 
-#define E_NEEDMOREPARAMS ":127.0.0.1 461 "
-#define E_ALREADYREGISTERED ":127.0.0.1 462 "
-#define E_PASSWDMISMATCH ":127.0.0.1 464 "
+# define E_NEEDMOREPARAMS ":" SERV_ADDR " 461 "
+# define E_ALREADYREGISTERED ":" SERV_ADDR " 462 "
+# define E_PASSWDMISMATCH ":" SERV_ADDR " 464 "
 
 // NICK message
-#define ERR_NONICKNAMEGIVEN ":127.0.0.1 431 "
+# define E_NONICKNAMEGIVEN ":" SERV_ADDR " 431 "
+# define E_NICKNAMEINUSE ":" SERV_ADDR " 433 "
 
 #endif

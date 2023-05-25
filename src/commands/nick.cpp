@@ -13,6 +13,8 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 		std::string addon;
 		int i = 2;
 		if (this->_clientsM.size() != 0 && this->_clientsM.find(newNick) != this->_clientsM.end()) {
+			std::string response = E_NICKNAMEINUSE + newNick + " :Nickname is already in use\r\n";
+			this->sendResponse(client, response);
 			newNick = newNick + "|" + itos(i);
 			std::cout << "client size" << this->_clientsM.size() << std::endl;
 		}
