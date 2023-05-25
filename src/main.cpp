@@ -79,6 +79,7 @@ int main(int argc, char **argv)
 	int port = 6667;
 	std::string key;
 
+	std::cout << E_NEEDMOREPARAMS << std::endl;
 	if (argc == 1)
 	{
 		std::cout << BRED << "Error!\n" << RED << "[Usage]: ./ircserv <port> <password>\n" << RESET << std::endl;
