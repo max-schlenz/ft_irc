@@ -172,7 +172,15 @@ static std::string getUserModes(Client& client)
 	return modes;
 }
 
-bool Server::checkMode(std::vector<std::string> reqVec, Client& client)
+static bool validUserMode(std::string mode) {
+	std::string modes = "i";
+
+	mode = mode.replace(0, 1, "");
+	if (mode == "" || modes[0] == mode[0])
+		return false;
+}
+
+bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 {
 	std::string clientIp = client.getHostname();
 	std::string err_msg;
@@ -199,7 +207,7 @@ bool Server::checkMode(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	if (!validUserModes()) {
+	if (!validUserMode()) {
 
 		"<client> :Unknown MODE flag"
 	}
