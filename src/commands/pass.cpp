@@ -2,6 +2,12 @@
 
 void Server::pass(std::vector<std::string> reqVec, Client &client)
 {
+	if (client.getNickRegistered())
+	{
+		std::string response = E_ALREADYREGISTERED + client.getNickname() + " :You may not register\r\n";
+		this->sendResponse(client, response);
+		return;
+	}
 	client.setPass(true);
 	if (this->_key_set == false)
 		std::cout << YELLOW << "No password needed!" << RESET << std::endl;
@@ -14,12 +20,15 @@ void Server::pass(std::vector<std::string> reqVec, Client &client)
 		}
 		else
 		{
-			std::cout << RED << "Bad password attempt!" << RESET << std::endl;
+			std::string response = E_PASSWDMISMATCH + client.getNickname() + " :Password incorrect\r\n";
+			this->sendResponse(client, response);
 			client.setKick(true);
 		}
 	}
 	else
 	{
-		
+		std::string response = E_NEEDMOREPARAMS + client.getNickname() + " :Not enough parameters\r\n";
+		this->sendResponse(client, response);
+		client.setKick(true);
 	}
 }

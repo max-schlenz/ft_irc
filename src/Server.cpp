@@ -118,8 +118,6 @@ bool Server::parseReq(Client& client, std::string request)
 	if (reqVec.size())
 	{
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
-		// if (request.find("CAP LS") != std::string::npos)
-		// 	this->handleReqHandshake(client, reqVec);
 		
 		if (it != this->_commands.end())
 			(this->*(it->second))(reqVec, client);
@@ -250,34 +248,4 @@ void Server::startServer()
 			}
 		}
 	}
-}
-
-const char* Server::InvalidArgsException::what() const throw()
-{
-	return "Invalid Arguments";
-}
-
-const char* Server::ErrorEstablishingConException::what() const throw()
-{
-	return "Error establishing connection...";
-}
-
-const char* Server::ErrorBindingSocketException::what() const throw()
-{
-	return "Error binding socket...";
-}
-
-const char* Server::ErrorOnAcceptException::what() const throw()
-{
-	return "Error on accepting...";
-}
-
-const char* Server::ErrorGettingProtonException::what() const throw()
-{
-	return "Error getting proton...";
-}
-
-const char* Server::ErrorPoll::what() const throw()
-{
-	return "Error: poll returned -1";
 }
