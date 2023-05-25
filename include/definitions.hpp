@@ -30,5 +30,6 @@
 # define ERR_CHANOPRIVSNEEDED std::string("482")
 # define ERR_USERONCHANNEL std::string("443") 
 # define ERR_CHANOPRIVSNEEDED std::string("482")
+# define ERR_UMODEUNKNOWNFLAG std::string("501")
 # define ERR_USERSDONTMATCH std::string("502")
 #endif

@@ -176,8 +176,9 @@ static bool validUserMode(std::string mode) {
 	std::string modes = "i";
 
 	mode = mode.replace(0, 1, "");
-	if (mode == "" || modes[0] == mode[0])
+	if (mode == "" || modes[0] != mode[0])
 		return false;
+	return true;
 }
 
 bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
@@ -191,7 +192,7 @@ bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 	}
 	std::string nickname = reqVec[1];
 	if (this->_clientsM.find(nickname) == this->_clientsM.end()) {
-		err_msg = msg_2(this->_hostname, ERR_NOSUCHNICK, clientIp, nickname, "No such nick/channel");
+		err_msg = msg_2(this->_hostname, ERR_NOSUCHNICK, clientIp, nickname, "No such nick");
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
@@ -206,10 +207,6 @@ bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 		err_msg = msg_1(this->_hostname, RPL_UMODEIS, clientIp, modes);
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
-	}
-	if (!validUserMode()) {
-
-		"<client> :Unknown MODE flag"
 	}
 	return true;
 }
