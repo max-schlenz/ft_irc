@@ -12,6 +12,7 @@ Operator when joining channel
 Only operator priv in channel (implementation std::vector std::string ops)  
 PRIVMSG sending msg to multiple channels + parsing  
 QUIT  
+NICK parsing wwhen having the same name + different when sending putting a nickname in advanced
 
 ### Could get implemented
 INFO
