@@ -22,7 +22,7 @@ MOTD
 
 ### Currently implemented
 Authentication
-PASS
+PASS  
 USER
 NICK
 PING

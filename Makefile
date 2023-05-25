@@ -9,6 +9,9 @@ NAME			=	ircserv
 
 SRC_NAME      	=	main \
 					Server \
+					ServerConnect \
+					ServerRequest \
+					ServerSetup \
 					Client \
 					misc \
 					requests \
