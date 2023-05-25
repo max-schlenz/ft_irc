@@ -56,18 +56,23 @@ bool Server::checkPart(std::vector<std::string> reqVec, Client& client)
 {
 	const char*	cIp		=	client.getHostname().c_str();
 	int			sock	=	client.getSock();
+	std::string err_msg;
 
 	if (reqVec.size() < 2) {
-		send_msg(sock, ":%s %s %s %s :Not enough parameters", this->_hostname.c_str(), ERR_NEEDMOREPARAMS.c_str(), cIp, reqVec[0].c_str());
+		// err_msg = getMsg(sock, ":%s %s %s %s :Not enough parameters", this->_hostname.c_str(), ERR_NEEDMOREPARAMS.c_str(), cIp, reqVec[0].c_str());
+		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	std::string channelToPart = reqVec[1];
 	if (this->_channelsM.find(channelToPart) == this->_channelsM.end()) {
-		send_msg(sock, ":%s %s %s %s :No such channel", this->_hostname.c_str(), ERR_NOSUCHCHANNEL.c_str(), client.getHostname().c_str(), channelToPart.c_str());
+		err_msg = getMsg(sock, ":%s %s %s %s :No such channel", this->_hostname.c_str(), ERR_NOSUCHCHANNEL.c_str(), client.getHostname().c_str(), channelToPart.c_str());
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	if (client.getJoinedChannels().find(channelToPart) == client.getJoinedChannels().end()) {
-		send_msg(sock, ":%s %s %s %s :You're not on that channel", this->_hostname.c_str(), ERR_NOTONCHANNEL.c_str(), cIp, channelToPart.c_str());
+		err_msg = getMsg(sock, ":%s %s %s %s :You're not on that channel", this->_hostname.c_str(), ERR_NOTONCHANNEL.c_str(), cIp, channelToPart.c_str());
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	return true;
@@ -199,3 +204,33 @@ bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 	}
 	return true;
 }
+
+// bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
+// {
+// 	std::string clientIp = client.getHostname();
+// 	std::string err_msg;
+// 	if (reqVec.size() < 2) {
+// 		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
+// 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+// 		return false;
+// 	}
+// 	std::string nickname = reqVec[1];
+// 	if (this->_clientsM.find(nickname) == this->_clientsM.end()) {
+// 		err_msg = msg_2(this->_hostname, ERR_NOSUCHNICK, clientIp, nickname, "No such nick");
+// 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+// 		return false;
+// 	}
+// 	if (client.getNickname() != nickname) {
+
+// 		err_msg = msg_1(this->_hostname, ERR_USERSDONTMATCH, clientIp, "Cant change mode for other users");
+// 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+// 		return false;
+// 	}
+// 	if (reqVec.size() < 3) {
+// 		std::string modes = getUserModes(client);
+// 		err_msg = msg_1(this->_hostname, RPL_UMODEIS, clientIp, modes);
+// 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+// 		return false;
+// 	}
+// 	return true;
+// }

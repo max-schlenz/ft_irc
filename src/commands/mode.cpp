@@ -33,7 +33,8 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 		else if (modes[i] == '+')
 			operation = "+";
 		else if (!validUserMode(modes[i])) {
-			err_msg = msg_1(this->_hostname, ERR_UMODEUNKNOWNFLAG, clientIp, "Unknown MODE flag");
+			std::string mode(1, modes[i]);
+			err_msg = msg_2(this->_hostname, ERR_UMODEUNKNOWNFLAG, client.getNickname(), mode, "is not a recognised user mode");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		} else {
 			if (operation == "-" && !client.getModeI() || operation == "+" && client.getModeI())

@@ -38,6 +38,6 @@ std::string msg_1 (std::string host, std::string num, std::string arg1, std::str
 std::string msg_2 (std::string host, std::string num, std::string arg1, std::string arg2, std::string msg);
 std::string msg_3 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string msg);
 std::string msg_4 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string msg);
-void	send_msg(int sock, const char *fmt, ...);
+std::string	getMsg(int sock, const char *fmt, ...);
 
 #endif
