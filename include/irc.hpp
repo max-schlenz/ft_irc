@@ -18,6 +18,7 @@
 # define GRAY "\033[0m\033[38;5;239m"
 # define BWHITE "\033[1;37m"
 # define YELLOW "\033[0;33m"
+# define PINK "\033[38;5;206m"
 # define RESET "\033[0m"
 
 # define VERBOSE 0
