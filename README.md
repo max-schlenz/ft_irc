@@ -5,7 +5,7 @@ clean up codebase
 toupper implementierung fuer invite
 
 ### Needs to be implemented
-MODES command + parsing  
+MODES command + parsing -> talea  
 INVITE command  
 KICK parsing?  
 Operator when joining channel  
