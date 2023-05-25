@@ -5,13 +5,13 @@ clean up codebase
 toupper implementierung fuer invite
 
 ### Needs to be implemented
-MODES command + parsing 
-INVITE command
-KICK parsing?
-Operator when joining channel
-Only operator priv in channel (implementation std::vector std::string ops)
-PRIVMSG sending msg to multiple channels + parsing
-QUIT
+MODES command + parsing. 
+INVITE command. 
+KICK parsing?  
+Operator when joining channel. 
+Only operator priv in channel (implementation std::vector std::string ops). 
+PRIVMSG sending msg to multiple channels + parsing. 
+QUIT. 
 
 ### Could get implemented
 INFO
