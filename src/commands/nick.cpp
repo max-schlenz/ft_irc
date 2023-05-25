@@ -8,12 +8,17 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 	{
 		std::string oldNick = client.getNickname();
 		std::string newNick = reqVec[1];
+		std::string addon;
 		int i = 2;
-		if (this->_clientsM.find(newNick) == this->_clientsM.end()) {
+		if (this->_clientsM.size() != 0 && this->_clientsM.find(newNick) != this->_clientsM.end()) {
 			newNick = newNick + "|" + itos(i);
+			std::cout << "client size" << this->_clientsM.size() << std::endl;
 		}
 		while (this->_clientsM.find(newNick) != this->_clientsM.end()) {
-			newNick = newNick + itos(i);
+			addon = itos(i);
+			std::cout << "size: " << reqVec[1].size() << std::endl;
+			std::cout << "new nick size" << newNick.size() << std::endl;
+			newNick = newNick.replace(reqVec[1].size() + 1, addon.size(), addon);
 			++i;
 		}
 
