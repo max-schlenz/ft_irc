@@ -15,14 +15,16 @@ Server::Server(int port, std::string key)
 	}
 	else
 		this->_key_set = false;
-	this->_proto = getprotobyname("tcp");
-	if (((this->_sock = socket(AF_INET, SOCK_STREAM, this->_proto->p_proto)) < 0 ))
+	// this->_proto = getprotobyname("tcp");
+	// this->_sock = socket(AF_INET, SOCK_STREAM, this->_proto->p_proto);
+	if (((this->_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0 ))
 		error_handling("[-] Error, socket invalid!");
 	std::cout << GREEN << "[+] Socket " << this->_sock << " is open through the TCP/IP protocol." << RESET << std::endl;
 	this->_port = port;
 	this->_saddr_in.sin_family = AF_INET;
 	this->_saddr_in.sin_port = htons(this->_port);
-	this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
+	// this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
+	this->_saddr_in.sin_addr.s_addr = inet_addr("127.0.0.1");
 	this->_saddr_in_len = sizeof(this->_saddr_in);
 	this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
 	this->_num_channels = 0;
@@ -100,7 +102,7 @@ void Server::sendMsgToAll(Client &client, std::string message)
 
 void Server::sendResponse(Client &client, const std::string& response)
 {
-	std::cout << "\t" << response << std::flush;
+	std::cout << PINK << response << RESET << std::flush;
 	send(client.getSock(), response.c_str(), response.size(), 0);
 }
 
@@ -189,7 +191,7 @@ bool Server::handleClientReq(Client& client)
 	{		
 		std::string buf(buffer.begin(), buffer.begin() + recv_len);
 		
-		std::cout << BLUE << " < " << buf << RESET << std::flush;
+		std::cout << BLUE << buf << RESET << std::flush;
 		this->buildReqQueue(client, buf);
 		if (!this->parseReqQueue(client))
 			return false;

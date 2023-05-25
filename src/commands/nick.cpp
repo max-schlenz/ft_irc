@@ -4,6 +4,8 @@
 //: oldNick!~UserName@host NICK newNick
 void Server::nick(std::vector<std::string> reqVec, Client &client)
 {
+	if (client.getKick())
+		return;
 	if (this->checkNick(reqVec, client))
 	{
 		std::string oldNick = client.getNickname();
@@ -28,9 +30,12 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 
 		if (!client.getNickRegistered())
 		{
-			// std::cout << "if" << std::endl;
-			// this->sendResponse(client, ":127.0.0.1 001 " + client.getNickname() + " :welcome, " + client.getNickname() + "!" + client.getUsername() + "@" + "127.0.0.1\r\n");
-			// this->sendMsgToAll(client, ":" + oldNick + "!" + client.getUsername() + "@127.0.0.1 NICK " + reqVec[1] + "\r\n");
+			if (this->_key_set && !client.getPass())
+			{
+				std::cout << RED << "No password provided by client!" << RESET << std::endl;
+				client.setKick(true);
+				return;
+			}
 			client.setNickRegistered(true);
 			this->_clientsM[client.getNickname()] = &client;
 		} else {

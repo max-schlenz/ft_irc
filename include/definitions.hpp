@@ -32,4 +32,18 @@
 # define ERR_CHANOPRIVSNEEDED std::string("482")
 # define ERR_UMODEUNKNOWNFLAG std::string("501")
 # define ERR_USERSDONTMATCH std::string("502")
+
+// <-------- RESPONSE CODES ---------->
+// #define ERR_ ":127.0.0.1 4 "
+// START
+
+
+// PASS 
+#define E_NEEDMOREPARAMS ":127.0.0.1 461 "
+#define E_ALREADYREGISTERED ":127.0.0.1 462 "
+#define E_PASSWDMISMATCH ":127.0.0.1 464 "
+
+// NICK message
+#define ERR_NONICKNAMEGIVEN ":127.0.0.1 431 "
+
 #endif

@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 		port = to_int(argv[1]);
 	if (argc == 3)
 	{
-		std::cout << "Password required!\n" << std::endl;
+		std::cout << "\nPassword required!\n" << std::endl;
 		key = argv[2];
 	}
 	else
