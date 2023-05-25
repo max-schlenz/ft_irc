@@ -14,6 +14,7 @@
 
 
 # define RPL_UMODEIS std::string("221")
+# define RPL_CHANNELMODEIS std::string("324")
 # define RPL_YOUREOPER std::string("381")
 
 # define ERR_NOSUCHNICK std::string("401")
@@ -32,7 +33,6 @@
 # define ERR_CHANOPRIVSNEEDED std::string("482")
 # define ERR_UMODEUNKNOWNFLAG std::string("501")
 # define ERR_USERSDONTMATCH std::string("502")
-
 // <-------- RESPONSE CODES ---------->
 // #define ERR_ ":127.0.0.1 4 "
 // START

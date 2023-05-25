@@ -23,7 +23,6 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 			newNick = newNick.replace(reqVec[1].size() + 1, addon.size(), addon);
 			++i;
 		}
-
 		client.setNickname(newNick);
 		// send(client.getSock(), response.c_str(), response.size(), 0);
 		std::string response;

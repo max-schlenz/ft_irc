@@ -54,7 +54,7 @@ void Server::mode(std::vector<std::string> reqVec, Client &client)
 		this->userMode(reqVec, client);
 		std::cout << client.getNickname() << GRAY << " mode" << std::endl;
 	}
-	// else if (this->checkChannelMode(reqVec, client)) {
-		
-	// }
+	else if (!isUserMode(reqVec[1]) && this->checkChannelMode(reqVec, client)) {
+		std::cout << "change channel mode" << std::endl;
+	}
 }
