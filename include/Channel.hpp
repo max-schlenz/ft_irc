@@ -28,6 +28,12 @@ class Channel
 		void setPassword(std::string password){
 			this->_password = password;
 		}
+		void addOperator(std::string operator) {
+			this->_operators.push_back(operator);
+		}
+		void delOperator(std::string operator) {
+			this->_operators.erase(operator);
+		}
 		// void add_client(Client client){
 		// 	this->_clients.push_back(client);
 		// }
@@ -64,6 +70,9 @@ class Channel
 		bool getModeK() const {
 			return this->mode_k;
 		}
+		std::vector<std::string> getOperators() const {
+			return this->_operators;
+		}
 		Channel(std::string name);
 		Channel(): _name(""), _topic(""), _password(""), _modes(""), _limit(0), mode_i(false), mode_t(false), mode_k(false), mode_o(false), num_clients(0) {};
 		~Channel();
@@ -83,7 +92,8 @@ class Channel
 
 		// std::vector<Client*> _clients;
 		// std::vector<std::string> _clientNames;
-		std::vector<std::string> operators;
+		std::vector
+		std::vector<std::string> _operators;
 		std::map<std::string, Client*> _clientsM;
 };
 

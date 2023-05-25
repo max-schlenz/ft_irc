@@ -16,6 +16,14 @@ static bool validUserMode(char mode) {
 	return true;
 }
 
+static bool validChannelMode(char mode) {
+	std::string modes = "iotk";
+
+	if (modes.find(mode) == std::string::npos)
+		return false;
+	return true;
+}
+
 void Server::userMode(std::vector<std::string> reqVec, Client &client)
 {
 	std::string modes = reqVec[2];
@@ -35,6 +43,38 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 		else if (!validUserMode(modes[i])) {
 			std::string mode(1, modes[i]);
 			err_msg = msg_2(this->_hostname, ERR_UMODEUNKNOWNFLAG, client.getNickname(), mode, "is not a recognised user mode");
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		} else {
+			if (operation == "-" && !client.getModeI() || operation == "+" && client.getModeI())
+				continue;
+			client.setModeI(true);
+			if (operation == "-")
+				client.setModeI(false);
+			err_msg = msg_2(this->_hostname, "MODE", client.getNickname(), operation + modes[i], "changing mode");
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		}
+	}
+}
+
+void Server::channelMode(std::vector<std::string> reqVec, Client &client)
+{
+	std::string modes = reqVec[2];
+	std::string clientIp = client.getHostname();
+	std::string err_msg;
+	std::string operation = "+";
+	int i = 1;
+	std::cout << " mode in here\n" << std::endl;
+	if (modes[0] != '-') {
+		operation = "-";
+	}
+	for (int i = 0; i < modes.size(); ++i) {
+		if (modes[i] == '-')
+			operation = "-";
+		else if (modes[i] == '+')
+			operation = "+";
+		else if (!validChannelMode(modes[i])) {
+			std::string mode(1, modes[i]);
+			err_msg = msg_2(this->_hostname, ERR_UMODEUNKNOWNFLAG, client.getNickname(), mode, "is not a recognised channel mode");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		} else {
 			if (operation == "-" && !client.getModeI() || operation == "+" && client.getModeI())

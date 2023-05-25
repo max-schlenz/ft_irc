@@ -236,10 +236,10 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	// if (/*channel priv*/) {
-
-	// // ERR_CHANOPRIVSNEEDED
-	// }
-
+	if (!this->_channelsM[channelName].getOperators.find(client.getNickname())) {
+		err_msg = msg_2(this->_hostname, ERR_CHANOPRIVSNEEDED, clientIp, channelName, "You're not channel operator");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
 	return true;
 }
