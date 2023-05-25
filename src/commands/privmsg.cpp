@@ -8,6 +8,11 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 {
 	if (reqVec.size() > 3 && reqVec[2] == ":\1DCC" && reqVec[3] == "SEND")
 		return this->dcc(reqVec, client);
+	if (reqVec.size() > 2) // && reqVec[1].find(',') != std::string::npos)
+	{
+		std::vector<std::string> recipients;
+		createLst(reqVec[1], recipients);
+	}
 	else if (reqVec.size() > 2)
 	{
 		for (std::map<std::string, Client *>::iterator itClient = this->_clientsM.begin(); itClient != this->_clientsM.end(); ++itClient)

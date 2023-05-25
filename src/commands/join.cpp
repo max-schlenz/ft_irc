@@ -26,16 +26,7 @@ void Server::sendUserList(Client& client, Channel& channel)
 	// std::cout << BRED << response << RESET << std::endl;
 }
 
-static void createLst(std::string req, std::vector<std::string>& lst)
-{
-	std::string buffer;
-	std::istringstream iss(req);
 
-	while (getline(iss, buffer, ',')){
-		lst.push_back(buffer);
-		buffer.clear();
-	}
-}
 
 bool Server::checkPassword(std::string channelName, std::string password, Client& client) {
 	if (this->_channelsM[channelName].getModeK()) {
