@@ -170,15 +170,6 @@ static std::string getUserModes(Client& client)
 	return modes;
 }
 
-static bool validUserMode(std::string mode) {
-	std::string modes = "i";
-
-	mode = mode.replace(0, 1, "");
-	if (mode == "" || modes[0] != mode[0])
-		return false;
-	return true;
-}
-
 bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 {
 	std::string clientIp = client.getHostname();
