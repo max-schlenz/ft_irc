@@ -28,7 +28,7 @@ void Server::topic(std::vector<std::string> reqVec, Client &client)
 				if (request + 1 != reqVec.end())
 					topic += " ";
 			}
-			itChannel->second.setTopic(topic);
+			itChannel->second.setTopic(topic.substr(1));
 			std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 TOPIC " + itChannel->second.getName() + " :" + topic + "\r\n";
 			for (std::map<std::string, Client *>::iterator itClient = itChannel->second.getClientsM().begin(); itClient != itChannel->second.getClientsM().end(); ++itClient)
 				this->sendResponse(*itClient->second, response);

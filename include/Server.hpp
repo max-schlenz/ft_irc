@@ -143,7 +143,7 @@ class Server {
 		void dbgPrint(std::vector<std::string> reqVec, Client &client);
 
 		bool parseReqQueue(Client& client);
-		void buildReqQueue(Client &client, const std::string &buffer);
+		bool buildReqQueue(Client &client, const std::string &buffer);
 
 		void disconnectClient(Client& client, int i);
 	
