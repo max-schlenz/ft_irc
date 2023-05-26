@@ -35,6 +35,13 @@ std::string msg_4 (std::string host, std::string num, std::string arg1, std::str
 	return ret_msg;
 }
 
+std::string msg_3_(std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3)
+{
+	
+	std::string ret_msg = ":" + host + " " + num + " " + arg1 + " " + arg2 + " " + arg3 + "\r\n";
+	return ret_msg;
+}
+
 bool send_all(int socket, const char *buffer, size_t length)
 {
 	char *ptr = (char *)buffer;
@@ -48,7 +55,7 @@ bool send_all(int socket, const char *buffer, size_t length)
 	return true;
 }
 
-void	send_msg(int sock, const char *fmt, ...)
+std::string	getMsg(int sock, const char *fmt, ...)
 {
 	va_list	ap;
 	char	str[512];
@@ -57,8 +64,9 @@ void	send_msg(int sock, const char *fmt, ...)
 	vsprintf(str, fmt, ap);
 	va_end(ap);
 	std::string msg = str;
-	std::cout << GRAY << msg << RESET << std::endl;
-	if (send_all(sock, msg.c_str(), msg.size()) == false)
-		std::cout << RED << "Error sending message: " << msg << RESET << std::endl;
+	return msg;
+	// std::cout << GRAY << msg << RESET << std::endl;
+	// if (send_all(sock, msg.c_str(), msg.size()) == false)
+	// 	std::cout << RED << "Error sending message: " << msg << RESET << std::endl;
 	// send(sock, msg.c_str(), msg.size(), 0);
 }
