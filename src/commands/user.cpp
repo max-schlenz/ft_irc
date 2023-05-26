@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include <ctime>
 
 // USER max 0 127.0.0.1 :1,11KVIrc 5.0.0 Aria http://kvirc.net/
 void Server::user(std::vector<std::string> reqVec, Client &client)
@@ -22,8 +23,8 @@ void Server::user(std::vector<std::string> reqVec, Client &client)
 		response += ":127.0.0.1 NOTICE * :*** No Ident response\r\n";
 		response += ":127.0.0.1 001 " + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + "127.0.0.1\r\n";
 		response += ":127.0.0.1 002 " + client.getNickname() + " :Your host is ft.irc.de, running version 1.0\r\n";
-		std::time_t currentTime = std::time(NULL);
-		char *dateString = std::ctime(&currentTime);
+		std::time_t currentTime = time(NULL);
+		char *dateString = ctime(&currentTime);
 		response += ":127.0.0.1 003 " + client.getNickname() + " :This server was created " + dateString + "\r\n";
 		// response += ":127.0.0.1 004 " + client.getNickname() + " ft.irc.de ft_irc1.0 iw itko\r\n";
 		response += ":127.0.0.1 251 " + client.getNickname() + " :There are " + itos(this->_clientsM.size()) + " users and 0 invisible on 1 servers\r\n";

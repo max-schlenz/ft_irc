@@ -1,4 +1,5 @@
 #include "irc.hpp"
+#include <cstdarg>
 
 std::string msg_0 (std::string host, std::string num, std::string msg)
 {

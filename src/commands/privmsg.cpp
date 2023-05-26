@@ -8,28 +8,28 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 {
 	if (reqVec.size() > 3 && reqVec[2] == ":\1DCC" && reqVec[3] == "SEND")
 		return this->dcc(reqVec, client);
-	if (reqVec.size() > 2) // && reqVec[1].find(',') != std::string::npos)
+	else if (reqVec.size() > 2)
 	{
 		std::vector<std::string> recipients;
 		createLst(reqVec[1], recipients);
-	}
-	else if (reqVec.size() > 2)
-	{
-		for (std::map<std::string, Client *>::iterator itClient = this->_clientsM.begin(); itClient != this->_clientsM.end(); ++itClient)
+		for (std::vector<std::string>::iterator itRecipient = recipients.begin(); itRecipient != recipients.end(); ++itRecipient)
 		{
-			if (itClient->first != client.getNickname() && isUserInChannel(*itClient->second, reqVec[1]))
+			for (std::map<std::string, Client *>::iterator itClient = this->_clientsM.begin(); itClient != this->_clientsM.end(); ++itClient)
 			{
-				std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + reqVec[1] + " :";
-				if (reqVec[2].length() > 1)
-					reqVec[2] = reqVec[2].substr(1);
-				for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
+				if (itClient->first != client.getNickname())
 				{
-					response += *itVec;
-					if (itVec + 1 != reqVec.end())
-						response += " ";
+					std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + *itRecipient + " :";
+					if (reqVec[2].length() > 1)
+						reqVec[2] = reqVec[2].substr(1);
+					for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
+					{
+						response += *itVec;
+						if (itVec + 1 != reqVec.end())
+							response += " ";
+					}
+					response += "\r\n";
+					this->sendResponse(*itClient->second, response);
 				}
-				response += "\r\n";
-				this->sendResponse(*itClient->second, response);
 			}
 		}
 	}
