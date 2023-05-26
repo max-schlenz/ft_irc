@@ -74,4 +74,10 @@
 # define R_INVITING(client, nick, channel) (std::string(":" SERV_ADDR " 341 ") + client.getNickname() + " " + nick + " " + channel + "\r\n")
 # define R_SENDINV(client, nick, channel) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname() + " INVITE " + nick + " " + channel + "\r\n")
 
+// WHO
+# define SHORT_NAME(code) (std::string(":" SERV_ADDR " " code " "))
+# define LONG_NAME(code) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname())
+// # define R_ENDOFWHO(client, channel) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname() + " 315 " + client.getNickname() + " " + channel + " :End of /WHO list.\r\n")
+# define R_ENDOFWHO(client, channel) (std::string(":" SERV_ADDR " 315 ") + " " + channel + " :End of /WHO list.\r\n")
+
 #endif
