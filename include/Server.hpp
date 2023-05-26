@@ -194,6 +194,8 @@ class Server {
 		void channelMode(std::vector<std::string> reqVec, Client& client);
 		void userMode(std::vector<std::string> reqVec, Client& client);
 		bool checkChannelMode(std::vector<std::string> reqVec, Client& client);
+		void channelModeLoop(std::vector<std::string> reqVec, Client &client);
+		bool channelModeLoop2(std::vector<std::string> reqVec, Client& client);
 		bool checkUserMode(std::vector<std::string> reqVec, Client& client);
 };
 

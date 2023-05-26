@@ -175,11 +175,11 @@ static std::string getUserModes(Client& client)
 static std::string getChannelModes(Channel& channel)
 {
 	std::string modes = "+";
-	if (channel.getModeK())
+	if (channel.getModes()['k'])
 		modes += "k";
-	if (channel.getModeI())
+	if (channel.getModes()['i'])
 		modes += "i";
-	if (channel.getModeT())
+	if (channel.getModes()['t'])
 		modes += "t";
 	return modes;
 }
@@ -232,12 +232,9 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 	if (reqVec.size() < 3) {
 	// "<client> <channel> <modestring> <mode arguments>..."
 		std::string modes = getChannelModes(this->_channelsM[channelName]);
-		err_msg = msg_2(this->_hostname, RPL_CHANNELMODEIS, clientIp, channelName, modes);
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-		return false;
-	}
-	if (!this->_channelsM[channelName].getOperators.find(client.getNickname())) {
-		err_msg = msg_2(this->_hostname, ERR_CHANOPRIVSNEEDED, clientIp, channelName, "You're not channel operator");
+		std::cout << "channel modes: " << modes << std::endl;
+		// err_msg = msg_2(this->_hostname, RPL_CHANNELMODEIS, clientIp, modes, channelName);
+		err_msg = msg_2(this->_hostname, RPL_CHANNELMODEIS, clientIp, modes + channelName, modes);
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}

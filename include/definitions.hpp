@@ -33,6 +33,7 @@
 # define ERR_CHANOPRIVSNEEDED std::string("482")
 # define ERR_UMODEUNKNOWNFLAG std::string("501")
 # define ERR_USERSDONTMATCH std::string("502")
+# define ERR_INVALIDMODEPARAM std::string("696")
 // <-------- RESPONSE CODES ---------->
 // #define ERR_ ":127.0.0.1 4 "
 // START
