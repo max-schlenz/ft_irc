@@ -17,7 +17,6 @@ static bool checkChars(std::string name)
 
 bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 {
-	std::string name = reqVec[1];
 	std::string clientIp = client.getHostname();
 	std::string currentNick = client.getNickname();
 	std::string err_msg;
@@ -26,8 +25,16 @@ bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
+	std::string name = reqVec[1];
+	if (client.getNickname() == name)
+		return false;
 	if (!checkChars(name) || reqVec.size() > 2) {
 		err_msg = msg_2(this->_hostname, ERR_INVALIDNICK, clientIp, reqVec[1], "Erroneus nickname");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	if (this->_clientsM.find(name) != this->_clientsM.end()) {
+		err_msg = msg_2(this->_hostname, ERR_NICKINUSE, clientIp, name, "Nickname is already in use");
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}

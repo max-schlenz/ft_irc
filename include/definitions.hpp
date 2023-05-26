@@ -33,7 +33,7 @@
 # define ERR_UMODEUNKNOWNFLAG std::string("501")
 # define ERR_USERSDONTMATCH std::string("502")
 
-# define SERV_ADDR "127.0.0.1"
+# define SERV_ADDR "0.0.0.0"
 // <-------- RESPONSE CODES ---------->
 // #define ERR_ ":127.0.0.1 4 "
 // START
