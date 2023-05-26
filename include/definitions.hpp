@@ -35,17 +35,43 @@
 
 # define SERV_ADDR "127.0.0.1"
 // <-------- RESPONSE CODES ---------->
-// #define ERR_ ":127.0.0.1 4 "
-// START
 
+// WELCOME
+# define NOTICE(...) (std::string(":" SERV_ADDR " NOTICE * :") + __VA_ARGS__)
+# define WELCOME_001(client) (std::string(":" SERV_ADDR " 001 ") + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + "\r\n")
+# define WELCOME_002(client) (std::string(":" SERV_ADDR " 002 ") + client.getNickname() + " :Your host is ft.irc.de, running version 1.0\r\n")
+# define WELCOME_003(client) (std::string(":" SERV_ADDR " 003 ") + client.getNickname() + " :This server was created " + this->_dateString + "\r\n")
 
-// PASS 
-# define E_NEEDMOREPARAMS ":" SERV_ADDR " 461 "
-# define E_ALREADYREGISTERED ":" SERV_ADDR " 462 "
-# define E_PASSWDMISMATCH ":" SERV_ADDR " 464 "
+# define WELCOME_251(client) (std::string(":" SERV_ADDR " 251 ") + client.getNickname() + " :There are " + itos(this->_clientsM.size()) + " users and 0 invisible on 1 server(s)\r\n")
+# define WELCOME_252(client) (std::string(":" SERV_ADDR " 252 ") + client.getNickname() + " " + itos(this->_num_ops) + " :IRC Operators online\r\n")
+# define WELCOME_253(client) (std::string(":" SERV_ADDR " 253 ") + client.getNickname() + " 0 :Unknown connection(s)\r\n")
+# define WELCOME_254(client) (std::string(":" SERV_ADDR " 254 ") + client.getNickname() + " " + itos(this->_num_channels) + " :Channels formed\r\n")
+# define WELCOME_265(client) (std::string(":" SERV_ADDR " 265 ") + client.getNickname() + " " + itos(this->_clientsM.size()) + " " + itos(USR_LIMIT) + " :Current local users " + itos(this->_clientsM.size()) + ", max " + itos(USR_LIMIT) + "\r\n")
 
-// NICK message
-# define E_NONICKNAMEGIVEN ":" SERV_ADDR " 431 "
-# define E_NICKNAMEINUSE ":" SERV_ADDR " 433 "
+# define WELCOME_375(client) (std::string(":" SERV_ADDR " 375 ") + client.getNickname() + " :- Message of the day\r\n")
+# define WELCOME_372_1(client) (std::string(":" SERV_ADDR " 372 ") + client.getNickname() + " :- Welcome to our server!\r\n")
+# define WELCOME_372_2(client) (std::string(":" SERV_ADDR " 372 ") + client.getNickname() + " :- \r\n")
+# define WELCOME_372_3(client) (std::string(":" SERV_ADDR " 372 ") + client.getNickname() + " :- Have fun :)\r\n")
+# define WELCOME_376(client) (std::string(":" SERV_ADDR " 376 ") + client.getNickname() + " :End of /MOTD command.\r\n")
+
+# define WELCOME_MODE(client) (std::string(":") + client.getNickname() + " MODE " + client.getNickname() + " :+iw\r\n")
+
+# define WELCOME(client) WELCOME_001(client) + WELCOME_002(client) + WELCOME_003(client) + WELCOME_251(client) + WELCOME_252(client) \
++ WELCOME_253(client) + WELCOME_254(client) + WELCOME_265(client) + WELCOME_375(client) + WELCOME_372_1(client) + WELCOME_372_1(client) \
++ WELCOME_372_2(client) + WELCOME_372_3(client) + WELCOME_376(client) + WELCOME_MODE(client)
+
+// PASS
+# define E_NEEDMOREPARAMS(client, str) (std::string(":" SERV_ADDR " 461 ") + client.getNickname()+ " " + str + " " + " :Not enough parameters\r\n")
+# define E_ALREADYREGISTERED(client) (std::string(":" SERV_ADDR " 462 ") + client.getNickname()+ " :You may not register\r\n")
+# define E_PASSWDMISMATCH(client) (std::string(":" SERV_ADDR " 464 ") + client.getNickname()+ " :Password incorrect\r\n")
+
+// NICK
+# define E_NONICKNAMEGIVEN(client) (std::string(":" SERV_ADDR " 431 ") + client.getNickname()+ " :No nickname given\r\n")
+# define E_ERRONEUSNICKNAME(client) (std::string(":" SERV_ADDR " 432 ") + client.getNickname()+ " :Erroneus nickname\r\n")
+# define E_NICKNAMEINUSE(oldNick, newNick) (std::string(":" SERV_ADDR " 433 ") + oldNick + " " + newNick + " :Nickname is already in use\r\n")
+
+// INVITE
+# define R_INVITING(client, nick, channel) (std::string(":" SERV_ADDR " 341 ") + client.getNickname() + " " + nick + " " + channel + "\r\n")
+# define R_SENDINV(client, nick, channel) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname() + " INVITE " + nick + " " + channel + "\r\n")
 
 #endif

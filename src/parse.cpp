@@ -77,7 +77,8 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 	std::string clientIp = client.getHostname();
 	std::string err_msg;
 	if (reqVec.size() < 3) {
-		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
+		// err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
+		err_msg = E_NEEDMOREPARAMS(client, "INVITE");
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}

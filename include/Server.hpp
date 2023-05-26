@@ -93,6 +93,9 @@ class Server {
 		std::vector<Client>& getClients() {
 			return this->_clients;
 		}
+		std::string& getDateString() {
+			return this->_dateString;
+		}
 		socklen_t& getSinLen() {
 			return (this->_saddr_in_len);
 		}
@@ -132,6 +135,7 @@ class Server {
 		void	notice(std::vector<std::string> reqVec, Client &client);
 		void	invite(std::vector<std::string> reqVec, Client &client);
 		void	user(std::vector<std::string> reqVec, Client& client);
+		void	welcome(Client &client);
 		void	ping(std::vector<std::string> reqVec, Client& client);
 		void	whois(std::vector<std::string> reqVec, Client &client);
 		void	capreq(std::vector<std::string> reqVec, Client &client);
@@ -172,6 +176,7 @@ class Server {
 		sockaddr_in _saddr_in;
 		socklen_t _saddr_in_len;
 		std::string _hostname;
+		std::string _dateString;
 		
 		std::vector<Client> _clients;
 		std::map<std::string, Client*> _clientsM;
