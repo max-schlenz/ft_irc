@@ -4,6 +4,8 @@
 // PRIVMSG <recipient>{,<recipient>} <text to be sent>
 //
 //PRIVMSG User1 :DCC SEND file 2130706433 60052 4
+//
+// ! NEEDS 404 AND 401 ERROR
 void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 {
 	if (reqVec.size() > 3 && reqVec[2] == ":\1DCC" && reqVec[3] == "SEND")
