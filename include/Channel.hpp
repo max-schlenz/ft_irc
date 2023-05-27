@@ -28,6 +28,9 @@ class Channel
 		void setPassword(std::string password){
 			this->_password = password;
 		}
+		// void addOperator(std::string _operator){
+		// 	this->_operators.push_back(_operator);
+		// }
 		// void add_client(Client client){
 		// 	this->_clients.push_back(client);
 		// }
@@ -49,41 +52,56 @@ class Channel
 		void setLimit(int limit) {
 			this->_limit = limit;
 		}
+		void setModeTrue(char mode) {
+			this->_modes[mode] = true;
+		}
+		void setModeFalse(char mode) {
+			this->_modes[mode] = false;
+		}
 		int getLimit() {
 			return this->_limit;
 		}
-		bool getModeO() const {
-			return this->mode_o;
+		// bool getModeO() const {
+		// 	return this->mode_o;
+		// }
+		// bool getModeI() const {
+		// 	return this->mode_i;
+		// }
+		// bool getModeT() const {
+		// 	return this->mode_t;
+		// }
+		// bool getModeK() const {
+		// 	return this->mode_k;
+		// }
+		std::map<char, bool> getModes() {
+			return this->_modes;
 		}
-		bool getModeI() const {
-			return this->mode_i;
-		}
-		bool getModeT() const {
-			return this->mode_t;
-		}
-		bool getModeK() const {
-			return this->mode_k;
+		std::map<std::string, Client*>& getOperators() {
+			return this->_operators;
 		}
 		Channel(std::string name);
-		Channel(): _name(""), _topic(""), _password(""), _modes(""), _limit(0), mode_i(false), mode_t(false), mode_k(false), mode_o(false), num_clients(0) {};
+		// Channel(): _name(""), _topic(""), _password(""), _modes(""), _limit(0), mode_i(false), mode_t(false), mode_k(false), mode_o(false), num_clients(0) {};
+		Channel();
 		~Channel();
 
 	private:
 		std::string	_name;
 		std::string	_topic;
 		std::string	_password;
-		std::string	_modes;
+		// std::string	_modes;
 		int			_limit;
-		bool		mode_i;
-		bool		mode_t;
-		bool		mode_k;
-		bool		mode_o;
+		// bool		mode_i;
+		// bool		mode_t;
+		// bool		mode_k;
+		// bool		mode_o;
 		int			num_clients;
 		// int			num_clients;
 
 		// std::vector<Client*> _clients;
 		// std::vector<std::string> _clientNames;
-		std::vector<std::string> operators;
+		// std::vector<std::string> _operators;
+		std::map<char, bool>		_modes;
+		std::map<std::string, Client*> _operators;
 		std::map<std::string, Client*> _clientsM;
 };
 

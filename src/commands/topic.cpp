@@ -6,16 +6,16 @@
 //: nickname!~username@hostname TOPIC #channelname :New topic\r\n
 void Server::topic(std::vector<std::string> reqVec, Client &client)
 {
-	if (reqVec.size() == 2)
-	{
-		std::map<std::string, Channel>::iterator it = this->_channelsM.find(reqVec[1]);
+	// if (reqVec.size() == 2)
+	// {
+	// 	std::map<std::string, Channel>::iterator it = this->_channelsM.find(reqVec[1]);
 
-		if (it != this->_channelsM.end())
-			this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 332 " + client.getNickname() + " " + reqVec[1] + " :" + it->second.getTopic() + "\r\n");
-		else
-			this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 403 " + client.getNickname() + " " + reqVec[1] + " :No such channel\r\n");
-	}
-	if (reqVec.size() > 2)
+	// 	if (it != this->_channelsM.end())
+	// 		this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 332 " + client.getNickname() + " " + reqVec[1] + " :" + it->second.getTopic() + "\r\n");
+	// 	else
+	// 		this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 403 " + client.getNickname() + " " + reqVec[1] + " :No such channel\r\n");
+	// }
+	if (checkTopic(reqVec, client))
 	{
 		std::map<std::string, Channel>::iterator itChannel = this->_channelsM.find(reqVec[1]);
 

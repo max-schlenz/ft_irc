@@ -1,5 +1,6 @@
 #include "Server.hpp"
 # include <cstdlib>
+# include <sys/wait.h>
 
 //: oldNick!~UserName@host NICK newNick
 void Server::nick(std::vector<std::string> reqVec, Client &client)
@@ -12,21 +13,21 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 		std::string oldNick = client.getNickname();
 		std::string newNick = reqVec[1];
 		std::string addon;
-		int i = 2;
-		if (this->_clientsM.size() != 0 && this->_clientsM.find(newNick) != this->_clientsM.end()) {
-			std::string response = E_NICKNAMEINUSE(oldNick, newNick);
-			this->sendResponse(client, response);
-			newNick = newNick + "|" + itos(i);
-			std::cout << "client size" << this->_clientsM.size() << std::endl;
-		}
-		while (this->_clientsM.find(newNick) != this->_clientsM.end()) {
-			addon = itos(i);
-			std::cout << "size: " << reqVec[1].size() << std::endl;
-			std::cout << "new nick size" << newNick.size() << std::endl;
-			newNick = newNick.replace(reqVec[1].size() + 1, addon.size(), addon);
-			++i;
-		}
-		std::cout << "Number: " << i << std::endl;
+// 		int i = 2;
+// 		if (this->_clientsM.size() != 0 && this->_clientsM.find(newNick) != this->_clientsM.end()) {
+// 			std::string response = E_NICKNAMEINUSE(oldNick, newNick);
+// 			this->sendResponse(client, response);
+// 			newNick = newNick + "|" + itos(i);
+// 			std::cout << "client size" << this->_clientsM.size() << std::endl;
+// 		}
+// 		while (this->_clientsM.find(newNick) != this->_clientsM.end()) {
+// 			addon = itos(i);
+// 			std::cout << "size: " << reqVec[1].size() << std::endl;
+// 			std::cout << "new nick size" << newNick.size() << std::endl;
+// 			newNick = newNick.replace(reqVec[1].size() + 1, addon.size(), addon);
+// 			++i;
+// 		}
+// 		std::cout << "Number: " << i << std::endl;
 		client.setNickname(newNick);
 		// send(client.getSock(), response.c_str(), response.size(), 0);
 		std::string response;

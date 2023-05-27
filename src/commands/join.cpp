@@ -37,7 +37,7 @@ static void createLst(std::string req, std::vector<std::string>& lst)
 }
 
 bool Server::checkPassword(std::string channelName, std::string password, Client& client) {
-	if (this->_channelsM[channelName].getModeK()) {
+	if (this->_channelsM[channelName].getModes()['k']) {
 		std::cout << this->_channelsM[channelName].getPassword() << "\t" << password << std::endl;
 		if (this->_channelsM[channelName].getPassword() != password) {
 			std::string response = E_BADCHANNELKEY(client, channelName);
@@ -93,10 +93,11 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 			for (int i = 0; i < channelsToJoin.size(); ++i) {
 				if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 					this->joinAsOperator(channelsToJoin[i], client);
-				else
+				else {
 					if (this->checkPassword(channelsToJoin[i], "", client)) {
 						this->joinAsNormal(channelsToJoin[i], client);
 					}
+				}
 			}
 		}
 		if (reqVec.size() >= 3) {

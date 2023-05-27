@@ -26,6 +26,13 @@ bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 	if (!checkChars(reqVec[1]) || reqVec.size() > 2) {
 		response = E_ERRONEUSNICKNAME(client, reqVec[1]);
 		this->sendResponse(client, response);
+	std::string name = reqVec[1];
+	if (client.getNickname() == name)
+		return false;
+	}
+	if (this->_clientsM.find(name) != this->_clientsM.end()) {
+		err_msg = msg_2(this->_hostname, ERR_NICKINUSE, clientIp, name, "Nickname is already in use");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
 	return true;
@@ -167,6 +174,18 @@ static std::string getUserModes(Client& client)
 	return modes;
 }
 
+static std::string getChannelModes(Channel& channel)
+{
+	std::string modes = "+";
+	if (channel.getModes()['k'])
+		modes += "k";
+	if (channel.getModes()['i'])
+		modes += "i";
+	if (channel.getModes()['t'])
+		modes += "t";
+	return modes;
+}
+
 bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 {
 	std::string clientIp = client.getHostname();
@@ -191,6 +210,33 @@ bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 	if (reqVec.size() < 3) {
 		std::string modes = getUserModes(client);
 		err_msg = msg_1(this->_hostname, RPL_UMODEIS, clientIp, modes);
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	return true;
+}
+
+bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
+{
+	std::string clientIp = client.getHostname();
+	std::string err_msg;
+	if (reqVec.size() < 2) {
+		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	std::string channelName = reqVec[1];
+	if (this->_channelsM.find(channelName) == this->_channelsM.end()) {
+		std::string err_msg = msg_2(this->_hostname, ERR_NOSUCHCHANNEL, clientIp, channelName, "No such channel");
+		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		return false;
+	}
+	if (reqVec.size() < 3) {
+	// "<client> <channel> <modestring> <mode arguments>..."
+		std::string modes = getChannelModes(this->_channelsM[channelName]);
+		std::cout << "channel modes: " << modes << std::endl;
+		// err_msg = msg_2(this->_hostname, RPL_CHANNELMODEIS, clientIp, modes, channelName);
+		err_msg = msg_2(this->_hostname, RPL_CHANNELMODEIS, clientIp, modes + channelName, modes);
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
