@@ -69,10 +69,19 @@
 //MODES
 # define R_CHANNELMODEIS(nickname, channel, modes) (SHORT_NAME + " 324 " + nickname + " " + channel + " " + modes + "\r\n")
 # define R_UMODEIS(client, modes) (SHORT_NAME + " 221 " + client.getHostname() + " " + modes + "\r\n")  //client IP needed
+# define E_CHANOPRIVSNEEDED(client, channelName) (SHORT_NAME + " 482 " + client.getHostname() + " " + client.getNickname() + " " + channelName + " :You're not channel operator\r\n")
+# define USERMODE(client, modeStr) (SHORT_NAME + " MODE " + client.getNickname() + " " + modeStr + ":changing mode\r\n")
+# define CHANNELMODE(client, channelName, modeStr) (SHORT_NAME + " MODE " + channelName + " " + modeStr + ":changing channel mode\r\n")
+# define CHANNELMODEARGS(client, channelName, modeStr, args) (SHORT_NAME + " MODE " + channelName + " " + modeStr + " " + args + "\r\n")
+# define E_INVALIDKEY(client, channelName) (SHORT_NAME + " 525 " + channelName + " :Key is not well-formed\r\n")
+# define ERR_KEYSET(client, channelName) (SHORT_NAME + " 467 " + channelName + " :Channel key aready set\r\n")
+// "<client> <target chan> :Key is not well-formed"
+
+# define E_INVALIDMODEPARAM(client, channelName, mode, str) (SHORT_NAME + " 696 " + client.getHostname() + " " + channelName + " " + mode + " * :" + str + "\r\n")
 
 //topic
-# define R_TOPIC(client, channelName, top) (SHORT_NAME + " 332 " + client.getHostname() + " " + channelName + " :" + top + "\r\n")
-# define R_NOTOPIC(client, channelName) (SHORT_NAME + " 331 " + client.getHostname() + " " + channelName + " :No topic is set\r\n")
+# define R_TOPIC(client, channelName, top) (SHORT_NAME + " 332 " + client.getHostname() + " " + channelName + " :" + top + "\r\n") //client IP needed
+# define R_NOTOPIC(client, channelName) (SHORT_NAME + " 331 " + client.getHostname() + " " + channelName + " :No topic is set\r\n") //client IP needed
 
 // PASS
 # define E_NEEDMOREPARAMS(client, str) (SHORT_NAME + " 461 " + client.getNickname() + " " + str + " " + " :Not enough parameters\r\n")
@@ -86,8 +95,8 @@
 # define E_NICKNAMEINUSE(oldNick, newNick) (SHORT_NAME + " 433 " + oldNick + " " + newNick + " :Nickname is already in use\r\n")
 
 // USER
-# define E_UMODEUNKNOWNFLAG(client) (SHORT_NAME + " 501 " + client.getNickname() + " :Unknown MODE flag\r\n")
-# define E_USERSDONTMATCH(client) (SHORT_NAME + " 502 " + client.getNickname() + " :Cant change mode for other users\r\n")
+# define E_UMODEUNKNOWNFLAG(client, mode) (SHORT_NAME + " 501 " + client.getNickname() +  " " + mode + " :Unknown MODE flag\r\n") // clientip NOT needed
+# define E_USERSDONTMATCH(client) (SHORT_NAME + " 502 " + client.getNickname() + " :Cant change mode for other users\r\n") // clientip NOT needed
 
 // INVITE
 # define R_INVITING(client, nick, channel) (SHORT_NAME + " 341 " + client.getNickname() + " " + nick + " " + channel + "\r\n")
@@ -100,10 +109,10 @@
 // JOIN
 // # define JOIN(client, channel) (std::string(":") + client.getNickname() + " JOIN " + channel + "\r\n")
 // # define JOIN(client, channel) (SHORT_NAME + " JOIN " + channel + "\r\n")
-# define JOIN(client, channel) (LONG_NAME(client) + " JOIN " + channel + "\r\n")
+# define JOIN(client, channel) (LONG_NAME(client) + " JOIN " + channel + "\r\n") //LONG NAME needed
 
 // PART
-# define PART(client, channel) (LONG_NAME(client) + " PART " + channel + "\r\n")
+# define PART(client, channel) (LONG_NAME(client) + " PART " + channel + "\r\n") //LONG NAME needed
 # define E_NOSUCHCHANNEL(client, channel) (SHORT_NAME + " 403 " + client.getNickname() + " " + channel + " :No such channel\r\n")
 # define E_NOTONCHANNEL(client, channel) (SHORT_NAME + " 442 " + client.getNickname() + " " + channel + " :You're not on that channel\r\n")
 

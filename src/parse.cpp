@@ -101,13 +101,6 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 		return false;
 	}
 	if (this->_channelsM[channelToInvite].getClientsM().find(reqVec[1]) != this->_channelsM[channelToInvite].getClientsM().end()) { ///not working why????
-		std::cout << "catch user on channel error" << std::endl;
-		std::cout << "clients size: " << this->_clientsM.size() << std::endl;
-		for(std::map<std::string, Client*>::iterator it = this->_channelsM[channelToInvite].getClientsM().begin();
-			it != this->_channelsM[channelToInvite].getClientsM().end(); ++it)
-		{
-			std::cout << it->first << "\n";
-		}
 		response = E_USERONCHANNEL(client, reqVec[1], channelToInvite);
 		this->sendResponse(client, response);
 		return false;
@@ -122,17 +115,14 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 
 bool Server::checkTopic(std::vector<std::string> reqVec, Client& client)
 {
-	// std::string clientIp = client.getHostname();
-	std::string err_msg;
 	std::string response;
 	if (reqVec.size() < 2) {
-		// if (this->)
-		// send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		response = E_NEEDMOREPARAMS(client, reqVec[0]);
+		this->sendResponse(client, response);
 		return false;
 	}
 	std::string channelName = reqVec[1];
 	if (this->_channelsM.find(channelName) == this->_channelsM.end()) {
-		std::cout << "in here" << std::endl;
 		response = E_NOSUCHCHANNEL(client, channelName);
 		this->sendResponse(client, response);
 		return false;
