@@ -97,7 +97,7 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 		else if (modes[i] == 'k' && !argsGiven) {
 			err_msg = msg_4(this->_hostname, ERR_INVALIDMODEPARAM, clientIp, channelName, "k", "*", "You must specify a parameter for the key mode. Syntax: <key>");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-		} else if (modes[i] == 'k' && )
+		}// else if (modes[i] == 'k' && )
 		
 		else if (modes[i] == 'o') {
 			err_msg = msg_4(this->_hostname, ERR_INVALIDMODEPARAM, clientIp, channelName, "o", "*", "You must specify a parameter for the key mode. Syntax: <nick>");
