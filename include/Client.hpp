@@ -100,6 +100,9 @@ class Client
 		bool getUserRegistered(){
 			return this->_user_registered;
 		}
+		std::string& getReqQueueBuf(){
+			return this->_reqQueueBuf;
+		}
 		std::string getRealName();
 		pollfd& getPollFd() {
 			return this->_pollFd;
@@ -137,6 +140,7 @@ class Client
 		bool _nick_registered;
 		bool _user_registered;
 
+		std::string _reqQueueBuf;
 		std::vector<std::string> _reqQueue;
 		// std::vector<Channel*> _joinedChannels;
 		// std::vector<std::string> _channelNames;

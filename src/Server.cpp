@@ -118,8 +118,6 @@ bool Server::parseReq(Client& client, std::string request)
 	if (reqVec.size())
 	{
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
-		// if (request.find("CAP LS") != std::string::npos)
-		// 	this->handleReqHandshake(client, reqVec);
 		
 		if (it != this->_commands.end())
 			(this->*(it->second))(reqVec, client);
@@ -157,30 +155,33 @@ Client &Server::getClientName(std::string name)
 
 bool Server::parseReqQueue(Client& client)
 {
+	std::string req;
 	for (std::vector<std::string>::iterator it = client.getReqQueue().begin(); it != client.getReqQueue().end(); ++it)
-	{
-		//AGGREGATE COMMAND UNTIL NL
-		if (!this->parseReq(client, *it))
-			return false;
-	}
+		req += *it;
+	
+	if (!this->parseReq(client, req))
+		return false;
+
 	client.getReqQueue().clear();
 	return true;
 }
 
-// void Server::buildReqQueue(Client& client, std::vector<char> buf)
-// void Server::buildReqQueue(Client& client, std::vector<char>& buf)
 bool Server::buildReqQueue(Client& client, const std::string& buffer)
 {
 	std::istringstream iss(buffer);
 	std::string buffer_str;
 
 	while (std::getline(iss, buffer_str, '\n'))
-		client.getReqQueue().push_back(buffer_str);
-	
+	{
+		client.getReqQueueBuf() += buffer_str;
+		if (!iss.eof())
+		{
+			client.getReqQueue().push_back(client.getReqQueueBuf());
+			client.getReqQueueBuf().clear();
+		}
+	}
 	if (!buffer.empty() && buffer[buffer.size() - 1] == '\n')
-		return std::cout << "TRUE" << std::endl, true;
-
-	// AGGREGATE
+		return true;
 
 	return false;
 }
