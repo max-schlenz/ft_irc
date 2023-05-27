@@ -1,16 +1,5 @@
 #include "Server.hpp"
 
-void createLst(std::string req, std::vector<std::string>& lst)
-{
-	std::string buffer;
-	std::istringstream iss(req);
-
-	while (getline(iss, buffer, ',')){
-		lst.push_back(buffer);
-		buffer.clear();
-	}
-}
-
 std::string itos(const int i)
 {
 	std::ostringstream oss;
