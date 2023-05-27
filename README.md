@@ -4,15 +4,18 @@
 clean up codebase
 toupper implementierung fuer invite
 
-### Needs to be implemented
-MODES command + parsing -> talea  
-INVITE command  
-KICK parsing?  
-Operator when joining channel  
-Only operator priv in channel (implementation std::vector std::string ops)  
-PRIVMSG sending msg to multiple channels + parsing  
-QUIT  
-NICK parsing wwhen having the same name + different when sending putting a nickname in advanced
+### Needs to be implemented 
+- [ ]  nickname wenn doppelt am anfang - entweder kicken oder richtig handlen
+- [ ]  operator sollte operator bleiben nach dem joinen von anderen personen
+- [ ]  alles einmal auf Fehler durchchecken → parsing + commands
+- [ ]  modes wenn würder modes k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
+- [ ]  kick parsing
+- [ ]  quit parsing
+- [ ]  schauen was im parsing an sich noch fehlt
+- [ ]  quit implementierung → alle funktionen so umschreiben, dass
+- [ ]  commands und parsing alle responses durch Macros ersetzten
+- [ ]  PRIVMSG funktioniert @Max?
+- [ ]  parting multiple channels
 
 ### Could get implemented
 INFO
