@@ -15,6 +15,13 @@ static bool checkChars(std::string name)
 	return true;
 }
 
+static bool channelPrivNeed(Channel channel, std::string nickname, char mode)
+{
+	if (channel.getModes()[mode] && channel.getOperators().find(nickname) == channel.getOperators().end())
+		return true;
+	return false;
+}
+
 bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 {
 	std::string response;
@@ -105,13 +112,14 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 		this->sendResponse(client, response);
 		return false;
 	}
-	// if (/*invite only channel & client not operator*/) {
-	// 	err_msg = ERR_CHANOPRIVSNEEDED + clientIp + channelToPart + " :You're not channel operator";
-	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-	// 	return false;
-	// }
+	if (channelPrivNeed(this->_channelsM[channelToInvite], client.getNickname(), 'i')) {
+		response = E_CHANOPRIVSNEEDED(client, channelToInvite);
+		this->sendResponse(client, response);
+	 	return false;
+	}
 	return true;
 }
+
 
 bool Server::checkTopic(std::vector<std::string> reqVec, Client& client)
 {
@@ -140,11 +148,11 @@ bool Server::checkTopic(std::vector<std::string> reqVec, Client& client)
 		this->sendResponse(client, response);
 		return false;
 	}
-	// if (/*protected topic mode && not operator*/) {
-	// 	err_msg = msg_2(this->_hostname, ERR_CHANOPRIVSNEEDED, clientIp, channel, "You're not channel operator");
-	// 	send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-	// 	return false;
-	// }
+	if (channelPrivNeed(this->_channelsM[channelName], client.getNickname(), 't')) {
+		response = E_CHANOPRIVSNEEDED(client, channelName);
+		this->sendResponse(client, response);
+	 	return false;
+	}
 	return true;
 
 }
@@ -230,7 +238,7 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 	}
 	if (reqVec.size() < 3) {
 		std::string modes = getChannelModes(this->_channelsM[channelName]);
-		response = R_CHANNELMODEIS(client.getNickname(), reqVec[1], "+i");
+		response = R_CHANNELMODEIS(client.getNickname(), reqVec[1], modes);
 		this->sendResponse(client, response);
 		return false;
 	}
