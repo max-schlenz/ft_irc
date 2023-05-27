@@ -108,17 +108,26 @@ void Server::sendResponse(Client &client, const std::string& response)
 
 bool Server::parseReq(Client& client, std::string request)
 {
+		// std::cout << BRED << request << "" << RESET << std::endl;
 	std::vector<std::string> reqVec;
 	std::string reqField;
 
 	std::istringstream iss(request);
 	while (iss >> reqField)
+	{
+		// std::cout << BRED << reqField << RESET << std::endl;
 		reqVec.push_back(reqField);
+	}
 
+	// std::cout << std::endl;
+	// printReqVec(reqVec);
+	// std::cout << std::endl;
 	if (reqVec.size())
 	{
+
+		// std::cout << BRED << reqVec[0] << "|" << RESET << std::endl;
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
-		
+
 		if (it != this->_commands.end())
 			(this->*(it->second))(reqVec, client);
 
@@ -155,13 +164,11 @@ Client &Server::getClientName(std::string name)
 
 bool Server::parseReqQueue(Client& client)
 {
-	std::string req;
 	for (std::vector<std::string>::iterator it = client.getReqQueue().begin(); it != client.getReqQueue().end(); ++it)
-		req += *it;
-	
-	if (!this->parseReq(client, req))
-		return false;
-
+	{
+		if (!this->parseReq(client, *it))
+			return false;
+	}
 	client.getReqQueue().clear();
 	return true;
 }

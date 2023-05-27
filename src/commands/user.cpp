@@ -4,6 +4,7 @@
 // USER max 0 127.0.0.1 :1,11KVIrc 5.0.0 Aria http://kvirc.net/
 void Server::user(std::vector<std::string> reqVec, Client &client)
 {
+	PRNT;
 	if (client.getKick())
 		return;
 	if (this->checkUser(reqVec, client))
