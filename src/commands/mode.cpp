@@ -65,7 +65,8 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 {
 	std::string modes = reqVec[2];
 	std::string channelName = reqVec[1];
-	std::map<char, bool> channelModes = this->_channelsM[channelName].getModes();
+	Channel& channel = this->_channelsM[channelName];
+	std::map<char, bool> channelModes = channel.getModes();
 	std::string clientIp = client.getHostname();
 	std::string err_msg;
 	std::string operation = "+";
@@ -83,10 +84,11 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 			std::string mode(1, modes[i]);
 			err_msg = msg_2(this->_hostname, ERR_UMODEUNKNOWNFLAG, client.getNickname(), mode, "is not a recognised channel mode");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-		} else if (this->_channelsM[channelName].getOperators().find(client.getNickname()) == this->_channelsM[channelName].getOperators().end()) {
+		} else if (channel.getOperators().find(client.getNickname()) == channel.getOperators().end()) {
 			err_msg = msg_2(this->_hostname, ERR_CHANOPRIVSNEEDED, clientIp, channelName, "You're not channel operator");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-		} else if (modes[i] == 'k') {
+		}
+		else if (modes[i] == 'k') {
 			err_msg = msg_4(this->_hostname, ERR_INVALIDMODEPARAM, clientIp, channelName, "k", "*", "You must specify a parameter for the key mode. Syntax: <key>");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		} else if (modes[i] == 'o') {
@@ -105,6 +107,57 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 		}
 	}
 }
+
+/*void Server::channelModeLoop2(std::vector<std::string> reqVec, Client &client)
+{
+	std::string modes = reqVec[2];
+	std::string channelName = reqVec[1];
+	Channel& channel = this->_channelsM[channelName];
+	std::map<char, bool> channelModes = channel.getModes();
+	std::string clientIp = client.getHostname();
+	std::string args;
+	std::string err_msg;
+	std::string operation = "+";
+
+	int i = 1;
+	std::cout << " mode in here\n" << std::endl;
+	createLst(reqVec[3], args);
+	if (modes[0] != '-') {
+		operation = "-";
+	}
+	for (int i = 0; i < modes.size(); ++i) {
+		for (int j = 0; )
+		if (modes[i] == '-')
+			operation = "-";
+		else if (modes[i] == '+')
+			operation = "+";
+		else if (!validChannelMode(channelModes, modes[i])) {
+			std::string mode(1, modes[i]);
+			err_msg = msg_2(this->_hostname, ERR_UMODEUNKNOWNFLAG, client.getNickname(), mode, "is not a recognised channel mode");
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		} else if (channel.getOperators().find(client.getNickname()) == channel.getOperators().end()) {
+			err_msg = msg_2(this->_hostname, ERR_CHANOPRIVSNEEDED, clientIp, channelName, "You're not channel operator");
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		}
+		else if (modes[i] == 'k') {
+			err_msg = msg_4(this->_hostname, ERR_INVALIDMODEPARAM, clientIp, channelName, "k", "*", "You must specify a parameter for the key mode. Syntax: <key>");
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		} else if (modes[i] == 'o') {
+			err_msg = msg_4(this->_hostname, ERR_INVALIDMODEPARAM, clientIp, channelName, "o", "*", "You must specify a parameter for the key mode. Syntax: <nick>");
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		}
+		else if (modeAlreadyOper(operation, modes[i], channelModes))
+			continue;
+		else {
+			if (operation == "-")
+				this->_channelsM[channelName].setModeFalse(modes[i]);
+			else
+				this->_channelsM[channelName].setModeTrue(modes[i]);
+			err_msg = msg_2(this->_hostname, "MODE", client.getNickname(), operation + modes[i], "changing mode");
+			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		}
+	}
+}*/
 
 void Server::channelMode(std::vector<std::string> reqVec, Client &client)
 {

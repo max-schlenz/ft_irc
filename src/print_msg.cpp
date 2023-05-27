@@ -55,7 +55,7 @@ bool send_all(int socket, const char *buffer, size_t length)
 	return true;
 }
 
-std::string	getMsg(int sock, const char *fmt, ...)
+/*std::string	getMsg(int sock, const char *fmt, ...)
 {
 	va_list	ap;
 	char	str[512];
@@ -69,4 +69,4 @@ std::string	getMsg(int sock, const char *fmt, ...)
 	// if (send_all(sock, msg.c_str(), msg.size()) == false)
 	// 	std::cout << RED << "Error sending message: " << msg << RESET << std::endl;
 	// send(sock, msg.c_str(), msg.size(), 0);
-}
+}*/

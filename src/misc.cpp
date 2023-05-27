@@ -8,6 +8,17 @@ std::string itos(const int i)
 	return oss.str();
 }
 
+void createLst(std::string req, std::vector<std::string>& lst)
+{
+	std::string buffer;
+	std::istringstream iss(req);
+
+	while (getline(iss, buffer, ',')){
+		lst.push_back(buffer);
+		buffer.clear();
+	}
+}
+
 void Server::sendMsgToAllInChannel(Channel& channel, const std::string& response, Client& except)
 {
 	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)

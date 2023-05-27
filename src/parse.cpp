@@ -166,6 +166,8 @@ bool Server::checkJoin(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
+	if (client.getJoinedChannels().find(reqVec[1]) != client.getJoinedChannels().end())
+			return false;
 	return true;
 }
 
