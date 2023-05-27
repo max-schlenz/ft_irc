@@ -26,14 +26,8 @@ void Server::sendUserList(Client& client, Channel& channel)
 }
 
 bool Server::checkPassword(std::string channelName, std::string password, Client& client) {
-	if (this->_channelsM[channelName].getModes()['k']) {
-		//std::cout << this->_channelsM[channelName].getPassword() << "\t" << password << std::endl;
-		if (this->_channelsM[channelName].getPassword() != password) {
-			std::string response = E_BADCHANNELKEY(client, channelName);
-			this->sendResponse(client, response);
-			return false;
-		}
-	}
+	if (this->_channelsM[channelName].getPassword() != password)
+		return false;
 	return true;
 }
 
@@ -42,9 +36,13 @@ void Server::joinAsOperator(std::string channelName, Client &client)
 	Channel channel(channelName);
 	this->_channelsM[channelName] = channel;
 	this->_channelsM[channelName].getClientsM()[client.getNickname()] = &client;
+	this->_channelsM[channelName].addOperator(client.getNickname(), &client);
 	client.getJoinedChannels()[channelName] = &this->_channelsM[channelName];
 
 	std::string response = JOIN(client, channelName);
+	this->sendResponse(client, response);
+	this->sendMsgToAllInChannel(channel, response, client); //brauch man das?
+	response = CHANNELMODEARGS(client, channelName, "+o", client.getNickname());
 	this->sendResponse(client, response);
 	this->sendMsgToAllInChannel(channel, response, client); //brauch man das?
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
@@ -81,13 +79,19 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 			passGiven = true;
 		}
 		for (int i = 0; i < channelsToJoin.size(); ++i) {
+			if (client.getJoinedChannels().find(channelsToJoin[i]) != client.getJoinedChannels().end())
+				continue ;
 			if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 				this->joinAsOperator(channelsToJoin[i], client);
 			else {
-				if ((!passGiven || i > passwords.size() - 1) && this->checkPassword(channelsToJoin[i], "", client))
+				if ((!passGiven || i > passwords.size() - 1) && !this->_channelsM[channelsToJoin[i]].getModes()['k'])
 					this->joinAsNormal(channelsToJoin[i], client);
 				else if (passGiven && i < passwords.size() && this->checkPassword(channelsToJoin[i], passwords[i], client))
 					this->joinAsNormal(channelsToJoin[i], client);
+				else {
+					std::string response = E_BADCHANNELKEY(client, channelsToJoin[i]);
+					this->sendResponse(client, response);
+				}
 			}
 		}
 	}
