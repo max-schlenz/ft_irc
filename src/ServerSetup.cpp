@@ -73,6 +73,7 @@ void Server::setCommands()
 	this->_commands["MSG"] = &Server::privmsg; // same as privmsg
 	this->_commands["WHO"] = &Server::who;
 	this->_commands["NOTICE"] = &Server::notice;
+	this->_commands["QUIT"] = &Server::quit;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
 	this->_commands["dcc"] = &Server::dcc;

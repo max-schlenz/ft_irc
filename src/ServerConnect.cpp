@@ -22,8 +22,9 @@ void Server::acceptClient()
 
 void Server::disconnectClient(Client& client, int i)
 {
-	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getHostname() << RED << " disconnected." << RESET << std::endl;
+	close(client.getSock());
 	close(this->_pollFds[i].fd);
+	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getHostname() << RED << " disconnected." << RESET << std::endl;
 	this->_clientsM.erase(this->_clients[i - 1].getNickname());
 	this->_pollFds.erase(this->_pollFds.begin() + i);
 	this->_clients.erase(this->_clients.begin() + (i - 1));
