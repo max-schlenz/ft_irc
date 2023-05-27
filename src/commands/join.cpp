@@ -64,8 +64,6 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 	// this->sendMsgToAll(client, response);
 	for (std::vector<Client>::iterator itClient = this->_clients.begin(); itClient != this->_clients.end(); ++itClient)
 		this->sendUserList(*itClient, itChannel->second);
-
-	return;
 }
 
 
@@ -81,31 +79,16 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 		if (reqVec.size() >= 3) {
 			createLst(reqVec[2], passwords);
 			passGiven = true;
-			std::cout << "pass true: " << passwords.size() << std::endl;
 		}
 		for (int i = 0; i < channelsToJoin.size(); ++i) {
 			if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 				this->joinAsOperator(channelsToJoin[i], client);
 			else {
-				std::cout << "pass size: " << passwords.size() << " i: " << i << std::endl;
-				if ((!passGiven || i > passwords.size() - 1) && this->checkPassword(channelsToJoin[i], "", client)) {
+				if ((!passGiven || i > passwords.size() - 1) && this->checkPassword(channelsToJoin[i], "", client))
 					this->joinAsNormal(channelsToJoin[i], client);
-				} else if (passGiven && i < passwords.size() && this->checkPassword(channelsToJoin[i], passwords[i], client)) {
+				else if (passGiven && i < passwords.size() && this->checkPassword(channelsToJoin[i], passwords[i], client))
 					this->joinAsNormal(channelsToJoin[i], client);
-					std::cout << "join as normal with password " << i << std::endl;
-
-				}
 			}
 		}
-			/*for (int i = 0; i < channelsToJoin.size(); ++i) {
-				for (int j = 0; j < passwords.size(); ++j) {
-					if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
-						this->joinAsOperator(channelsToJoin[i], client);
-					else {
-						if (this->checkPassword(channelsToJoin[i], passwords[j], client))
-							this->joinAsNormal(channelsToJoin[i], client);
-					}
-				}
-			}*/
 	}
 }
