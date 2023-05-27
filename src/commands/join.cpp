@@ -36,11 +36,15 @@ void Server::joinAsOperator(std::string channelName, Client &client)
 	Channel channel(channelName);
 	this->_channelsM[channelName] = channel;
 	this->_channelsM[channelName].getClientsM()[client.getNickname()] = &client;
+	this->_channelsM[channelName].addOperator(client.getNickname(), &client);
 	client.getJoinedChannels()[channelName] = &this->_channelsM[channelName];
 
 	std::string response = JOIN(client, channelName);
 	this->sendResponse(client, response);
 	this->sendMsgToAllInChannel(channel, response, client); //brauch man das?
+	response = CHANNELMODEARGS(client, channelName, "+o", client.getNickname());
+	this->sendResponse(client, response);
+	this->sendMsgToAllInChannel(channel, response, client);
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 		this->sendUserList(*it, channel);
 }

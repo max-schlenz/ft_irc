@@ -167,8 +167,6 @@ static std::string getUserModes(Client& client)
 	std::string modes = "+";
 	if (client.getModeI())
 		modes += "i";
-	if (client.getModeO())
-		modes += "o";
 	return modes;
 }
 

@@ -202,7 +202,7 @@ class Server {
 		bool checkChannelMode(std::vector<std::string> reqVec, Client& client);
 		void channelModeLoop(std::vector<std::string> reqVec, Client &client);
 		void handleModeK(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation);
-		void handleModeO(std::vector<std::string> reqVec, Client &client);
+		void handleModeO(std::vector<std::string> reqVec, Client &client,  int i, int args_counter, std::string operation);
 		bool checkUserMode(std::vector<std::string> reqVec, Client& client);
 };
 

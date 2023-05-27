@@ -27,9 +27,9 @@ class Client
 		void setUserRegistered(bool registered){
 			this->_user_registered = registered;
 		}
-		void setModeO(bool mode_o){
+		/*void setModeO(bool mode_o){
 			this->_mode_o = mode_o;
-		}
+		}*/
 		void setModeI(bool mode_i){
 			this->_mode_i = mode_i;
 		}
@@ -58,9 +58,9 @@ class Client
 		const std::string& getNickname() const {
 			return (this->_nickName);
 		}
-		const bool& getModeO() const {
+		/*const bool& getModeO() const {
 			return (this->_mode_o);
-		}
+		}*/
 		const bool& getModeI() const {
 			return (this->_mode_i);
 		}
@@ -125,7 +125,7 @@ class Client
 		std::string _nickName;
 		std::string _userName;
 		std::string _realName;
-		bool		_mode_o;
+		//bool		_mode_o;
 		bool		_mode_i;
 		bool		_bot;
 		bool		_kick;

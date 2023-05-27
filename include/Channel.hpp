@@ -28,9 +28,6 @@ class Channel
 		void setPassword(std::string password){
 			this->_password = password;
 		}
-		// void addOperator(std::string _operator){
-		// 	this->_operators.push_back(_operator);
-		// }
 		// void add_client(Client client){
 		// 	this->_clients.push_back(client);
 		// }
@@ -58,21 +55,15 @@ class Channel
 		void setModeFalse(char mode) {
 			this->_modes[mode] = false;
 		}
+		void addOperator(std::string name, Client* client) {
+			this->_operators[name] = client;
+		}
+		void removeOperator(std::string name) {
+			this->_operators.erase(name);
+		}
 		int getLimit() {
 			return this->_limit;
 		}
-		// bool getModeO() const {
-		// 	return this->mode_o;
-		// }
-		// bool getModeI() const {
-		// 	return this->mode_i;
-		// }
-		// bool getModeT() const {
-		// 	return this->mode_t;
-		// }
-		// bool getModeK() const {
-		// 	return this->mode_k;
-		// }
 		std::map<char, bool> getModes() {
 			return this->_modes;
 		}
