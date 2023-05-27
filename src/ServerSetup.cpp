@@ -40,8 +40,8 @@ Server::Server(int port, std::string key)
 	pollfd server_poll_fd;
 	server_poll_fd.fd = this->_sock;
 	server_poll_fd.events = POLLIN;
-	std::time_t currentTime = std::time(NULL);
-	this->_dateString = std::ctime(&currentTime);
+	time_t currentTime = time(NULL);
+	this->_dateString = ctime(&currentTime);
 	this->_pollFds.push_back(server_poll_fd);
 	this->setCommands();
 }

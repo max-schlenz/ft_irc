@@ -77,17 +77,17 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 		bool passGiven = false;
 		std::vector<std::string> channelsToJoin;
 		std::vector<std::string> passwords;
-		std::cout << passwords.size() << std::endl;
  		createLst(reqVec[1], channelsToJoin);
 		if (reqVec.size() >= 3) {
 			createLst(reqVec[2], passwords);
 			passGiven = true;
+			std::cout << "pass true: " << passwords.size() << std::endl;
 		}
 		for (int i = 0; i < channelsToJoin.size(); ++i) {
 			if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 				this->joinAsOperator(channelsToJoin[i], client);
 			else {
-				std::cout << "pass size: " << passwords.size() << "i: " << i << std::endl;
+				std::cout << "pass size: " << passwords.size() << " i: " << i << std::endl;
 				if ((!passGiven || i > passwords.size() - 1) && this->checkPassword(channelsToJoin[i], "", client)) {
 					this->joinAsNormal(channelsToJoin[i], client);
 				} else if (passGiven && i < passwords.size() && this->checkPassword(channelsToJoin[i], passwords[i], client)) {
