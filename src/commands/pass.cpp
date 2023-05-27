@@ -4,7 +4,7 @@ void Server::pass(std::vector<std::string> reqVec, Client &client)
 {
 	if (client.getNickRegistered())
 	{
-		std::string response = E_ALREADYREGISTERED + client.getNickname() + " :You may not register\r\n";
+		std::string response = E_ALREADYREGISTERED(client);
 		this->sendResponse(client, response);
 		return;
 	}
@@ -20,14 +20,14 @@ void Server::pass(std::vector<std::string> reqVec, Client &client)
 		}
 		else
 		{
-			std::string response = E_PASSWDMISMATCH + client.getNickname() + " :Password incorrect\r\n";
+			std::string response = E_PASSWDMISMATCH(client);
 			this->sendResponse(client, response);
 			client.setKick(true);
 		}
 	}
 	else
 	{
-		std::string response = E_NEEDMOREPARAMS + client.getNickname() + " :Not enough parameters\r\n";
+		std::string response = E_NEEDMOREPARAMS(client, "PASS");
 		this->sendResponse(client, response);
 		client.setKick(true);
 	}

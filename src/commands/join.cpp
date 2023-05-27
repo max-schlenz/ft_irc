@@ -19,9 +19,8 @@ void Server::sendUserList(Client& client, Channel& channel)
 			send(client.getSock(), response.c_str(), response.size(), 0);
 		}
 	}
-	
-	response = ":127.0.0.1 366 " + client.getNickname() + " " + channel.getName() + " :End of /NAMES list\r\n";
-	send(client.getSock(), response.c_str(), response.size(), 0);
+	response = E_ENDOFNAMES(client, channel.getName());
+	this->sendResponse(client, response);
 
 	// std::cout << BRED << response << RESET << std::endl;
 }
@@ -30,8 +29,8 @@ bool Server::checkPassword(std::string channelName, std::string password, Client
 	if (this->_channelsM[channelName].getModes()['k']) {
 		//std::cout << this->_channelsM[channelName].getPassword() << "\t" << password << std::endl;
 		if (this->_channelsM[channelName].getPassword() != password) {
-			std::string err_msg = msg_2(this->_hostname, ERR_BADCHANNELKEY, client.getHostname(), channelName, "Cannot join channel (+k)");
-			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+			std::string response = E_BADCHANNELKEY(client, channelName);
+			this->sendResponse(client, response);
 			return false;
 		}
 	}
@@ -45,7 +44,7 @@ void Server::joinAsOperator(std::string channelName, Client &client)
 	this->_channelsM[channelName].getClientsM()[client.getNickname()] = &client;
 	client.getJoinedChannels()[channelName] = &this->_channelsM[channelName];
 
-	std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@localhost JOIN " + channelName + "\r\n";
+	std::string response = JOIN(client, channelName);
 	this->sendResponse(client, response);
 	this->sendMsgToAllInChannel(channel, response, client); //brauch man das?
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
@@ -58,7 +57,7 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 	client.getJoinedChannels()[channelName] = &itChannel->second;
 	itChannel->second.getClientsM()[client.getNickname()] = &client;
 
-	std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@localhost JOIN " + channelName + "\r\n";
+	std::string response = JOIN(client, channelName);
 	this->sendResponse(client, response);
 
 	this->sendMsgToAllInChannel(itChannel->second, response, client);

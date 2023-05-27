@@ -11,7 +11,7 @@ void Server::part(std::vector<std::string> reqVec, Client &client)
 		{
 			Channel *channel = itChannel->second;
 
-			std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 PART " + reqVec[1] + "\r\n";
+			std::string response = PART(client, reqVec[1]);
 			this->sendResponse(client, response);
 			this->sendMsgToAll(client, response);
 
