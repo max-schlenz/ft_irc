@@ -34,6 +34,7 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 	std::string modes = reqVec[2];
 	std::string clientIp = client.getHostname();
 	std::string err_msg;
+	std::string response;
 	std::string operation = "+";
 	int i = 1;
 	std::cout << " mode in here\n" << std::endl;
@@ -46,9 +47,8 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 		else if (modes[i] == '+')
 			operation = "+";
 		else if (!validUserMode(modes[i])) {
-			std::string mode(1, modes[i]);
-			err_msg = msg_2(this->_hostname, ERR_UMODEUNKNOWNFLAG, client.getNickname(), mode, "is not a recognised user mode");
-			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+			response = E_UMODEUNKNOWNFLAG(client);
+			this->sendResponse(client, response);
 		} else {
 			if (operation == "-" && !client.getModeI() || operation == "+" && client.getModeI())
 				continue;
