@@ -25,20 +25,9 @@ void Server::sendUserList(Client& client, Channel& channel)
 	// std::cout << BRED << response << RESET << std::endl;
 }
 
-static void createLst(std::string req, std::vector<std::string>& lst)
-{
-	std::string buffer;
-	std::istringstream iss(req);
-
-	while (getline(iss, buffer, ',')){
-		lst.push_back(buffer);
-		buffer.clear();
-	}
-}
-
 bool Server::checkPassword(std::string channelName, std::string password, Client& client) {
 	if (this->_channelsM[channelName].getModes()['k']) {
-		std::cout << this->_channelsM[channelName].getPassword() << "\t" << password << std::endl;
+		//std::cout << this->_channelsM[channelName].getPassword() << "\t" << password << std::endl;
 		if (this->_channelsM[channelName].getPassword() != password) {
 			std::string response = E_BADCHANNELKEY(client, channelName);
 			this->sendResponse(client, response);
@@ -75,8 +64,6 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 	// this->sendMsgToAll(client, response);
 	for (std::vector<Client>::iterator itClient = this->_clients.begin(); itClient != this->_clients.end(); ++itClient)
 		this->sendUserList(*itClient, itChannel->second);
-
-	return;
 }
 
 
@@ -85,33 +72,22 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 {
 	if (checkJoin(reqVec, client))
 	{
-		if (client.getJoinedChannels().find(reqVec[1]) != client.getJoinedChannels().end())
-			return;
+		bool passGiven = false;
 		std::vector<std::string> channelsToJoin;
-		createLst(reqVec[1], channelsToJoin);
-		if (reqVec.size() == 2) {
-			for (int i = 0; i < channelsToJoin.size(); ++i) {
-				if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
-					this->joinAsOperator(channelsToJoin[i], client);
-				else {
-					if (this->checkPassword(channelsToJoin[i], "", client)) {
-						this->joinAsNormal(channelsToJoin[i], client);
-					}
-				}
-			}
-		}
+		std::vector<std::string> passwords;
+ 		createLst(reqVec[1], channelsToJoin);
 		if (reqVec.size() >= 3) {
-			std::vector<std::string> passwords;
 			createLst(reqVec[2], passwords);
-			for (int i = 0; i < channelsToJoin.size(); ++i) {
-				for (int j = 0; j < passwords.size(); ++j) {
-					if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
-						this->joinAsOperator(channelsToJoin[i], client);
-					else {
-						if (this->checkPassword(channelsToJoin[i], passwords[j], client))
-							this->joinAsNormal(channelsToJoin[i], client);
-					}
-				}
+			passGiven = true;
+		}
+		for (int i = 0; i < channelsToJoin.size(); ++i) {
+			if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
+				this->joinAsOperator(channelsToJoin[i], client);
+			else {
+				if ((!passGiven || i > passwords.size() - 1) && this->checkPassword(channelsToJoin[i], "", client))
+					this->joinAsNormal(channelsToJoin[i], client);
+				else if (passGiven && i < passwords.size() && this->checkPassword(channelsToJoin[i], passwords[i], client))
+					this->joinAsNormal(channelsToJoin[i], client);
 			}
 		}
 	}

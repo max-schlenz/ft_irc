@@ -160,6 +160,8 @@ bool Server::checkJoin(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
+	if (client.getJoinedChannels().find(reqVec[1]) != client.getJoinedChannels().end())
+			return false;
 	return true;
 }
 
@@ -219,15 +221,16 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 {
 	std::string clientIp = client.getHostname();
 	std::string err_msg;
+	std::string response;
 	if (reqVec.size() < 2) {
-		err_msg = msg_2(this->_hostname, ERR_NEEDMOREPARAMS, clientIp, reqVec[0], "Not enough parameters");
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		response = E_NEEDMOREPARAMS(client, reqVec[0]);
+		this->sendResponse(client, response);
 		return false;
 	}
 	std::string channelName = reqVec[1];
 	if (this->_channelsM.find(channelName) == this->_channelsM.end()) {
-		std::string err_msg = msg_2(this->_hostname, ERR_NOSUCHCHANNEL, clientIp, channelName, "No such channel");
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		response = E_NOSUCHCHANNEL(client, reqVec[1]);
+		this->sendResponse(client, response);
 		return false;
 	}
 	if (reqVec.size() < 3) {
