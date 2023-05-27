@@ -22,11 +22,9 @@ static bool validChannelMode(std::map<char, bool> modes, char mode) {
 	return true;
 }
 
-static bool modeAlreadyOper(std::string operation, char mode, Channel& channel, std::string nickname)
+static bool modeAlreadyOper(std::string operation, char mode, Channel& channel)
 {
 	if (operation == "-" && !channel.getModes()[mode] || operation == "+" && channel.getModes()[mode])
-		return true;
-	if (operation == "-" && channel.getOperators().find(nickname) == channel.getOperators().end() || operation == "+" && channel.getOperators().find(nickname) != channel.getOperators().end())
 		return true;
 	return false;
 }
@@ -169,14 +167,14 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 		 	response = E_CHANOPRIVSNEEDED(client, channelName);
 		 	this->sendResponse(client, response);
 		}
+		else if (modeAlreadyOper(operation, modes[i], channel)) {
+			++args_counter;
+			continue;
+		}
 		else if (modes[i] == 'k')
 			this->handleModeK(reqVec, client, i, args_counter, operation);
 		else if (modes[i] == 'o') {
 			this->handleModeO(reqVec, client, i, args_counter, operation);
-		}
-		else if (modeAlreadyOper(operation, modes[i], channel, args[args_counter])) {
-			++args_counter;
-			continue;
 		}
 		else {
 			if (operation == "-")
@@ -199,10 +197,8 @@ void Server::mode(std::vector<std::string> reqVec, Client &client)
 {
 	if (isUserMode(reqVec[1]) && this->checkUserMode(reqVec, client)) {
 		this->userMode(reqVec, client);
-		std::cout << client.getNickname() << GRAY << " mode" << std::endl;
 	}
 	else if (!isUserMode(reqVec[1]) && this->checkChannelMode(reqVec, client)) {
 		channelMode(reqVec, client);
-		std::cout << "change channel mode" << std::endl;
 	}
 }
