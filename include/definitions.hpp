@@ -38,6 +38,10 @@
 # define ERR_INVALIDMODEPARAM std::string("696")
 // <-------- RESPONSE CODES ---------->
 
+// WHO
+# define SHORT_NAME (std::string(":" SERV_ADDR))
+# define LONG_NAME(client) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname())
+
 // WELCOME
 # define NOTICE(...) (std::string(":" SERV_ADDR " NOTICE * :") + __VA_ARGS__)
 # define WELCOME_001(client) (std::string(":" SERV_ADDR " 001 ") + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + "\r\n")
@@ -62,31 +66,36 @@
 + WELCOME_253(client) + WELCOME_254(client) + WELCOME_265(client) + WELCOME_375(client) + WELCOME_372_1(client) + WELCOME_372_1(client) \
 + WELCOME_372_2(client) + WELCOME_372_3(client) + WELCOME_376(client) + WELCOME_MODE(client)
 
+//MODES
+# define R_CHANNELMODEIS(nickname, channel, modes) (SHORT_NAME + " 324 " + nickname + " " + channel + " " + modes + "\r\n")
+# define R_UMODEIS(client, modes) (SHORT_NAME + " 221 " + client.getHostname() + " " + modes + "\r\n")  //client IP needed
+
+//topic
+# define R_TOPIC(client, channelName, top) (SHORT_NAME + " 332 " + client.getHostname() + " " + channelName + " :" + top + "\r\n")
+# define R_NOTOPIC(client, channelName) (SHORT_NAME + " 331 " + client.getHostname() + " " + channelName + " :No topic is set\r\n")
+
 // PASS
-# define E_NEEDMOREPARAMS(client, str) (std::string(":" SERV_ADDR " 461 ") + client.getNickname() + " " + str + " " + " :Not enough parameters\r\n")
-# define E_ALREADYREGISTERED(client) (std::string(":" SERV_ADDR " 462 ") + client.getNickname() + " :You may not reregister\r\n")
-# define E_PASSWDMISMATCH(client) (std::string(":" SERV_ADDR " 464 ") + client.getNickname() + " :Password incorrect\r\n")
+# define E_NEEDMOREPARAMS(client, str) (SHORT_NAME + " 461 " + client.getNickname() + " " + str + " " + " :Not enough parameters\r\n")
+# define E_ALREADYREGISTERED(client) (SHORT_NAME + " 462 " + client.getNickname() + " :You may not reregister\r\n")
+# define E_PASSWDMISMATCH(client) (SHORT_NAME + " 464 " + client.getNickname() + " :Password incorrect\r\n")
 
 // NICK
-# define E_NOSUCHNICK(client, nick) (std::string(":" SERV_ADDR " 401 ") + client.getNickname() + " " + nick + " :No such nick/channel\r\n")
-# define E_NONICKNAMEGIVEN(client) (std::string(":" SERV_ADDR " 431 ") + client.getNickname() + " :No nickname given\r\n")
-# define E_ERRONEUSNICKNAME(client, nick) (std::string(":" SERV_ADDR " 432 ") + client.getNickname() + " " + nick + " :Erroneus nickname\r\n")
-# define E_NICKNAMEINUSE(oldNick, newNick) (std::string(":" SERV_ADDR " 433 ") + oldNick + " " + newNick + " :Nickname is already in use\r\n")
+# define E_NOSUCHNICK(client, nick) (SHORT_NAME + " 401 " + client.getHostname() + " " + nick + " :No such nick\r\n")
+# define E_NONICKNAMEGIVEN(client) (SHORT_NAME + " 431 " + client.getNickname() + " :No nickname given\r\n")
+# define E_ERRONEUSNICKNAME(client, nick) (SHORT_NAME + " 432 " + client.getHostname() + " " + nick + " :Erroneus nickname\r\n")
+# define E_NICKNAMEINUSE(oldNick, newNick) (SHORT_NAME + " 433 " + oldNick + " " + newNick + " :Nickname is already in use\r\n")
 
 // USER
-# define E_UMODEUNKNOWNFLAG(client) (std::string(":" SERV_ADDR " 501 ") + client.getNickname() + " :Unknown MODE flag\r\n")
-# define E_USERSDONTMATCH(client) (std::string(":" SERV_ADDR " 502 ") + client.getNickname() + " :Cant change mode for other users\r\n")
+# define E_UMODEUNKNOWNFLAG(client) (SHORT_NAME + " 501 " + client.getNickname() + " :Unknown MODE flag\r\n")
+# define E_USERSDONTMATCH(client) (SHORT_NAME + " 502 " + client.getNickname() + " :Cant change mode for other users\r\n")
 
 // INVITE
-# define R_INVITING(client, nick, channel) (std::string(":" SERV_ADDR " 341 ") + client.getNickname() + " " + nick + " " + channel + "\r\n")
+# define R_INVITING(client, nick, channel) (SHORT_NAME + " 341 " + client.getNickname() + " " + nick + " " + channel + "\r\n")
 # define R_SENDINV(client, nick, channel) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname() + " INVITE " + nick + " " + channel + "\r\n")
-# define E_USERONCHANNEL(client, nick, channel) (std::string(":" SERV_ADDR " 443 ") + client.getNickname() + " " + nick + " " + channel + " :is already on channel\r\n")
+# define E_USERONCHANNEL(client, nick, channel) (SHORT_NAME + " 443 " + client.getNickname() + " " + nick + " " + channel + " :is already on channel\r\n")
 
-// WHO
-# define SHORT_NAME (std::string(":" SERV_ADDR))
-# define LONG_NAME(client) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname())
 // # define R_ENDOFWHO(client, channel) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname() + " 315 " + client.getNickname() + " " + channel + " :End of /WHO list.\r\n")
-# define R_ENDOFWHO(client, channel) (std::string(":" SERV_ADDR " 315 ") + " " + channel + " :End of /WHO list.\r\n")
+# define R_ENDOFWHO(client, channel) (SHORT_NAME + " 315 " + " " + channel + " :End of /WHO list.\r\n")
 
 // JOIN
 // # define JOIN(client, channel) (std::string(":") + client.getNickname() + " JOIN " + channel + "\r\n")
@@ -95,8 +104,8 @@
 
 // PART
 # define PART(client, channel) (LONG_NAME(client) + " PART " + channel + "\r\n")
-# define E_NOSUCHCHANNEL(client, channel) (std::string(":" SERV_ADDR " 403 ") + client.getNickname() + " " + channel + " :No such channel\r\n")
-# define E_NOTONCHANNEL(client, channel) (std::string(":" SERV_ADDR " 442 ") + client.getNickname() + " " + channel + " :You're not on that channel\r\n")
+# define E_NOSUCHCHANNEL(client, channel) (SHORT_NAME + " 403 " + client.getNickname() + " " + channel + " :No such channel\r\n")
+# define E_NOTONCHANNEL(client, channel) (SHORT_NAME + " 442 " + client.getNickname() + " " + channel + " :You're not on that channel\r\n")
 
 // CHANNEL
 # define E_BADCHANNELKEY(client, channel) (SHORT_NAME + " 475 " + client.getNickname() + " " + channel + " :Cannot join channel (+k)\r\n")

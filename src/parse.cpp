@@ -122,22 +122,31 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 
 bool Server::checkTopic(std::vector<std::string> reqVec, Client& client)
 {
-	std::string clientIp = client.getHostname();
+	// std::string clientIp = client.getHostname();
 	std::string err_msg;
 	std::string response;
-	if (reqVec.size() < 3) {
-		E_NEEDMOREPARAMS(client, reqVec[0]);
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+	if (reqVec.size() < 2) {
+		// if (this->)
+		// send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	std::string channelName = reqVec[2];
+	std::string channelName = reqVec[1];
 	if (this->_channelsM.find(channelName) == this->_channelsM.end()) {
+		std::cout << "in here" << std::endl;
 		response = E_NOSUCHCHANNEL(client, channelName);
 		this->sendResponse(client, response);
 		return false;
 	}
 	if (client.getJoinedChannels().find(channelName) == client.getJoinedChannels().end()) {
 		response = E_NOTONCHANNEL(client, channelName);
+		this->sendResponse(client, response);
+		return false;
+	}
+	if (reqVec.size() < 3) {
+		if (this->_channelsM[channelName].getTopic() == "")
+			response = R_NOTOPIC(client, channelName);
+		else
+			response = R_TOPIC(client, channelName, this->_channelsM[channelName].getTopic());
 		this->sendResponse(client, response);
 		return false;
 	}
@@ -160,8 +169,6 @@ bool Server::checkJoin(std::vector<std::string> reqVec, Client& client)
 		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		return false;
 	}
-	if (client.getJoinedChannels().find(reqVec[1]) != client.getJoinedChannels().end())
-			return false;
 	return true;
 }
 
@@ -210,8 +217,8 @@ bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 	}
 	if (reqVec.size() < 3) {
 		std::string modes = getUserModes(client);
-		err_msg = msg_1(this->_hostname, RPL_UMODEIS, clientIp, modes);
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		response = R_UMODEIS(client, modes);
+		this->sendResponse(client, response);
 		return false;
 	}
 	return true;
@@ -234,12 +241,9 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 		return false;
 	}
 	if (reqVec.size() < 3) {
-	// "<client> <channel> <modestring> <mode arguments>..."
 		std::string modes = getChannelModes(this->_channelsM[channelName]);
-		std::cout << "channel modes: " << modes << std::endl;
-		// err_msg = msg_2(this->_hostname, RPL_CHANNELMODEIS, clientIp, modes, channelName);
-		err_msg = msg_2(this->_hostname, RPL_CHANNELMODEIS, clientIp, modes + channelName, modes);
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+		response = R_CHANNELMODEIS(client.getNickname(), reqVec[1], "+i");
+		this->sendResponse(client, response);
 		return false;
 	}
 	return true;

@@ -94,11 +94,12 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 			err_msg = msg_2(this->_hostname, ERR_CHANOPRIVSNEEDED, clientIp, channelName, "You're not channel operator");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
 		}
-		else if (modes[i] == 'k' && !argsGiven) {
+		else if (modes[i] == 'k' && (!argsGiven || i >= args.size())) {
 			err_msg = msg_4(this->_hostname, ERR_INVALIDMODEPARAM, clientIp, channelName, "k", "*", "You must specify a parameter for the key mode. Syntax: <key>");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
-		}// else if (modes[i] == 'k' && )
-		
+		} else if (modes[i] == 'k' && argsGiven && i < args.size() && !this->checkPassword(channelName, args[i], client)) {
+			;
+		}
 		else if (modes[i] == 'o') {
 			err_msg = msg_4(this->_hostname, ERR_INVALIDMODEPARAM, clientIp, channelName, "o", "*", "You must specify a parameter for the key mode. Syntax: <nick>");
 			send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);

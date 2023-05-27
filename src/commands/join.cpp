@@ -81,6 +81,8 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 			passGiven = true;
 		}
 		for (int i = 0; i < channelsToJoin.size(); ++i) {
+			if (client.getJoinedChannels().find(channelsToJoin[i]) != client.getJoinedChannels().end())
+				continue ;
 			if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 				this->joinAsOperator(channelsToJoin[i], client);
 			else {
