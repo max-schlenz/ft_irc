@@ -34,7 +34,7 @@
 # define ERR_UMODEUNKNOWNFLAG std::string("501")
 # define ERR_USERSDONTMATCH std::string("502")
 
-# define SERV_ADDR "0.0.0.0"
+# define SERV_ADDR "127.0.0.1"
 # define ERR_INVALIDMODEPARAM std::string("696")
 // <-------- RESPONSE CODES ---------->
 
@@ -94,6 +94,7 @@
 # define JOIN(client, channel) (LONG_NAME(client) + " JOIN " + channel + "\r\n")
 
 // PART
+# define PART(client, channel) (LONG_NAME(client) + " PART " + channel + "\r\n")
 # define E_NOSUCHCHANNEL(client, channel) (std::string(":" SERV_ADDR " 403 ") + client.getNickname() + " " + channel + " :No such channel\r\n")
 # define E_NOTONCHANNEL(client, channel) (std::string(":" SERV_ADDR " 442 ") + client.getNickname() + " " + channel + " :You're not on that channel\r\n")
 

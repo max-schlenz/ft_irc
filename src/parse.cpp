@@ -26,13 +26,12 @@ bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 	if (!checkChars(reqVec[1]) || reqVec.size() > 2) {
 		response = E_ERRONEUSNICKNAME(client, reqVec[1]);
 		this->sendResponse(client, response);
-	std::string name = reqVec[1];
-	if (client.getNickname() == name)
+	if (client.getNickname() == reqVec[1])
 		return false;
 	}
-	if (this->_clientsM.find(name) != this->_clientsM.end()) {
-		err_msg = msg_2(this->_hostname, ERR_NICKINUSE, clientIp, name, "Nickname is already in use");
-		send(client.getSock(), err_msg.c_str(), err_msg.size(), 0);
+	if (this->_clientsM.find(reqVec[1]) != this->_clientsM.end()) {
+		response = E_NICKNAMEINUSE(client.getNickname(), reqVec[1]);
+		this->sendResponse(client, response);
 		return false;
 	}
 	return true;
