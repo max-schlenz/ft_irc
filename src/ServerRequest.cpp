@@ -1,5 +1,16 @@
 # include "Server.hpp"
 
+bool Server::parseReqQueue(Client& client)
+{
+	for (std::vector<std::string>::iterator it = client.getReqQueue().begin(); it != client.getReqQueue().end(); ++it)
+	{
+		if (!this->parseReq(client, *it))
+			return false;
+	}
+	client.getReqQueue().clear();
+	return true;
+}
+
 bool Server::parseReq(Client& client, std::string request)
 {
 	std::vector<std::string> reqVec;
@@ -25,26 +36,24 @@ bool Server::parseReq(Client& client, std::string request)
 	return true;
 }
 
-bool Server::parseReqQueue(Client& client)
-{
-	for (std::vector<std::string>::iterator it = client.getReqQueue().begin(); it != client.getReqQueue().end(); ++it)
-	{
-		if (!this->parseReq(client, *it))
-			return false;
-	}
-	client.getReqQueue().clear();
-	return true;
-}
-
-// void Server::buildReqQueue(Client& client, std::vector<char> buf)
-// void Server::buildReqQueue(Client& client, std::vector<char>& buf)
-void Server::buildReqQueue(Client& client, const std::string& buffer)
+bool Server::buildReqQueue(Client& client, const std::string& buffer)
 {
 	std::istringstream iss(buffer);
 	std::string buffer_str;
 
 	while (std::getline(iss, buffer_str, '\n'))
-		client.getReqQueue().push_back(buffer_str);
+	{
+		client.getReqQueueBuf() += buffer_str;
+		if (!iss.eof())
+		{
+			client.getReqQueue().push_back(client.getReqQueueBuf());
+			client.getReqQueueBuf().clear();
+		}
+	}
+	if (!buffer.empty() && buffer[buffer.size() - 1] == '\n')
+		return true;
+
+	return false;
 }
 
 bool Server::handleClientReq(Client& client)
@@ -62,7 +71,8 @@ bool Server::handleClientReq(Client& client)
 		std::string buf(buffer.begin(), buffer.begin() + recv_len);
 		
 		std::cout << BLUE << buf << RESET << std::flush;
-		this->buildReqQueue(client, buf);
+		if (!this->buildReqQueue(client, buf))
+			return true;
 		if (!this->parseReqQueue(client))
 			return false;
 	}
