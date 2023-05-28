@@ -6,7 +6,7 @@ toupper implementierung fuer invite
 
 ### Needs to be implemented 
 - [ ]  nickname wenn doppelt am anfang - entweder kicken oder richtig handlen
-- [ ]  operator sollte operator bleiben nach dem joinen von anderen personen
+- [X]  operator sollte operator bleiben nach dem joinen von anderen personen
 - [ ]  alles einmal auf Fehler durchchecken → parsing + commands
 - [ ]  modes wenn würder modes k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
 - [ ]  kick parsing
@@ -14,8 +14,8 @@ toupper implementierung fuer invite
 - [ ]  schauen was im parsing an sich noch fehlt
 - [ ]  quit implementierung → alle funktionen so umschreiben, dass
 - [ ]  commands und parsing alle responses durch Macros ersetzten
-- [ ]  PRIVMSG funktioniert @Max?
-- [ ]  parting multiple channels
+- [X]  PRIVMSG funktioniert @Max? (i think so 👀)
+- [X]  parting multiple channels
 
 ### Could get implemented
 INFO
