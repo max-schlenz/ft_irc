@@ -62,9 +62,11 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 
 	std::string response = JOIN(client, channelName);
 	this->sendResponse(client, response);
-
 	this->sendMsgToAllInChannel(itChannel->second, response, client);
+	response = R_TOPIC(client, channelName, itChannel->second.getTopic());
+	this->sendResponse(client, response);
 	// this->sendMsgToAll(client, response);
+	//"<client> <channel> :<topic>"
 	for (std::vector<Client>::iterator itClient = this->_clients.begin(); itClient != this->_clients.end(); ++itClient)
 		this->sendUserList(*itClient, itChannel->second);
 }
@@ -78,6 +80,7 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 		bool passGiven = false;
 		std::vector<std::string> channelsToJoin;
 		std::vector<std::string> passwords;
+		std::string response;
  		createLst(reqVec[1], channelsToJoin);
 		if (reqVec.size() >= 3) {
 			createLst(reqVec[2], passwords);
@@ -89,12 +92,16 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 			if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 				this->joinAsOperator(channelsToJoin[i], client);
 			else {
-				if ((!passGiven || i > passwords.size() - 1) && !this->_channelsM[channelsToJoin[i]].getModes()['k'])
+				if (this->_channelsM[channelsToJoin[i]].getModes()['i']) {
+					response = E_INVITEONLYCHAN(client, channelsToJoin[i]);
+					this->sendResponse(client, response);
+				}
+				else if ((!passGiven || i > passwords.size() - 1) && !this->_channelsM[channelsToJoin[i]].getModes()['k'])
 					this->joinAsNormal(channelsToJoin[i], client);
 				else if (passGiven && i < passwords.size() && this->checkPassword(channelsToJoin[i], passwords[i], client))
 					this->joinAsNormal(channelsToJoin[i], client);
 				else {
-					std::string response = E_BADCHANNELKEY(client, channelsToJoin[i]);
+					response = E_BADCHANNELKEY(client, channelsToJoin[i]);
 					this->sendResponse(client, response);
 				}
 			}
