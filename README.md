@@ -16,7 +16,7 @@ toupper implementierung fuer invite
 - [ ]  commands und parsing alle responses durch Macros ersetzten
 - [X]  PRIVMSG funktioniert @Max? (i think so 👀)
 - [X]  parting multiple channels
-- [ ]  das topic beim joinen von channels anzeigen
+- [X]  das topic beim joinen von channels anzeigen
 
 ### Could get implemented
 INFO
