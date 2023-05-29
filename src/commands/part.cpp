@@ -5,26 +5,31 @@ void Server::part(std::vector<std::string> reqVec, Client &client)
 {
 	if (this->checkPart(reqVec, client))
 	{
-		std::map<std::string, Channel *>::iterator itChannel = client.getJoinedChannels().find(reqVec[1]);
-
-		if (itChannel != client.getJoinedChannels().end())
+		std::vector<std::string> partChannels;
+		createLst(reqVec[1], partChannels);
+		for (std::vector<std::string>::iterator itPartChannels = partChannels.begin(); itPartChannels != partChannels.end(); ++itPartChannels)
 		{
-			Channel *channel = itChannel->second;
+			std::map<std::string, Channel *>::iterator itChannel = client.getJoinedChannels().find(*itPartChannels);
 
-			std::string response = PART(client, reqVec[1]);
-			this->sendResponse(client, response);
-			this->sendMsgToAll(client, response);
+			if (itChannel != client.getJoinedChannels().end())
+			{
+				Channel *channel = itChannel->second;
 
-			std::map<std::string, Client *>::iterator itClient = channel->getClientsM().find(client.getNickname());
-			if (itClient != itChannel->second->getClientsM().end())
-				channel->getClientsM().erase(itClient->second->getNickname());
+				std::string response = PART(client, *itPartChannels);
+				this->sendResponse(client, response);
+				this->sendMsgToAll(client, response);
 
-			size_t numClients = client.getJoinedChannels()[reqVec[1]]->getClientsM().size();
+				std::map<std::string, Client *>::iterator itClient = channel->getClientsM().find(client.getNickname());
+				if (itClient != itChannel->second->getClientsM().end())
+					channel->getClientsM().erase(itClient->second->getNickname());
 
-			client.getJoinedChannels().erase(reqVec[1]);
+				size_t numClients = client.getJoinedChannels()[*itPartChannels]->getClientsM().size();
 
-			if (!numClients)
-				this->_channelsM.erase(channel->getName());
+				client.getJoinedChannels().erase(*itPartChannels);
+
+				if (!numClients)
+					this->_channelsM.erase(channel->getName());
+			}
 		}
 	}
 }

@@ -8,6 +8,12 @@ void Server::sendUserList(Client& client, Channel& channel)
 	std::string response = ":127.0.0.1 353 " + client.getNickname() + " = " + channel.getName() + " :";
 	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)
 	{
+		std::map<std::string, Client*>::iterator itOp = channel.getOperators().find(it->first);
+		if (itOp != channel.getOperators().end())
+		{
+			std::cout << GREEN << itOp->first << std::endl;
+			response += "@";
+		}
  		response += it->first;
 		std::map<std::string, Client*>::iterator itNext = it;
 		++itNext;
@@ -16,13 +22,12 @@ void Server::sendUserList(Client& client, Channel& channel)
 		else
 		{
 			response += "\r\n";
+			std::cout << BRED << response << RESET << std::endl;
 			send(client.getSock(), response.c_str(), response.size(), 0);
 		}
 	}
 	response = E_ENDOFNAMES(client, channel.getName());
 	this->sendResponse(client, response);
-
-	// std::cout << BRED << response << RESET << std::endl;
 }
 
 bool Server::checkPassword(std::string channelName, std::string password, Client& client) {

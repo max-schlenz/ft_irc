@@ -4,6 +4,7 @@
 // PRIVMSG <recipient>{,<recipient>} <text to be sent>
 //
 //PRIVMSG User1 :DCC SEND file 2130706433 60052 4
+//
 void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 {
 	if (reqVec.size() > 3 && reqVec[2] == ":\1DCC" && reqVec[3] == "SEND")
@@ -14,22 +15,52 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 		createLst(reqVec[1], recipients);
 		for (std::vector<std::string>::iterator itRecipient = recipients.begin(); itRecipient != recipients.end(); ++itRecipient)
 		{
-			for (std::map<std::string, Client *>::iterator itClient = this->_clientsM.begin(); itClient != this->_clientsM.end(); ++itClient)
+			if (*itRecipient->begin() == '#')
 			{
-				if (itClient->first != client.getNickname())
+				std::map<std::string, Channel>::iterator itRecChan = this->_channelsM.find(*itRecipient);
+				if (itRecChan != this->_channelsM.end())
 				{
-					std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + *itRecipient + " :";
-					if (reqVec[2].length() > 1)
-						reqVec[2] = reqVec[2].substr(1);
-					for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
+					for (std::map<std::string, Client*>::iterator itRecChanClient = itRecChan->second.getClientsM().begin(); itRecChanClient != itRecChan->second.getClientsM().end(); ++itRecChanClient)
 					{
-						response += *itVec;
-						if (itVec + 1 != reqVec.end())
-							response += " ";
+						if (itRecChanClient->first != client.getNickname() && isUserInChannel(*itRecChanClient->second, *itRecipient))
+						{
+							std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + *itRecipient + " :";
+							if (reqVec[2].length() > 1)
+								reqVec[2] = reqVec[2].substr(1);
+							for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
+							{
+								response += *itVec;
+								if (itVec + 1 != reqVec.end())
+									response += " ";
+							}
+							response += "\r\n";
+							this->sendResponse(*itRecChanClient->second, response);
+						}
 					}
-					response += "\r\n";
-					this->sendResponse(*itClient->second, response);
 				}
+				continue;
+			}
+
+			std::map<std::string, Client *>::iterator itClient = this->_clientsM.find(*itRecipient);
+			if (itClient == this->_clientsM.end())
+			{
+				this->sendResponse(client, "401 " + client.getNickname() + " " + *itRecipient + " :No such nick/channel\r\n");
+				continue;
+			}
+
+			if (itClient->first != client.getNickname())
+			{
+				std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + *itRecipient + " :";
+				if (reqVec[2].length() > 1)
+					reqVec[2] = reqVec[2].substr(1);
+				for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
+				{
+					response += *itVec;
+					if (itVec + 1 != reqVec.end())
+						response += " ";
+				}
+				response += "\r\n";
+				this->sendResponse(*itClient->second, response);
 			}
 		}
 	}

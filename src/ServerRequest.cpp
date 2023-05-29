@@ -27,11 +27,11 @@ bool Server::parseReq(Client& client, std::string request)
 		if (it != this->_commands.end())
 			(this->*(it->second))(reqVec, client);
 
-		else if (reqVec[0] == "QUIT")
+		if (reqVec[0] == "QUIT")
 			return false;
 
-		else
-			std::cout << GRAY << "not recognized: " RESET << request << std::endl;
+		// else
+		// 	std::cout << GRAY << "not recognized: " RESET << request << std::endl;
 	}
 	return true;
 }
