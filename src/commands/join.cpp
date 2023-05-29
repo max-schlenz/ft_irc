@@ -66,7 +66,6 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 	response = R_TOPIC(client, channelName, itChannel->second.getTopic());
 	this->sendResponse(client, response);
 	// this->sendMsgToAll(client, response);
-	//"<client> <channel> :<topic>"
 	for (std::vector<Client>::iterator itClient = this->_clients.begin(); itClient != this->_clients.end(); ++itClient)
 		this->sendUserList(*itClient, itChannel->second);
 }

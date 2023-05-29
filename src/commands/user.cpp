@@ -21,11 +21,13 @@ void Server::user(std::vector<std::string> reqVec, Client &client)
 
 void Server::welcome(Client &client)
 {
-	std::string response = NOTICE("*** Checking Ident\r\n");
-	response += NOTICE("*** Looking up your hostname...\r\n");
-	response += NOTICE("*** No Ident response\r\n");
-	response += WELCOME(client);
+	if (client.getNickRegistered()) {
+		std::string response = NOTICE("*** Checking Ident\r\n");
+		response += NOTICE("*** Looking up your hostname...\r\n");
+		response += NOTICE("*** No Ident response\r\n");
+		response += WELCOME(client);
 
-	this->sendResponse(client, response);
-	client.setNickRegistered(true);
+		this->sendResponse(client, response);
+		client.setUserRegistered(true);
+	}
 }
