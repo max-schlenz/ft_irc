@@ -54,7 +54,7 @@ void Server::startServer()
 		std::cout << "~~~ Server listening on: " << BWHITE << inet_ntoa(this->_saddr_in.sin_addr) << ":" << this->_port << " ~~~\n" << RESET <<  std::endl;
 	while (g_run)
 	{
-		res = poll(this->_pollFds.data(), this->_pollFds.size(), 500);
+		res = poll(this->_pollFds.data(), this->_pollFds.size(), 1000);
 		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
 		{
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN && this->_clients.size() < USR_LIMIT)
