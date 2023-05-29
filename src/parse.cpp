@@ -33,9 +33,10 @@ bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 	if (!checkChars(reqVec[1]) || reqVec.size() > 2) {
 		response = E_ERRONEUSNICKNAME(client, reqVec[1]);
 		this->sendResponse(client, response);
-	if (client.getNickname() == reqVec[1])
 		return false;
 	}
+	if (client.getNickname() == reqVec[1])
+		return false;
 	if (this->_clientsM.find(reqVec[1]) != this->_clientsM.end()) {
 		response = E_NICKNAMEINUSE(client.getNickname(), reqVec[1]);
 		this->sendResponse(client, response);
