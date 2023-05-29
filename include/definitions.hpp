@@ -66,6 +66,10 @@
 + WELCOME_253(client) + WELCOME_254(client) + WELCOME_265(client) + WELCOME_375(client) + WELCOME_372_1(client) + WELCOME_372_1(client) \
 + WELCOME_372_2(client) + WELCOME_372_3(client) + WELCOME_376(client) + WELCOME_MODE(client)
 
+// CAP
+# define R_CAP(string) (SHORT_NAME + " CAP * " + string + " :multi-prefix away-notify account-notify\r\n")
+// # define R_CAPREQ (SHORT_NAME + " CAP * ACK :multi-prefix away-notify account-notify\r\n")
+
 // join
 # define E_INVITEONLYCHAN(client, channelName) (SHORT_NAME + " 473 " + client.getHostname() + " " + channelName + " :Cannot join channel (+i)\r\n")
 //MODES
@@ -81,9 +85,10 @@
 
 # define E_INVALIDMODEPARAM(client, channelName, mode, str) (SHORT_NAME + " 696 " + client.getHostname() + " " + channelName + " " + mode + " * :" + str + "\r\n")
 
-//topic
+// TOPIC
 # define R_TOPIC(client, channelName, top) (SHORT_NAME + " 332 " + client.getHostname() + " " + channelName + " :" + top + "\r\n") //client IP needed
 # define R_NOTOPIC(client, channelName) (SHORT_NAME + " 331 " + client.getHostname() + " " + channelName + " :No topic is set\r\n") //client IP needed
+# define TOPIC(client, channel, topic) (LONG_NAME(client) + " TOPIC " + channel + " " + topic)
 
 // PASS
 # define E_NEEDMOREPARAMS(client, str) (SHORT_NAME + " 461 " + client.getNickname() + " " + str + " " + " :Not enough parameters\r\n")
@@ -96,7 +101,6 @@
 # define E_ERRONEUSNICKNAME(client, nick) (SHORT_NAME + " 432 " + client.getHostname() + " " + nick + " :Erroneus nickname\r\n")
 # define E_NICKNAMEINUSE(oldNick, newNick) (SHORT_NAME + " 433 " + oldNick + " " + newNick + " :Nickname is already in use\r\n")
 # define E_NICKNAMEINUSE2(oldNick, newNick) (SHORT_NAME + " 433 " + oldNick + " :Nickname is already in use.\r\n")
-
 
 // USER
 # define E_UMODEUNKNOWNFLAG(client, mode) (SHORT_NAME + " 501 " + client.getNickname() +  " " + mode + " :Unknown MODE flag\r\n") // clientip NOT needed
@@ -111,7 +115,6 @@
 # define R_ENDOFWHO(client, channel) (SHORT_NAME + " 315 " + " " + channel + " :End of /WHO list.\r\n")
 
 // JOIN
-// # define JOIN(client, channel) (std::string(":") + client.getNickname() + " JOIN " + channel + "\r\n")
 // # define JOIN(client, channel) (SHORT_NAME + " JOIN " + channel + "\r\n")
 # define JOIN(client, channel) (LONG_NAME(client) + " JOIN " + channel + "\r\n") //LONG NAME needed
 
@@ -123,5 +126,12 @@
 // CHANNEL
 # define E_BADCHANNELKEY(client, channel) (SHORT_NAME + " 475 " + client.getNickname() + " " + channel + " :Cannot join channel (+k)\r\n")
 # define E_ENDOFNAMES(client, channel) (SHORT_NAME + " 366 " + client.getNickname() + " " + channel + " :End of /NAMES list\r\n")
+
+// KICK
+# define E_USERNOTINCHANNEL(client, nick, channel) (SHORT_NAME + " 441 " + client.getNickname() + " " + nick + " " + channel + " :They aren't on that channel\r\n")
+# define E_KICK(client, channel, nick) (LONG_NAME(client) + " KICK " + channel + " " + nick + " ")
+
+// QUIT
+# define E_QUIT(client, message) (LONG_NAME(client) + " QUIT :" + message + "\r\n")
 
 #endif

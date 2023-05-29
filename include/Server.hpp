@@ -143,7 +143,7 @@ class Server {
 		void	dcc(std::vector<std::string> reqVeq, Client &client);
 		void	pass(std::vector<std::string> reqVec, Client &client);
 
-		void sendMsgToAllInChannel(Channel &channel, const std::string &response, Client& except);
+		void sendMsgToAllInChannel(Channel &channel, const std::string &response, const std::string& nickname);
 
 		void dbgPrint(std::vector<std::string> reqVec, Client &client);
 

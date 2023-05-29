@@ -19,11 +19,11 @@ void createLst(std::string req, std::vector<std::string>& lst)
 	}
 }
 
-void Server::sendMsgToAllInChannel(Channel& channel, const std::string& response, Client& except)
+void Server::sendMsgToAllInChannel(Channel& channel, const std::string& response, const std::string& nickname)
 {
 	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)
 	{
-		if (it->first != except.getNickname())
+		if (nickname == "" || it->first != nickname)
 			this->sendResponse(*it->second, response);
 	}
 }

@@ -125,7 +125,7 @@ class Client
 		std::string _nickName;
 		std::string _userName;
 		std::string _realName;
-		//bool		_mode_o;
+		// bool		_mode_o;
 		bool		_mode_i;
 		bool		_bot;
 		bool		_kick;

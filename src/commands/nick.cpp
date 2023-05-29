@@ -6,16 +6,16 @@
 {
 	std::string oldNick = client.getNickname();
 	std::string reqNick = reqVec[1];
-	/*std::string addon;
+	std::string addon;
 	int i = 2;
-	int pos = reqNick.find("|");*/
-	/*if (pos != std::string::npos) {
+	int pos = reqNick.find("|");
+	if (pos != std::string::npos) {
 		reqNick.replace(pos, reqNick.size() - pos, "");
 	} else {
 		
 		reqNick = reqNick + "|" + itos(i);
-	}*/
-	/*if (pos == std::string::npos) {
+	}
+	if (pos == std::string::npos) {
 		reqNick = reqNick + "|" + itos(i);
 	}
 	while (this->_clientsM.find(reqNick) != this->_clientsM.end()) {

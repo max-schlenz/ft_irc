@@ -46,10 +46,10 @@ void Server::joinAsOperator(std::string channelName, Client &client)
 
 	std::string response = JOIN(client, channelName);
 	this->sendResponse(client, response);
-	this->sendMsgToAllInChannel(channel, response, client); //brauch man das?
+	this->sendMsgToAllInChannel(channel, response, client.getNickname()); //brauch man das?
 	response = CHANNELMODEARGS(client, channelName, "+o", client.getNickname());
 	this->sendResponse(client, response);
-	this->sendMsgToAllInChannel(channel, response, client); //brauch man das?
+	this->sendMsgToAllInChannel(channel, response, client.getNickname()); //brauch man das?
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 		this->sendUserList(*it, channel);
 }
@@ -62,7 +62,7 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 
 	std::string response = JOIN(client, channelName);
 	this->sendResponse(client, response);
-	this->sendMsgToAllInChannel(itChannel->second, response, client);
+	this->sendMsgToAllInChannel(itChannel->second, response, client.getNickname());
 	response = R_TOPIC(client, channelName, itChannel->second.getTopic());
 	this->sendResponse(client, response);
 	// this->sendMsgToAll(client, response);

@@ -9,30 +9,31 @@ toupper implementierung fuer invite
 - [X]  operator sollte operator bleiben nach dem joinen von anderen personen
 - [ ]  alles einmal auf Fehler durchchecken → parsing + commands
 - [ ]  modes: wenn modes +k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
-- [ ]  kick parsing
-- [ ]  quit parsing -> Da gibts glaube gar nichts worauf man achten muss?
+- [X]  kick parsing
+- [X]  quit parsing
 - [ ]  schauen was im parsing an sich noch fehlt
 - [ ]  quit implementierung → alle command funktionen so umschreiben, dass entweder true oder false returned wird
 - [ ]  commands und parsing alle responses durch Macros ersetzten
 - [X]  PRIVMSG funktioniert @Max? (i think so 👀)
 - [X]  parting multiple channels
 - [X]  das topic beim joinen von channels anzeigen
+- [ ]  topic mit nem leeren String muss das topic loeschen -> "TOPIC #test :"
 
 ### Could get implemented
-INFO
-TIME
-LIST
-VERSION
-MOTD
+INFO  
+TIME  
+LIST  
+VERSION  
+MOTD  
 
 ### Currently implemented
-Authentication
+Authentication  
 PASS  
-USER
-NICK
-PING
-PRIVMSG
-JOIN
+USER  
+NICK  
+PING  
+PRIVMSG  
+JOIN  
 
 ### Ressources
 ***[rfc 1459](https://www.rfc-editor.org/rfc/rfc1459) Internet Relay Chat Protocol (1993)***  
