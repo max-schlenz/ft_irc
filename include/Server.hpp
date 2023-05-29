@@ -204,6 +204,7 @@ class Server {
 		void handleModeK(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation);
 		void handleModeO(std::vector<std::string> reqVec, Client &client,  int i, int args_counter, std::string operation);
 		bool checkUserMode(std::vector<std::string> reqVec, Client& client);
+		void sendNewNickReq(std::vector<std::string> reqVec, Client& client);
 };
 
 #endif

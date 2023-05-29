@@ -95,6 +95,8 @@
 # define E_NONICKNAMEGIVEN(client) (SHORT_NAME + " 431 " + client.getNickname() + " :No nickname given\r\n")
 # define E_ERRONEUSNICKNAME(client, nick) (SHORT_NAME + " 432 " + client.getHostname() + " " + nick + " :Erroneus nickname\r\n")
 # define E_NICKNAMEINUSE(oldNick, newNick) (SHORT_NAME + " 433 " + oldNick + " " + newNick + " :Nickname is already in use\r\n")
+# define E_NICKNAMEINUSE2(oldNick, newNick) (SHORT_NAME + " 433 " + oldNick + " :Nickname is already in use.\r\n")
+
 
 // USER
 # define E_UMODEUNKNOWNFLAG(client, mode) (SHORT_NAME + " 501 " + client.getNickname() +  " " + mode + " :Unknown MODE flag\r\n") // clientip NOT needed
