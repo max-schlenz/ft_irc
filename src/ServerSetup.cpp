@@ -44,6 +44,7 @@ Server::Server(int port, std::string key)
 	this->_dateString = ctime(&currentTime);
 	this->_pollFds.push_back(server_poll_fd);
 	this->setCommands();
+	this->_bot_on = false;
 }
 
 Server::~Server()
@@ -74,6 +75,7 @@ void Server::setCommands()
 	this->_commands["WHO"] = &Server::who;
 	this->_commands["NOTICE"] = &Server::notice;
 	this->_commands["QUIT"] = &Server::quit;
+	this->_commands["BOT"] = &Server::bot;
 
 	this->_commands["dbg"] = &Server::dbgPrint;
 	this->_commands["dcc"] = &Server::dcc;

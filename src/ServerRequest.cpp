@@ -22,6 +22,7 @@ bool Server::parseReq(Client& client, std::string request)
 
 	if (reqVec.size())
 	{
+		reqVec[0] = toUpperCase(reqVec[0]);
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
 		
 		if (it != this->_commands.end())

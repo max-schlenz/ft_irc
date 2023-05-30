@@ -27,6 +27,8 @@
 # include <netdb.h>
 # include <fcntl.h>
 
-void	error_handling(const char *fmt, ...);
+void			error_handling(const char *fmt, ...);
+std::string		toLowerCase(const std::string& str);
+std::string		toUpperCase(const std::string& str);
 
 #endif
