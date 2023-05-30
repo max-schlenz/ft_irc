@@ -1,5 +1,6 @@
-
 #include "DiceBot.hpp"
+# include <string>
+# include <sstream>
 
 extern bool g_run;
 

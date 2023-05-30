@@ -37,7 +37,7 @@ SRC_NAME      	=	main \
 					commands/whois \
 					commands/dcc \
 					commands/pass \
-					commands/bot
+					commands/bot \
 
 INC_NAME		=	Channel Client Bot Server irc common
 
