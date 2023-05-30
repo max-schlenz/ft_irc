@@ -1,4 +1,3 @@
-
 #ifndef ANTISPAM_HPP
 # define ANTISPAM_HPP
 

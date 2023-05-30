@@ -115,7 +115,7 @@ class Client
 		std::map<std::string, Channel*>& getJoinedChannels() {
 			return this->_joinedChannels;
 		}
-
+		void createBot();
 
 		// Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
 		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
@@ -125,7 +125,7 @@ class Client
 		std::string _nickName;
 		std::string _userName;
 		std::string _realName;
-		//bool		_mode_o;
+		// bool		_mode_o;
 		bool		_mode_i;
 		bool		_bot;
 		bool		_kick;

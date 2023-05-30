@@ -5,12 +5,15 @@
 # define RECV_BUF 1024
 # define USR_LIMIT 1000
 
+# include "Client.hpp"
 # include "common.hpp"
 # include "irc.hpp"
 # include "definitions.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
+
+class OwnBot;
 
 class Server {
 	public:
@@ -142,8 +145,9 @@ class Server {
 		void	privmsg(std::vector<std::string> reqVec, Client &client);
 		void	dcc(std::vector<std::string> reqVeq, Client &client);
 		void	pass(std::vector<std::string> reqVec, Client &client);
+		void	bot(std::vector<std::string> reqVec, Client &client);
 
-		void sendMsgToAllInChannel(Channel &channel, const std::string &response, Client& except);
+		void sendMsgToAllInChannel(Channel &channel, const std::string &response, const std::string& nickname);
 
 		void dbgPrint(std::vector<std::string> reqVec, Client &client);
 
@@ -177,6 +181,8 @@ class Server {
 		socklen_t _saddr_in_len;
 		std::string _hostname;
 		std::string _dateString;
+		Client *_bot;
+		bool _bot_on;
 		
 		std::vector<Client> _clients;
 		std::map<std::string, Client*> _clientsM;

@@ -18,22 +18,31 @@ void Server::topic(std::vector<std::string> reqVec, Client &client)
 	if (checkTopic(reqVec, client))
 	{
 		std::map<std::string, Channel>::iterator itChannel = this->_channelsM.find(reqVec[1]);
+		std::string response;
 
 		if (itChannel != this->_channelsM.end())
 		{
 			std::string topic;
 			for (std::vector<std::string>::iterator request = reqVec.begin() + 2; request != reqVec.end(); ++request)
 			{
+				if (*request == reqVec[2] && (*request)[0] == ':')
+					(*request).replace(0,1,"");
 				topic += *request;
 				if (request + 1 != reqVec.end())
 					topic += " ";
 			}
+			topic += "\r\n";
 			itChannel->second.setTopic(topic);
-			std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 TOPIC " + itChannel->second.getName() + " :" + topic + "\r\n";
-			for (std::map<std::string, Client *>::iterator itClient = itChannel->second.getClientsM().begin(); itClient != itChannel->second.getClientsM().end(); ++itClient)
-				this->sendResponse(*itClient->second, response);
+			response = TOPIC(client, itChannel->second.getName(), topic);
+			// for (std::map<std::string, Client *>::iterator itClient = itChannel->second.getClientsM().begin(); itClient != itChannel->second.getClientsM().end(); ++itClient)
+			// 	this->sendResponse(*itClient->second, response);
+			this->sendMsgToAllInChannel(itChannel->second, response, "");
 		}
 		else
-			this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 403 " + client.getNickname() + " " + reqVec[1] + " :No such channel\r\n");
+		{
+			response = E_NOSUCHCHANNEL(client, reqVec[1]);
+			this->sendResponse(client, response);
+			// this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 403 " + client.getNickname() + " " + reqVec[1] + " :No such channel\r\n");
+		}
 	}
 }

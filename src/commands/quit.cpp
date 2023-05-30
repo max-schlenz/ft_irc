@@ -15,15 +15,19 @@ void Server::quit(std::vector<std::string> reqVec, Client& client)
 		this->part(reqVec, client);
 	}
 
-	std::string quitMessage;
+	std::string message;
 	if (reqVec.size() > 1)
 	{
 		for (std::vector<std::string>::iterator it = reqVec.begin(); it != reqVec.end(); ++it)
 		{
-			quitMessage += *it;
+			message += *it;
 			if (it + 1 != reqVec.end())
-				quitMessage += " ";
+				message += " ";
+			else
+				message += "\r\n";
 		}
 	}
-	this->sendMsgToAll(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 QUIT :" + quitMessage + "\r\n");
+	std::string response = E_QUIT(client, message);
+	this->sendResponse(client, message);
+	// this->sendMsgToAll(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 QUIT :" + quitMessage + "\r\n");
 }

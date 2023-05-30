@@ -19,11 +19,27 @@ void createLst(std::string req, std::vector<std::string>& lst)
 	}
 }
 
-void Server::sendMsgToAllInChannel(Channel& channel, const std::string& response, Client& except)
+std::string toLowerCase(const std::string& str) {
+	std::string result = str;
+	for (std::size_t i = 0; i < result.length(); ++i) {
+		result[i] = std::tolower(result[i]);
+	}
+	return result;
+}
+
+std::string toUpperCase(const std::string& str) {
+	std::string result = str;
+	for (std::size_t i = 0; i < result.length(); ++i) {
+		result[i] = std::toupper(result[i]);
+	}
+	return result;
+}
+
+void Server::sendMsgToAllInChannel(Channel& channel, const std::string& response, const std::string& nickname)
 {
 	for (std::map<std::string, Client*>::iterator it = channel.getClientsM().begin(); it != channel.getClientsM().end(); ++it)
 	{
-		if (it->first != except.getNickname())
+		if (nickname == "" || it->first != nickname)
 			this->sendResponse(*it->second, response);
 	}
 }
