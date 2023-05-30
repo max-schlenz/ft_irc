@@ -8,7 +8,7 @@ toupper implementierung fuer invite
 - [X]  nickname wenn doppelt am anfang - entweder kicken oder richtig handlen
 - [X]  operator sollte operator bleiben nach dem joinen von anderen personen
 - [ ]  alles einmal auf Fehler durchchecken → parsing + commands
-- [ ]  modes: wenn modes +k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
+- [X]  modes: wenn modes +k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
 - [X]  kick parsing
 - [X]  quit parsing
 - [ ]  schauen was im parsing an sich noch fehlt
