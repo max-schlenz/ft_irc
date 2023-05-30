@@ -66,7 +66,6 @@ bool Server::handleClientReq(Client& client)
 
 	if (recv_len <= 0)
 		return false;
-
 	else
 	{		
 		std::string buf(buffer.begin(), buffer.begin() + recv_len);

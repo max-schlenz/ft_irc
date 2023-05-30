@@ -13,6 +13,7 @@ SRC_NAME      	=	main \
 					ServerRequest \
 					ServerSetup \
 					Client \
+					Bot \
 					misc \
 					requests \
 					Channel \
@@ -38,7 +39,7 @@ SRC_NAME      	=	main \
 					commands/pass \
 					commands/bot
 
-INC_NAME		=	Channel Client Server irc common
+INC_NAME		=	Channel Client Bot Server irc common
 
 SRC_DIR			=	src/
 OBJ_DIR			=	.obj/

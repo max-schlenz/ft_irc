@@ -5,15 +5,15 @@
 # define RECV_BUF 1024
 # define USR_LIMIT 1000
 
-# include "Client.hpp"
+# include "Bot.hpp"
 # include "common.hpp"
-# include "irc.hpp"
 # include "definitions.hpp"
+# include "Client.hpp"
+# include "Channel.hpp"
+//# include "irc.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
-
-class OwnBot;
 
 class Server {
 	public:
@@ -181,7 +181,7 @@ class Server {
 		socklen_t _saddr_in_len;
 		std::string _hostname;
 		std::string _dateString;
-		Client *_bot;
+		Bot *_bot;
 		bool _bot_on;
 		
 		std::vector<Client> _clients;

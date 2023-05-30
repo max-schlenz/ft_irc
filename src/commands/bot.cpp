@@ -8,8 +8,7 @@ void Server::bot(std::vector<std::string> reqVec, Client &client)
 	{
 		if (!this->_bot_on && toUpperCase(reqVec[1]) == "ON")
 		{
-			this->_bot = new Client;
-			this->_bot->createBot();
+			this->_bot = new Bot(this->_port, this->_hostname);
 			response = "CAP LS\r\nPING :127.0.0.1\r\n";
 			send(this->_bot->getSock(),response.c_str(), response.size(), 0);
 			this->_bot_on = true;
@@ -25,7 +24,7 @@ void Server::bot(std::vector<std::string> reqVec, Client &client)
 			if (itChannel != this->_channelsM.end())
 			{
 				response = JOIN((*this->_bot), reqVec[1]);
-				this->sendResponse(*(this->_bot), response);
+				this->sendResponse(*this->_bot, response);
 			}
 
 		}

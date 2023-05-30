@@ -30,5 +30,7 @@
 void			error_handling(const char *fmt, ...);
 std::string		toLowerCase(const std::string& str);
 std::string		toUpperCase(const std::string& str);
+void			createLst(std::string req, std::vector<std::string>& lst);
+std::string		itos(const int i);
 
 #endif

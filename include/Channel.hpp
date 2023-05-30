@@ -3,9 +3,13 @@
 # define CHANNEL_HPP
 
 # include "common.hpp"
-# include "irc.hpp"
+// # include "irc.hpp"
+// # include "Server.hpp"
+
+#include "Client.hpp"
 
 class Client;
+//class Bot;
 
 class Channel
 {

@@ -3,43 +3,24 @@
 # define IRC_H
 
 # include "common.hpp"
-# include "Channel.hpp"
-# include "Client.hpp"
-# include "Server.hpp"
 # include "definitions.hpp"
 
-# define BOLD "\033[1m"
-# define RED "\033[0;31m"
-# define BRED "\033[1;31m"
-# define GREEN "\033[0;32m"
-# define BGREEN "\033[1;32m"
-# define BLUE "\033[0;34m"
-# define BBLUE "\033[1;34m"
-# define GRAY "\033[0m\033[38;5;239m"
-# define BWHITE "\033[1;37m"
-# define YELLOW "\033[0;33m"
-# define PINK "\033[38;5;206m"
-# define RESET "\033[0m"
 
-# define VERBOSE 0
-# define BUFFER 512
-
-# define PRNT std::cout << BRED << "HERE" << RESET << std::endl
  
-class Server;
+//class Server;
 
-void	exiting(int error_code);
-bool	channelExists(std::string channelName, std::vector<Channel> channels);
-std::string itos(const int i);
-void printReqVec(std::vector<std::string> reqVec);
+// void	exiting(int error_code);
+// bool	channelExists(std::string channelName, std::vector<Channel> channels);
 
-std::string msg_0 (std::string host, std::string num, std::string msg);
-std::string msg_1 (std::string host, std::string num, std::string arg1, std::string msg);
-std::string msg_2 (std::string host, std::string num, std::string arg1, std::string arg2, std::string msg);
-std::string msg_3 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string msg);
-std::string msg_4 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string msg);
-std::string msg_3_(std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3);
-std::string	getMsg(int sock, const char *fmt, ...);
-void createLst(std::string req, std::vector<std::string>& lst);
+// void printReqVec(std::vector<std::string> reqVec);
+
+// std::string msg_0 (std::string host, std::string num, std::string msg);
+// std::string msg_1 (std::string host, std::string num, std::string arg1, std::string msg);
+// std::string msg_2 (std::string host, std::string num, std::string arg1, std::string arg2, std::string msg);
+// std::string msg_3 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string msg);
+// std::string msg_4 (std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3, std::string arg4, std::string msg);
+// std::string msg_3_(std::string host, std::string num, std::string arg1, std::string arg2, std::string arg3);
+// std::string	getMsg(int sock, const char *fmt, ...);
+
 
 #endif
