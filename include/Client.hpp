@@ -3,10 +3,10 @@
 # define CLIENT_HPP
 
 # include "common.hpp"
-# include "irc.hpp"
+//# include "irc.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
-
+# include "Channel.hpp"
 class Channel;
 
 class Client

@@ -1,9 +1,10 @@
 #include "common.hpp"
-#include "irc.hpp"
+# include "Server.hpp"
 #include <climits>
 #include <cstdarg>
 
 bool g_run = true;
+bool g_bot = false;
 
 void	error_handling(const char *fmt, ...)
 {
@@ -42,7 +43,8 @@ void	error_handling(const char *fmt, ...)
 
 void sigint_handler(int sig) 
 {
-	error_handling("Exiting program...");
+	std::cout << YELLOW << "\nExiting program..." << RESET << std::endl;
+	g_run = false;
 }
 
 void sig()

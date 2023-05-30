@@ -1,6 +1,6 @@
-# include "irc.hpp"
 # include "definitions.hpp"
 # include "Client.hpp"
+# include "Server.hpp"
 
 static bool checkChars(std::string name)
 {

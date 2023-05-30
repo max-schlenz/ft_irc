@@ -11,7 +11,7 @@ void Server::sendUserList(Client& client, Channel& channel)
 		std::map<std::string, Client*>::iterator itOp = channel.getOperators().find(it->first);
 		if (itOp != channel.getOperators().end())
 		{
-			std::cout << GREEN << itOp->first << std::endl;
+			// std::cout << GREEN << itOp->first << std::endl;
 			response += "@";
 		}
  		response += it->first;
@@ -22,8 +22,9 @@ void Server::sendUserList(Client& client, Channel& channel)
 		else
 		{
 			response += "\r\n";
-			std::cout << BRED << response << RESET << std::endl;
-			send(client.getSock(), response.c_str(), response.size(), 0);
+			// std::cout << BRED << response << RESET << std::flush;
+			this->sendResponse(client, response);
+			// send(client.getSock(), response.c_str(), response.size(), 0);
 		}
 	}
 	response = E_ENDOFNAMES(client, channel.getName());
@@ -68,6 +69,8 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 	// this->sendMsgToAll(client, response);
 	for (std::vector<Client>::iterator itClient = this->_clients.begin(); itClient != this->_clients.end(); ++itClient)
 		this->sendUserList(*itClient, itChannel->second);
+	response = "PRIVMSG " + channelName + " : (:-|k- Welcome " + client.getNickname() + " to channel " + channelName + "!\r\n";
+	this->sendResponse(*this->_bot, response);
 }
 
 

@@ -3,6 +3,24 @@
 
 # include "common.hpp"
 
+# define BOLD "\033[1m"
+# define RED "\033[0;31m"
+# define BRED "\033[1;31m"
+# define GREEN "\033[0;32m"
+# define BGREEN "\033[1;32m"
+# define BLUE "\033[0;34m"
+# define BBLUE "\033[1;34m"
+# define GRAY "\033[0m\033[38;5;239m"
+# define BWHITE "\033[1;37m"
+# define YELLOW "\033[0;33m"
+# define PINK "\033[38;5;206m"
+# define RESET "\033[0m"
+
+# define VERBOSE 0
+# define BUFFER 512
+
+# define PRNT std::cout << BRED << "HERE" << RESET << std::endl
+
 # define RPL_WELCOME 001
 # define RPL_YOURHOST 002
 # define RPL_CREATED 003
