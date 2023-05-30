@@ -11,10 +11,8 @@ void Server::invite(std::vector<std::string> reqVec, Client &client)
 			{
 				if (itClient->first == reqVec[1])
 				{
-					response = R_SENDINV(client, reqVec[1], reqVec[2]);
-					this->sendResponse(*itClient->second, response);
-					response = R_INVITING(client, reqVec[1], reqVec[2]);
-					this->sendResponse(client, response);
+					this->sendResponse(*itClient->second, R_SENDINV(client, reqVec[1], reqVec[2]));
+					this->sendResponse(client, R_INVITING(client, reqVec[1], reqVec[2]));
 				}
 			}
 		}

@@ -46,8 +46,7 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 		else if (modes[i] == '+')
 			operation = "+";
 		else if (!validUserMode(modes[i])) {
-			response = E_UMODEUNKNOWNFLAG(client, modes[i]);
-			this->sendResponse(client, response);
+			this->sendResponse(client, E_UMODEUNKNOWNFLAG(client, modes[i]));
 		} else {
 			if (operation == "-" && !client.getModeI() || operation == "+" && client.getModeI())
 				continue;

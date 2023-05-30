@@ -27,7 +27,5 @@ void Server::quit(std::vector<std::string> reqVec, Client& client)
 				message += "\r\n";
 		}
 	}
-	std::string response = E_QUIT(client, message);
-	this->sendResponse(client, message);
-	// this->sendMsgToAll(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 QUIT :" + quitMessage + "\r\n");
+	this->sendResponse(client, E_QUIT(client, message));
 }

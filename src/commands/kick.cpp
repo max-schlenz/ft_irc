@@ -16,7 +16,6 @@ void Server::kick(std::vector<std::string> reqVec, Client &client)
 			std::map<std::string, Client*>::iterator itClient = itChannel->second.getClientsM().find(reqVec[2]);
 			if (itClient != itChannel->second.getClientsM().end())
 			{
-				// std::string response = ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 KICK " + itChannel->second.getName() + " " + itClient->second->getNickname() + " :Kick message\r\n";
 				response = E_KICK(client, itChannel->second.getName(), itClient->second->getNickname());
 				for (std::vector<std::string>::iterator it = reqVec.begin() + 3; it != reqVec.end(); ++it)
 				{
@@ -33,22 +32,11 @@ void Server::kick(std::vector<std::string> reqVec, Client &client)
 				return ;
 			}
 			else
-			{
-				response = E_USERNOTINCHANNEL(client, reqVec[2], reqVec[1]);
-				this->sendResponse(client, response);
-				// return this->sendResponse(client, "441 " + client.getNickname() + " " + reqVec[2] + " " + reqVec[1] + " :They aren't on that channel\r\n");
-			}
+				return this->sendResponse(client, E_USERNOTINCHANNEL(client, reqVec[2], reqVec[1]));
 		}
 		else
-		{
-			response = E_NOSUCHCHANNEL(client, reqVec[1]);
-			this->sendResponse(client, response);
-			// this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 403 " + client.getNickname() + " " + reqVec[2] + " " + reqVec[1] + " :No such channel\r\n");
-		}
+			this->sendResponse(client, E_NOSUCHCHANNEL(client, reqVec[1]));
 	}
 	else
-	{
-		response = E_NEEDMOREPARAMS(client, reqVec[0]);
-		this->sendResponse(client, response);
-	}
+		this->sendResponse(client, E_NEEDMOREPARAMS(client, reqVec[0]));
 }

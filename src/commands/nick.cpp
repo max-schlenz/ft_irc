@@ -63,7 +63,6 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 			for (std::map<std::string, Channel>::iterator it = this->_channelsM.begin(); it != this->_channelsM.end(); ++it) //this is not workin yet
 			{
 				if (it->second.getClientsM().find(oldNick) != it->second.getClientsM().end()) {
-					std::cout << "dellll" << std::endl;
 					it->second.getClientsM().erase(oldNick);
 					it->second.getClientsM()[newNick] = &client;
 				}
