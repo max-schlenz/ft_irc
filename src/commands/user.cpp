@@ -15,8 +15,9 @@ void Server::user(std::vector<std::string> reqVec, Client &client)
 
 		client.setRealname(realName);
 	}
-	if (!client.getUserRegistered())
+	if (!client.getUserRegistered() && client.getNickRegistered())
 		this->welcome(client);
+	client.setUserRegistered(true);
 }
 
 void Server::welcome(Client &client)
@@ -26,8 +27,6 @@ void Server::welcome(Client &client)
 		response += NOTICE("*** Looking up your hostname...\r\n");
 		response += NOTICE("*** No Ident response\r\n");
 		response += WELCOME(client);
-
 		this->sendResponse(client, response);
-		client.setUserRegistered(true);
 	}
 }

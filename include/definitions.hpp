@@ -147,9 +147,12 @@
 
 // KICK
 # define E_USERNOTINCHANNEL(client, nick, channel) (SHORT_NAME + " 441 " + client.getNickname() + " " + nick + " " + channel + " :They aren't on that channel\r\n")
-# define E_KICK(client, channel, nick) (LONG_NAME(client) + " KICK " + channel + " " + nick + " ")
+# define E_KICK(client, channel, nick) (LONG_NAME(client) + " KICK " + channel + " " + nick + "\r\n")
 
 // QUIT
 # define E_QUIT(client, message) (LONG_NAME(client) + " QUIT :" + message + "\r\n")
+
+// PRIVMSG
+# define E_CANNOTSENDTOCHAN(client, channel) (SHORT_NAME + " 404 " + client.getNickname() + " " + channel + " :Cannot send to channel\r\n")
 
 #endif
