@@ -14,10 +14,10 @@ void Server::user(std::vector<std::string> reqVec, Client &client)
 			realName += *it;
 
 		client.setRealname(realName);
+		if (!client.getUserRegistered() && client.getNickRegistered())
+			this->welcome(client);
+		client.setUserRegistered(true);
 	}
-	if (!client.getUserRegistered() && client.getNickRegistered())
-		this->welcome(client);
-	client.setUserRegistered(true);
 }
 
 void Server::welcome(Client &client)
