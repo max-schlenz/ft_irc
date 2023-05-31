@@ -10,7 +10,6 @@
 # include "definitions.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
-//# include "irc.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 typedef struct protoent protoent;
@@ -108,7 +107,6 @@ class Server {
 		std::map<std::string, Channel>& getChannelsM() {
 			return this->_channelsM;
 		}
-		// Server(int port, std::vector<pollfd>& poll_fds);
 		Server(int port, std::string key);
 		Server(int port, int sock, sockaddr_in _saddr_in) : _sock(sock), _port(port), _saddr_in(_saddr_in){};
 		~Server();
@@ -164,9 +162,6 @@ class Server {
 		bool isValidClient(std::string name);
 		Client& getClientName(std::string name);
 
-		// void sendMsgToAll(std::string message);
-		// void sendMsgToAllInChannel(Client &client, std::string message);
-
 	private:
 		int	_sock;
 		int _port;
@@ -187,7 +182,6 @@ class Server {
 		std::vector<Client> _clients;
 		std::map<std::string, Client*> _clientsM;
 
-		// std::vector<Channel> _channels;
 		std::map<std::string, Channel> _channelsM;
 
 		std::vector<pollfd> _pollFds;
