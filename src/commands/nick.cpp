@@ -56,8 +56,8 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 			}
 			client.setNickRegistered(true);
 			this->_clientsM[client.getNickname()] = &client;
-			if (!client.getUserRegistered())
-				this->welcome(client);
+			// if (!client.getUserRegistered())
+			// 	this->welcome(client);
 		} else {
 			this->sendMsgToAll(client, ":" + oldNick + "!" + client.getUsername() + "@127.0.0.1 NICK " + reqVec[1] + "\r\n");
 			for (std::map<std::string, Channel>::iterator it = this->_channelsM.begin(); it != this->_channelsM.end(); ++it) //this is not workin yet

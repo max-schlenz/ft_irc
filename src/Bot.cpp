@@ -8,9 +8,9 @@ Bot::Bot(int port, std::string ipStr)
 	int			sock;
 
 	g_bot = true;
-	this->_nickName = "bot";
-	this->_userName = "bot";
-	this->_realName = "bot";
+	this->_nickName = "Bot";
+	this->_userName = "Bot";
+	this->_realName = "Bot";
 	this->_kick = false;
 	if(((this->_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0))
 	{
@@ -46,9 +46,9 @@ Bot::Bot()
 	int			sock;
 	std::string	ipStr = "127.0.0.1";
 
-	this->_nickName = "bot";
-	this->_userName = "bot";
-	this->_realName = "bot";
+	this->_nickName = "Bot";
+	this->_userName = "Bot";
+	this->_realName = "Bot";
 	this->_kick = false;
 	if(((this->_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0))
 		error_handling("[-] Error, bot socket invalid!");
