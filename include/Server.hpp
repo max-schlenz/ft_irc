@@ -213,8 +213,9 @@ class Server {
 		void sendNewNickReq(std::vector<std::string> reqVec, Client& client);
 		bool checkKick(std::vector<std::string> reqVec, Client &client);
 		void partAllChannels(Client& client);
+		void handleModeL(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation);
 };
 
-bool		channelPrivNeed(Channel channel, std::string nickname, char mode);
-
+bool	channelPrivNeed(Channel channel, std::string nickname, char mode);
+int		ft_stoi(std::string str);
 #endif

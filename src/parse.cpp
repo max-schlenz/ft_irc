@@ -179,6 +179,8 @@ static std::string getChannelModes(Channel& channel)
 		modes += "i";
 	if (channel.getModes()['t'])
 		modes += "t";
+	if (channel.getModes()['l'])
+		modes += "l";
 	return modes;
 }
 
