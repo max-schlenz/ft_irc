@@ -69,7 +69,7 @@
 # define WELCOME_251(client) (std::string(":" SERV_ADDR " 251 ") + client.getNickname() + " :There are " + itos(this->_clientsM.size()) + " users and 0 invisible on 1 server(s)\r\n")
 # define WELCOME_252(client) (std::string(":" SERV_ADDR " 252 ") + client.getNickname() + " " + itos(this->_num_ops) + " :IRC Operators online\r\n")
 # define WELCOME_253(client) (std::string(":" SERV_ADDR " 253 ") + client.getNickname() + " 0 :Unknown connection(s)\r\n")
-# define WELCOME_254(client) (std::string(":" SERV_ADDR " 254 ") + client.getNickname() + " " + itos(this->_num_channels) + " :Channels formed\r\n")
+# define WELCOME_254(client) (std::string(":" SERV_ADDR " 254 ") + client.getNickname() + " " + itos(this->_channelsM.size()) + " :Channels formed\r\n")
 # define WELCOME_265(client) (std::string(":" SERV_ADDR " 265 ") + client.getNickname() + " " + itos(this->_clientsM.size()) + " " + itos(USR_LIMIT) + " :Current local users " + itos(this->_clientsM.size()) + ", max " + itos(USR_LIMIT) + "\r\n")
 
 # define WELCOME_375(client) (std::string(":" SERV_ADDR " 375 ") + client.getNickname() + " :- Message of the day\r\n")

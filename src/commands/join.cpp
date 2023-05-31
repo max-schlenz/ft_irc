@@ -44,6 +44,7 @@ void Server::joinAsOperator(std::string channelName, Client &client)
 	this->_channelsM[channelName].getClientsM()[client.getNickname()] = &client;
 	this->_channelsM[channelName].addOperator(client.getNickname(), &client);
 	client.getJoinedChannels()[channelName] = &this->_channelsM[channelName];
+	this->_num_channels++;
 
 	std::string response = JOIN(client, channelName);
 	this->sendResponse(client, response);
@@ -69,14 +70,22 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 	// this->sendMsgToAll(client, response);
 	for (std::vector<Client>::iterator itClient = this->_clients.begin(); itClient != this->_clients.end(); ++itClient)
 		this->sendUserList(*itClient, itChannel->second);
-	response = "PRIVMSG " + channelName + " : (:-|k- Welcome " + client.getNickname() + " to channel " + channelName + "!\r\n";
-	this->sendResponse(*this->_bot, response);
+	if (this->_bot_on && (client.getNickname() != this->_bot->getNickname()))
+	{
+		response = "PRIVMSG " + channelName + " : Welcome " + client.getNickname() + " to channel " + channelName + "!\r\n";
+		this->sendResponse(*this->_bot, response);
+	}
 }
 
 
 //: NickName!UserName@host JOIN #channelname
 void Server::join(std::vector<std::string> reqVec, Client &client)
 {
+	if (!client.getNickRegistered())
+	{
+		std::cout << YELLOW << "Client not registered!" << RESET << std::endl;
+		return;
+	}
 	if (checkJoin(reqVec, client))
 	{
 		bool passGiven = false;
