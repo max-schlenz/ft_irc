@@ -3,7 +3,6 @@
 # define CLIENT_HPP
 
 # include "common.hpp"
-//# include "irc.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
 # include "Channel.hpp"
@@ -27,9 +26,6 @@ class Client
 		void setUserRegistered(bool registered){
 			this->_user_registered = registered;
 		}
-		/*void setModeO(bool mode_o){
-			this->_mode_o = mode_o;
-		}*/
 		void setModeI(bool mode_i){
 			this->_mode_i = mode_i;
 		}
@@ -58,9 +54,6 @@ class Client
 		const std::string& getNickname() const {
 			return (this->_nickName);
 		}
-		/*const bool& getModeO() const {
-			return (this->_mode_o);
-		}*/
 		const bool& getModeI() const {
 			return (this->_mode_i);
 		}
@@ -114,16 +107,12 @@ class Client
 		bool getConnected(){
 			return this->_connected;
 		}
-		// std::vector<std::string>& getChannelNames() {
-		// 	return this->_channelNames;
-		// }
 		
 		std::map<std::string, Channel*>& getJoinedChannels() {
 			return this->_joinedChannels;
 		}
 		void createBot();
 
-		// Client(sockaddr_in sin, socklen_t sinLen, int id, char* ipStr, pollfd& pollFd);
 		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
 		Client();
 
@@ -131,7 +120,6 @@ class Client
 		std::string _nickName;
 		std::string _userName;
 		std::string _realName;
-		// bool		_mode_o;
 		bool		_mode_i;
 		bool		_bot;
 		bool		_kick;
@@ -149,8 +137,6 @@ class Client
 
 		std::string _reqQueueBuf;
 		std::vector<std::string> _reqQueue;
-		// std::vector<Channel*> _joinedChannels;
-		// std::vector<std::string> _channelNames;
 		std::map<std::string, Channel*> _joinedChannels;
 };
 

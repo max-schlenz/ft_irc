@@ -99,7 +99,7 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 		this->sendResponse(client, response);
 		return false;
 	}
-	if (this->_channelsM[channelToInvite].getClientsM().find(reqVec[1]) != this->_channelsM[channelToInvite].getClientsM().end()) { ///not working why????
+	if (this->_channelsM[channelToInvite].getClientsM().find(reqVec[1]) != this->_channelsM[channelToInvite].getClientsM().end()) {
 		response = E_USERONCHANNEL(client, reqVec[1], channelToInvite);
 		this->sendResponse(client, response);
 		return false;

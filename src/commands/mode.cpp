@@ -1,5 +1,4 @@
 # include "Server.hpp"
-# include "irc.hpp"
 
 static bool isUserMode(std::string channelName)
 {

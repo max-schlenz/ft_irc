@@ -15,10 +15,8 @@ SRC_NAME      	=	main \
 					Client \
 					Bot \
 					misc \
-					requests \
 					Channel \
 					parse \
-					print_msg \
 					commands/capreq \
 					commands/invite \
 					commands/join \
@@ -38,7 +36,7 @@ SRC_NAME      	=	main \
 					commands/pass \
 					commands/bot \
 
-INC_NAME		=	Channel Client Bot Server irc common
+INC_NAME		=	Channel Client Bot Server common
 
 SRC_DIR			=	src/
 OBJ_DIR			=	.obj/
@@ -49,9 +47,6 @@ OBJ_FILES		=	$(addsuffix .o, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
 DEP_FILES		=	$(addsuffix .d, $(addprefix $(OBJ_DIR), $(SRC_NAME)))
 SRC_FILES		=	$(addsuffix .cpp, $(addprefix $(SRC_DIR), $(SRC_NAME)))
 INC_FILES		=	$(addsuffix .hpp, $(addprefix $(INC_DIR), $(INC_NAME)))
-
-# PCH_H			= include/common.hpp
-# PCH				= $(PCH_H).gch
 
 ifeq ($(shell uname -s),Linux)
 	OS := Linux
@@ -75,16 +70,10 @@ $(NAME): $(OBJ_DIR) $(OBJ_FILES)
 
 -include $(DEP_FILES)
 
-# $(PCH): $(PCH_H)
-# 	@mkdir -p $(OBJ_DIR)/Classes
-# 	@$(CXX) $(CXXFLAGS) -x c++-header $< -o $@
-
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)/commands
 
-# $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(PCH)
-# 	@$(CXX) $(CXXFLAGS) -include $(PCH_H) -I $(INC_DIR) -c $< -o $@
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
 	@$(CXX) $(CXXFLAGS) -c $< -I$(INC_DIR) -o $@
 

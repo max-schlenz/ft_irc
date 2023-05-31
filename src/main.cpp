@@ -85,7 +85,12 @@ int main(int argc, char **argv)
 	int port = 6667;
 	std::string key;
 
-	if (argc == 1)
+	if (argc > 3)
+	{
+		std::cout << BRED << "\nError!\n" << RED << "[Usage]:\t./ircserv <port> <password>\n" << RESET << std::endl;
+		return (0);
+	}
+	else if (argc == 1)
 	{
 		std::cout << BRED << "Error!\n" << RED << "[Usage]: ./ircserv <port> <password>\n" << RESET << std::endl;
 		std::cout << YELLOW << "Starting on default port 6667 without a password!" << std::endl;
