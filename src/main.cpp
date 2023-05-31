@@ -53,27 +53,31 @@ void sig()
 		error_handling("Error: Unable to register signal handler!");
 }
 
-static int to_int(char const *s)
+int to_int(char const *s)
 {
 	long long result = 0;
 
 	if ( s == NULL || *s == '\0' )
-		return(error_handling("null or empty string argument"), -1);
-	bool negate = (s[0] == '-');
-	if ( *s == '+' || *s == '-' ) 
-		++s;
-	if ( *s == '\0')
-		return(error_handling("sign character only."), -1);
+	{
+		std::cout << BRED << "null or empty string argument." << std::endl;
+		return -1;
+	}
 	while(*s)
 	{
 		if ( *s < '0' || *s > '9' )
-			return(error_handling("invalid input string."), -1);
+		{
+			std::cout << BRED << "invalid input string." << std::endl;
+			return -1;
+		}
 		result = result * 10  - (*s - '0');
 		++s;
 	}
 	if ( result > INT_MAX || result < INT_MIN )
-		return(error_handling("invalid number."), -1);
-	return negate ? result : -result;
+		{
+			std::cout << BRED << "invalid number." << std::endl;
+			return -1;
+		}
+	return -result;
 }
 
 int main(int argc, char **argv)
@@ -89,6 +93,8 @@ int main(int argc, char **argv)
 	}
 	else
 		port = to_int(argv[1]);
+	if (port == -1)
+		return (0);
 	if (argc == 3)
 	{
 		std::cout << "\nPassword required!\n" << std::endl;
