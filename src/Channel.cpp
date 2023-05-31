@@ -15,8 +15,3 @@ Channel::Channel(): _name(""), _topic(""), _password("")
 	this->_modes['k'] = false;
 	this->_modes['t'] = false;
 }
-
-Channel::~Channel()
-{
-	;
-}

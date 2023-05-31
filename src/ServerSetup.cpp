@@ -58,7 +58,6 @@ void Server::setCommands()
 {
 	this->_commands["JOIN"] = &Server::join;
 	this->_commands["PART"] = &Server::part;
-	this->_commands["LEAVE"] = &Server::leave;
 	this->_commands["NICK"] = &Server::nick;
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["MODE"] = &Server::mode;
