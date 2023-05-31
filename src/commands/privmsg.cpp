@@ -59,7 +59,6 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 				}
 				response += "\r\n";
 				this->sendResponse(*itClient->second, response);
-				std::cout << BRED << "1 " << response << std::endl;
 			}
 		}
 	}
