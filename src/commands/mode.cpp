@@ -73,7 +73,7 @@ void Server::handleModeK(std::vector<std::string> reqVec, Client &client, unsign
 		this->_channelsM[channelName].setPassword("");
 		this->sendResponse(client, response);
 	}
-	if ((!argsGiven || args_counter >= args.size())) {
+	else if ((!argsGiven || args_counter >= args.size())) {
 		response = E_INVALIDMODEPARAM(client, channelName, "k", "You must specify a parameter for the key mode. Syntax: <key>");
 		this->sendResponse(client, response);
 	}
@@ -99,19 +99,17 @@ void Server::handleModeL(std::vector<std::string> reqVec, Client &client, unsign
 		argsGiven = true;
 	}
 	if (operation == "-" && channelModes['l']) {
-		response = CHANNELMODEARGS(client, channelName, operation + "l", "");
+		response = CHANNELMODEARGS(client, channelName, operation + "l", itos(this->_channelsM[channelName].getLimit()));
 		this->_channelsM[channelName].setModeFalse('l');
 		this->_channelsM[channelName].setLimit(42);
 		this->sendResponse(client, response);
 	}
-	if ((!argsGiven || args_counter >= args.size())) {
+	else if ((!argsGiven || args_counter >= args.size())) {
 		response = E_INVALIDMODEPARAM(client, channelName, "l", "You must specify a parameter for the limit mode. Syntax: <limit>");
 		this->sendResponse(client, response);
 	}
 	else if (argsGiven && args_counter < args.size()) {
-		std::cout << "in here 1" << std::endl;
 		if (operation == "+") {
-			std::cout << "in here 2" << std::endl;
 			int limit = ft_stoi(args[args_counter]);
 			response = CHANNELMODEARGS(client, channelName, operation + "l", itos(limit));
 			this->_channelsM[channelName].setModeTrue('l');
