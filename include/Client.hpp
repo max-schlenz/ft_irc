@@ -108,6 +108,12 @@ class Client
 			return this->_pollFd;
 		}
 
+		void setConnected(bool connected){
+			this->_connected = connected;
+		}
+		bool getConnected(){
+			return this->_connected;
+		}
 		// std::vector<std::string>& getChannelNames() {
 		// 	return this->_channelNames;
 		// }
@@ -130,6 +136,7 @@ class Client
 		bool		_bot;
 		bool		_kick;
 		bool		_pass;
+		bool		_connected;
 		std::string _hostname;
 		int 		_sock;
 		sockaddr_in _saddr_in;

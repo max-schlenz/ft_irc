@@ -22,6 +22,7 @@ void Server::acceptClient()
 
 void Server::disconnectClient(Client& client, int i)
 {
+	client.setConnected(false);
 	this->partAllChannels(client);
 	close(client.getSock());
 	close(this->_pollFds[i].fd);

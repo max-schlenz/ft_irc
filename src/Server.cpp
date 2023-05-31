@@ -21,7 +21,8 @@ void Server::sendMsgToAll(Client &client, std::string message)
 void Server::sendResponse(Client &client, const std::string& response)
 {
 	std::cout << PINK << response << RESET << std::flush;
-	send(client.getSock(), response.c_str(), response.size(), 0);
+	if (client.getConnected())
+		send(client.getSock(), response.c_str(), response.size(), 0);
 }
 
 bool Server::isValidClient(std::string name)
