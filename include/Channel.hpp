@@ -25,8 +25,7 @@ class Channel
 		void setPassword(std::string password){
 			this->_password = password;
 		}
-
-		Channel(std::string topic, std::string password) : num_clients(0) {
+		Channel(std::string topic, std::string password) {
 			this->_topic = topic;
 			this->_password = password;
 		}
@@ -65,7 +64,6 @@ class Channel
 		std::string	_topic;
 		std::string	_password;
 		unsigned int	_limit;
-		int			num_clients;
 		std::map<char, bool>		_modes;
 		std::map<std::string, Client*> _operators;
 		std::map<std::string, Client*> _clientsM;
