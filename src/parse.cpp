@@ -116,7 +116,7 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 		this->sendResponse(client, response);
 		return false;
 	}
-	if (channelPrivNeed(this->_channelsM[channelToInvite], client.getNickname(), 'i')) {
+	if (channelPrivNeed(this->_channelsM[channelToInvite], client.getNickname(), 'o')) {
 		response = E_CHANOPRIVSNEEDED(client, channelToInvite);
 		this->sendResponse(client, response);
 	 	return false;
