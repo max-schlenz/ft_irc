@@ -77,8 +77,7 @@ class Channel
 		Channel(std::string name);
 		// Channel(): _name(""), _topic(""), _password(""), _modes(""), _limit(0), mode_i(false), mode_t(false), mode_k(false), mode_o(false), num_clients(0) {};
 		Channel();
-		~Channel();
-
+		
 	private:
 		std::string	_name;
 		std::string	_topic;

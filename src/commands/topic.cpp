@@ -1,9 +1,5 @@
 #include "Server.hpp"
 
-// /TOPIC #channelname :New topic	- set topic
-// /TOPIC #channelname	- get topic
-//
-//: nickname!~username@hostname TOPIC #channelname :New topic\r\n
 void Server::topic(std::vector<std::string> reqVec, Client &client)
 {
 	if (checkTopic(reqVec, client))

@@ -1,10 +1,5 @@
 #include "Server.hpp"
 
-//: NICK!USER@host PRIVMSG <recipient> :<text>
-// PRIVMSG <recipient>{,<recipient>} <text to be sent>
-//
-//PRIVMSG User1 :DCC SEND file 2130706433 60052 4
-//
 void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 {
 	if (reqVec.size() > 3 && reqVec[2] == ":\1DCC" && reqVec[3] == "SEND")
@@ -20,7 +15,6 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 				std::map<std::string, Channel>::iterator itRecChan = this->_channelsM.find(*itRecipient);
 				if (itRecChan != this->_channelsM.end())
 				{
-					// CHECK IF IN CHANNEL
 					std::map<std::string, Channel *>::iterator itChannel = client.getJoinedChannels().find(*itRecipient);
 					if (itChannel == client.getJoinedChannels().end())
 					{

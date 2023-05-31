@@ -39,7 +39,6 @@ Bot::Bot(int port, std::string ipStr)
 	}
 }
 
-
 Bot::Bot()
 {
 	int			port = 6667;
@@ -64,10 +63,4 @@ Bot::Bot()
 	}
 	fcntl(this->_sock, F_SETFL, O_NONBLOCK);
 	std::cout << GREEN << "Bot connected." << RESET << std::endl;
-}
-
-Bot::~Bot()
-{
-	;
-	// std::cout << GREEN << "Client DEFAULT CONST" RESET << std::endl;
 }

@@ -1,7 +1,5 @@
 #include "Server.hpp"
 
-// NOTICE <nickname|channel> :<message>
-//
 void Server::notice(std::vector<std::string> reqVec, Client &client)
 {
 	if (reqVec.size() > 2)

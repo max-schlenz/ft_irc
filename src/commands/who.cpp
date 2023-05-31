@@ -1,8 +1,5 @@
 #include "Server.hpp"
 
-// 352 response for each user matching channel
-// 315 end of /WHO
-// 401 error ERR_NOSUCHNICK
 void Server::who(std::vector<std::string> reqVec, Client &client)
 {
 	std::string response;
@@ -11,7 +8,7 @@ void Server::who(std::vector<std::string> reqVec, Client &client)
 	{
 		std::map<std::string, Channel>::iterator itChannel = this->_channelsM.find(reqVec[1]);
 
-		if (itChannel != this->_channelsM.end()) // channel found
+		if (itChannel != this->_channelsM.end())
 		{
 			for (std::map<std::string, Client *>::iterator itClient = itChannel->second.getClientsM().begin(); itClient != itChannel->second.getClientsM().end(); ++itClient)
 				this->sendResponse(client, ":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 352 " + client.getNickname() + " " + itChannel->second.getName() + " " + itClient->second->getUsername() + "@" + itClient->second->getHostname() + " " + itClient->second->getHostname() + " " + itClient->second->getNickname() + " H :0 " + itClient->second->getRealName() + "\r\n");
@@ -38,6 +35,6 @@ void Server::who(std::vector<std::string> reqVec, Client &client)
 			}
 		}
 	}
-	if (reqVec.size() > 1) // if channel not found
+	if (reqVec.size() > 1)
 		this->sendResponse(client, E_NOSUCHCHANNEL(client, reqVec[1]));
 }

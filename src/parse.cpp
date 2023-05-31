@@ -27,7 +27,7 @@ bool channelPrivNeed(Channel channel, std::string nickname, char mode)
 bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 {
 	std::string response;
-	if (reqVec.size() <= 1) { // there is no need fot this if as the irssi client already handles that case
+	if (reqVec.size() <= 1) {
 		response = E_NONICKNAMEGIVEN(client);
 		this->sendResponse(client, response);
 		return false;
@@ -73,18 +73,6 @@ bool Server::checkPart(std::vector<std::string> reqVec, Client& client)
 		this->sendResponse(client, response);
 		return false;
 	}
-	//! needs to iterate over list of channels to part
-	// std::string channelToPart = reqVec[1];
-	// if (this->_channelsM.find(channelToPart) == this->_channelsM.end()) {
-	// 	response = E_NOSUCHCHANNEL(client, channelToPart);
-	// 	this->sendResponse(client, response);
-	// 	return false;
-	// }
-	// if (client.getJoinedChannels().find(channelToPart) == client.getJoinedChannels().end()) {
-	// 	response = E_NOTONCHANNEL(client, channelToPart);
-	// 	this->sendResponse(client, response);
-	// 	return false;
-	// }
 	return true;
 }
 
@@ -251,7 +239,6 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 
 bool Server::checkKick(std::vector<std::string> reqVec, Client &client)
 {
-	// kick channel user
 	std::string channelName;
 	std::string response;
 

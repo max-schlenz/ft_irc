@@ -18,7 +18,7 @@ Server::Server(int port, std::string key)
 	this->_port = port;
 	this->_saddr_in.sin_family = AF_INET;
 	this->_saddr_in.sin_port = htons(this->_port);
-	this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);//inet_addr(AF_INET);
+	this->_saddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
 	this->_saddr_in_len = sizeof(this->_saddr_in);
 	this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
 	this->_num_channels = 0;
@@ -58,27 +58,24 @@ void Server::setCommands()
 {
 	this->_commands["JOIN"] = &Server::join;
 	this->_commands["PART"] = &Server::part;
-	this->_commands["LEAVE"] = &Server::leave;
+	this->_commands["LEAVE"] = &Server::part;
 	this->_commands["NICK"] = &Server::nick;
 	this->_commands["TOPIC"] = &Server::topic;
 	this->_commands["MODE"] = &Server::mode;
 	this->_commands["KICK"] = &Server::kick;
-	this->_commands["invite"] = &Server::invite;   // lets pleaase make a to lower in the beginning for all ; but lc /join shouldn't work :D 
-	this->_commands["INVITE"] = &Server::invite;   // how about this? :) 
+	this->_commands["INVITE"] = &Server::invite;
 	this->_commands["USER"] = &Server::user;
 	this->_commands["PING"] = &Server::ping;
 	this->_commands["WHOIS"] = &Server::whois;
 	this->_commands["CAP"] = &Server::capreq;
 	this->_commands["PASS"] = &Server::pass;
 	this->_commands["PRIVMSG"] = &Server::privmsg;
-	this->_commands["MSG"] = &Server::privmsg; // same as privmsg
+	this->_commands["MSG"] = &Server::privmsg;
 	this->_commands["WHO"] = &Server::who;
 	this->_commands["NOTICE"] = &Server::notice;
 	this->_commands["QUIT"] = &Server::quit;
 	this->_commands["BOT"] = &Server::bot;
-
-	this->_commands["DBG"] = &Server::dbgPrint;
 	this->_commands["DCC"] = &Server::dcc;
 
-	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
+	this->_commands["DBG"] = &Server::dbgPrint;
 }

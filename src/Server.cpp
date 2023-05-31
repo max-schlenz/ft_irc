@@ -21,7 +21,8 @@ void Server::sendMsgToAll(Client &client, std::string message)
 void Server::sendResponse(Client &client, const std::string& response)
 {
 	std::cout << PINK << response << RESET << std::flush;
-	send(client.getSock(), response.c_str(), response.size(), 0);
+	if (client.getConnected())
+		send(client.getSock(), response.c_str(), response.size(), 0);
 }
 
 bool Server::isValidClient(std::string name)
@@ -34,7 +35,6 @@ bool Server::isValidClient(std::string name)
 	return false;
 }
 
-// ! use isValidClient() as protection !
 Client &Server::getClientName(std::string name)
 {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)

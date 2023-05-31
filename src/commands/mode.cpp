@@ -36,7 +36,6 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 	std::string response;
 	std::string operation = "+";
 	int i = 1;
-	std::cout << " mode in here\n" << std::endl;
 	if (modes[0] != '-') {
 		operation = "-";
 	}
@@ -140,12 +139,10 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 		argsGiven = true;
 	}
 	int i = 1;
-	std::cout << " mode in here\n" << std::endl;
 	if (modes[0] != '-') {
 		operation = "-";
 	}
 	for (int i = 0; i < modes.size(); ++i) {
-		std::cout << modes[i] << argsGiven << (args_counter < args.size()) << !channelModes['k'] << std::endl;
 		if (modes[i] == '-') {
 			operation = "-";
 			continue;

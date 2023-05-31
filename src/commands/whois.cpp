@@ -1,7 +1,5 @@
 #include "Server.hpp"
 
-// 311 -> found
-// 401 -> not found
 void Server::whois(std::vector<std::string> reqVec, Client &client)
 {
 	if (reqVec.size() > 1 && this->isValidClient(reqVec[1]))
