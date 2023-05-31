@@ -2,6 +2,61 @@
 
 extern bool g_run;
 
+void Server::setSock(int sock) {
+	this->_sock = sock;
+};
+void Server::setPort(int port) {
+	this->_port = port;
+};
+void Server::setKey(std::string key) {
+	this->_key_set = true;
+	this->_key = key;
+};
+void Server::setSin(sockaddr_in _saddr_in) {
+	this->_saddr_in_len = sizeof(_saddr_in);
+	this->_saddr_in = _saddr_in;
+};
+void Server::setSinLen(socklen_t _saddr_in_len) {
+	this->_saddr_in_len = _saddr_in_len;
+}
+
+const int& Server::getSock() const {
+	return (this->_sock);
+}
+const int& Server::getPort() const {
+	return (this->_port);
+}
+const std::string& Server::getHostname() const {
+	return (this->_hostname);
+}
+const std::string& Server::getKey() const {
+	return (this->_key);
+}
+const bool& Server::getKeySet() const {
+	return (this->_key_set);
+}
+sockaddr_in& Server::getSin() {
+	return (this->_saddr_in);
+}
+Client& Server::getClient(int i) {
+	return (this->_clients[i]);
+}
+std::vector<Client>& Server::getClients() {
+	return this->_clients;
+}
+std::string& Server::getDateString() {
+	return this->_dateString;
+}
+socklen_t& Server::getSinLen() {
+	return (this->_saddr_in_len);
+}
+std::map<std::string, Client*>& Server::getClientsM() {
+	return this->_clientsM;
+}
+std::map<std::string, Channel>& Server::getChannelsM() {
+	return this->_channelsM;
+}
+
 bool Server::isUserInChannel(Client &client, std::string channelName)
 {
 	if (client.getJoinedChannels().find(channelName) != client.getJoinedChannels().end())

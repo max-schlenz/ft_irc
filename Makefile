@@ -3,7 +3,7 @@ MAKEFLAGS 		=	--no-print-directory
 DATE			=	$$(date +%Y/%m/%d)
 
 CXX				=	c++
-CXXFLAGS		=	-std=c++98 -MMD -g -Wall -Wextra -Werror 
+CXXFLAGS		=	-std=c++98 -MMD -Wall -Wextra -Werror 
 
 NAME			=	ircserv
 
