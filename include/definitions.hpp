@@ -94,7 +94,7 @@
 # define E_INVITEONLYCHAN(client, channelName) (SHORT_NAME + " 473 " + client.getHostname() + " " + channelName + " :Cannot join channel (+i)\r\n")
 # define E_CANNOTJOINCHAN(client, channelName) (SHORT_NAME + " 471 " + client.getHostname() + " " + channelName + " :Cannot join channel (+l) - channel is full\r\n")
 //MODES
-# define R_CHANNELMODEIS(nickname, channel, modes) (SHORT_NAME + " 324 " + nickname + " " + channel + " " + modes + "\r\n")
+# define R_CHANNELMODEIS(nickname, channel, modes, args) (SHORT_NAME + " 324 " + nickname + " " + channel + " " + modes + " " + args + "\r\n")
 # define R_UMODEIS(client, modes) (SHORT_NAME + " 221 " + client.getHostname() + " " + modes + "\r\n")  //client IP needed
 // # define E_CHANOPRIVSNEEDED(client, channelName) (SHORT_NAME + " 482 " + client.getHostname() + " " + client.getNickname() + " " + channelName + " :You're not channel operator\r\n")
 # define E_CHANOPRIVSNEEDED(client, channelName) (SHORT_NAME + " 482 " + client.getHostname() + " " + channelName + " :You're not channel operator\r\n")
