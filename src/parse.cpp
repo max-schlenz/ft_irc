@@ -27,7 +27,7 @@ bool channelPrivNeed(Channel channel, std::string nickname, char mode)
 bool Server::checkNick(std::vector<std::string> reqVec, Client& client)
 {
 	std::string response;
-	if (reqVec.size() <= 1) { // there is no need fot this if as the irssi client already handles that case
+	if (reqVec.size() <= 1) {
 		response = E_NONICKNAMEGIVEN(client);
 		this->sendResponse(client, response);
 		return false;
@@ -251,7 +251,6 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 
 bool Server::checkKick(std::vector<std::string> reqVec, Client &client)
 {
-	// kick channel user
 	std::string channelName;
 	std::string response;
 

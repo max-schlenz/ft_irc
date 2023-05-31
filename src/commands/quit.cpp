@@ -15,7 +15,6 @@ void Server::partAllChannels(Client& client)
 	}
 }
 
-//":" + client.getNickname() + "!~" + client.getUsername() + "@127.0.0.1 QUIT :" + quitMsg + "\r\n";
 void Server::quit(std::vector<std::string> reqVec, Client& client)
 {
 	this->partAllChannels(client);

@@ -86,7 +86,6 @@ int main(int argc, char **argv)
 		std::cout << BRED << "Error!\n" << RED << "[Usage]: ./ircserv <port> <password>\n" << RESET << std::endl;
 		std::cout << YELLOW << "Starting on default port 6667 without a password!" << std::endl;
 		std::cout << "Exit here if you don't want this behavior!\n" << RESET << std::endl;
-		// return (42);
 	}
 	else
 		port = to_int(argv[1]);
