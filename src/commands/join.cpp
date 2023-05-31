@@ -98,6 +98,8 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 			else if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 				this->joinAsOperator(channelsToJoin[i], client);
 			else {
+				if (this->_channelsM[channelsToJoin[i]].getModes()['l'] && this->_channelsM[channelsToJoin[i]].getClientsM().size() >= this->_channelsM[channelsToJoin[i]].getLimit())
+					return this->sendResponse(client, E_CANNOTJOINCHAN(client, channelsToJoin[i]));
 				if (this->_channelsM[channelsToJoin[i]].getModes()['i']) {
 					response = E_INVITEONLYCHAN(client, channelsToJoin[i]);
 					this->sendResponse(client, response);
