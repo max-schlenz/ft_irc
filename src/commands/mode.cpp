@@ -23,7 +23,7 @@ static bool validChannelMode(std::map<char, bool> modes, char mode) {
 
 static bool modeAlreadyOper(std::string operation, char mode, Channel& channel)
 {
-	if (operation == "-" && !channel.getModes()[mode] || (operation == "+" && channel.getModes()[mode] && mode != 'k' && mode != 'l'))
+	if ((operation == "-" && !channel.getModes()[mode]) || (operation == "+" && channel.getModes()[mode] && mode != 'k' && mode != 'l'))
 		return true;
 	return false;
 }
@@ -34,11 +34,10 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 	std::string clientIp = client.getHostname();
 	std::string response;
 	std::string operation = "+";
-	int i = 1;
 	if (modes[0] != '-') {
 		operation = "-";
 	}
-	for (int i = 0; i < modes.size(); ++i) {
+	for (unsigned int i = 0; i < modes.size(); ++i) {
 		if (modes[i] == '-')
 			operation = "-";
 		else if (modes[i] == '+')
@@ -46,7 +45,7 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 		else if (!validUserMode(modes[i])) {
 			this->sendResponse(client, E_UMODEUNKNOWNFLAG(client, modes[i]));
 		} else {
-			if (operation == "-" && !client.getModeI() || operation == "+" && client.getModeI())
+			if ((operation == "-" && !client.getModeI()) || (operation == "+" && client.getModeI()))
 				continue;
 			client.setModeI(true);
 			if (operation == "-")
@@ -57,7 +56,7 @@ void Server::userMode(std::vector<std::string> reqVec, Client &client)
 	}
 }
 
-void Server::handleModeK(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation)
+void Server::handleModeK(std::vector<std::string> reqVec, Client &client, unsigned int args_counter, std::string operation)
 {
 	std::string channelName = reqVec[1];
 	std::vector<std::string> args;
@@ -88,7 +87,7 @@ void Server::handleModeK(std::vector<std::string> reqVec, Client &client, int i,
 	}
 }
 
-void Server::handleModeL(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation)
+void Server::handleModeL(std::vector<std::string> reqVec, Client &client, unsigned int args_counter, std::string operation)
 {
 	std::string channelName = reqVec[1];
 	std::vector<std::string> args;
@@ -122,7 +121,7 @@ void Server::handleModeL(std::vector<std::string> reqVec, Client &client, int i,
 	}
 }
 
-void Server::handleModeO(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation)
+void Server::handleModeO(std::vector<std::string> reqVec, Client &client, unsigned int args_counter, std::string operation)
 {
 	std::string channelName = reqVec[1];
 	std::vector<std::string> args;
@@ -134,7 +133,7 @@ void Server::handleModeO(std::vector<std::string> reqVec, Client &client, int i,
 
 	if ((args.size() == 0 || args_counter >= args.size()))
 		response = E_INVALIDMODEPARAM(client, channelName, "o", "You must specify a parameter for the operator mode. Syntax: <nick>");
-	else if (operation == "-" && operators.find(args[args_counter]) == operators.end() || operation == "+" && operators.find(args[args_counter]) != operators.end())
+	else if ((operation == "-" && operators.find(args[args_counter]) == operators.end()) || (operation == "+" && operators.find(args[args_counter]) != operators.end()))
 		return;
 	else {
 		if (this->_channelsM[channelName].getOperators().find(args[args_counter]) != this->_channelsM[channelName].getOperators().end())
@@ -166,16 +165,13 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 	std::vector<std::string> args;
 	int args_counter = 0;
 	std::string operation = "+";
-	bool argsGiven = false;
 	if (reqVec.size() >= 4) {
 		createLst(reqVec[3], args);
-		argsGiven = true;
 	}
-	int i = 1;
 	if (modes[0] != '-') {
 		operation = "-";
 	}
-	for (int i = 0; i < modes.size(); ++i) {
+	for (unsigned int i = 0; i < modes.size(); ++i) {
 		if (modes[i] == '-') {
 			operation = "-";
 			continue;
@@ -197,12 +193,12 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 			continue;
 		}
 		else if (modes[i] == 'k')
-			this->handleModeK(reqVec, client, i, args_counter, operation);
+			this->handleModeK(reqVec, client, args_counter, operation);
 		else if (modes[i] == 'o') {
-			this->handleModeO(reqVec, client, i, args_counter, operation);
+			this->handleModeO(reqVec, client, args_counter, operation);
 		}
 		else if (modes[i] == 'l') {
-			this->handleModeL(reqVec, client, i, args_counter, operation);
+			this->handleModeL(reqVec, client, args_counter, operation);
 		}
 		else {
 			if (operation == "-")

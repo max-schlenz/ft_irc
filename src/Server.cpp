@@ -37,13 +37,13 @@ bool Server::isValidClient(std::string name)
 
 Client &Server::getClientName(std::string name)
 {
-	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	std::vector<Client>::iterator it = this->_clients.begin();
+	for (; it != this->_clients.end(); ++it)
 	{
 		if (it->getNickname() == name)
 			return (*it);
 	}
-	Client *err;
-	return *(err);
+	return *it;
 }
 
 void Server::startServer()
@@ -55,7 +55,7 @@ void Server::startServer()
 	while (g_run)
 	{
 		res = poll(this->_pollFds.data(), this->_pollFds.size(), 500);
-		for (int i = 0; res > 0 && i < this->_pollFds.size(); i++)
+		for (unsigned int i = 0; res > 0 && i < this->_pollFds.size(); i++)
 		{
 			if (this->_pollFds[i].fd == this->_sock && this->_pollFds[i].revents & POLLIN && this->_clients.size() < USR_LIMIT)
 				this->acceptClient();

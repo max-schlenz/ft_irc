@@ -8,8 +8,10 @@ class Bot: public Client
 	private:
 		int	_specialBot;
 	public:
-		Bot(int port, std::string ipStr);
+		Bot(int port);
 		Bot();
+		Bot(const Bot& other);
+		~Bot();
 };
 
 #endif

@@ -6,7 +6,7 @@ static bool checkChars(std::string name)
 {
 	std::string notAllowed = ",*?!@.";
 	std::string notStart = ":$#&";
-	for (int i = 0; i < notAllowed.size(); ++i) {
+	for (unsigned int i = 0; i < notAllowed.size(); ++i) {
 		if (name.find(notAllowed[i]) != std::string::npos)
 			return false;
 	}
@@ -187,7 +187,7 @@ static std::string getChannelModes(Channel& channel)
 static std::string getModeArgs(std::string modes, Channel& channel)
 {
 	std::string args = "";
-	for (int i = 1; i < modes.size(); ++i) {
+	for (unsigned int i = 1; i < modes.size(); ++i) {
 		if (modes[i] == 'k')
 			args += channel.getPassword() + " ";
 		if (modes[i] == 'l')

@@ -3,10 +3,8 @@
 
 extern bool g_bot;
 
-Bot::Bot(int port, std::string ipStr)
+Bot::Bot(int port)
 {
-	int			sock;
-
 	g_bot = true;
 	this->_nickName = "Bot";
 	this->_userName = "Bot";
@@ -42,7 +40,6 @@ Bot::Bot(int port, std::string ipStr)
 Bot::Bot()
 {
 	int			port = 6667;
-	int			sock;
 	std::string	ipStr = "127.0.0.1";
 
 	this->_nickName = "Bot";
@@ -63,4 +60,9 @@ Bot::Bot()
 	}
 	fcntl(this->_sock, F_SETFL, O_NONBLOCK);
 	std::cout << GREEN << "Bot connected." << RESET << std::endl;
+}
+
+Bot::~Bot()
+{
+	
 }

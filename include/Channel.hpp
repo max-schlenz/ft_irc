@@ -26,14 +26,14 @@ class Channel
 			this->_password = password;
 		}
 
-		Channel(std::string topic, std::string password, int size) : num_clients(0) {
+		Channel(std::string topic, std::string password) : num_clients(0) {
 			this->_topic = topic;
 			this->_password = password;
 		}
 		std::string getName() {
 			return this->_name;
 		}
-		void setLimit(int limit) {
+		void setLimit(unsigned int limit) {
 			this->_limit = limit;
 		}
 		void setModeTrue(char mode) {
@@ -48,7 +48,7 @@ class Channel
 		void removeOperator(std::string name) {
 			this->_operators.erase(name);
 		}
-		int getLimit() {
+		unsigned int getLimit() {
 			return this->_limit;
 		}
 		std::map<char, bool> getModes() {
@@ -64,7 +64,7 @@ class Channel
 		std::string	_name;
 		std::string	_topic;
 		std::string	_password;
-		int			_limit;
+		unsigned int	_limit;
 		int			num_clients;
 		std::map<char, bool>		_modes;
 		std::map<std::string, Client*> _operators;

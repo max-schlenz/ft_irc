@@ -54,6 +54,8 @@ int ft_stoi(std::string str)
 
 void Server::dbgPrint(std::vector<std::string> reqVec, Client &client)
 {
+	(void)client;
+	(void)reqVec;
 	std::map<std::string, Client*>::iterator clientIt = this->_clientsM.begin();
 	std::map<std::string, Channel>::iterator channelIt = this->_channelsM.begin();
 

@@ -43,7 +43,8 @@ void	error_handling(const char *fmt, ...)
 
 void sigint_handler(int sig) 
 {
-	std::cout << YELLOW << "\nExiting program..." << RESET << std::endl;
+	(void)sig;
+		std::cout << YELLOW << "\nExiting program..." << RESET << std::endl;
 	g_run = false;
 }
 

@@ -17,7 +17,7 @@ void Server::bot(std::vector<std::string> reqVec, Client &client)
 	{
 		if (!this->_bot_on && toUpperCase(reqVec[1]) == "ON")
 		{
-			this->_bot = new Bot(this->_port, this->_hostname);
+			this->_bot = new Bot(this->_port);
 			response = "NICK Bot\r\n";
 			send(this->_bot->getSock(),response.c_str(), response.size(), 0);
 			response = "USER Bot 0 * :bot\r\n";

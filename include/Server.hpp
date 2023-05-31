@@ -158,6 +158,8 @@ class Server {
 
 		void broadcastEvent(Client &client, Channel &channel);
 		void sendUserList(Client& client, Channel& channel);
+		
+
 
 		bool isValidClient(std::string name);
 		Client& getClientName(std::string name);
@@ -196,18 +198,18 @@ class Server {
 		bool checkJoin(std::vector<std::string> reqVec, Client& client);
 		void joinAsOperator(std::string channelName, Client &client);
 		void joinAsNormal(std::string channelName, Client &client);
-		bool checkPassword(std::string channelName, std::string password, Client& client);
+		bool checkPassword(std::string channelName, std::string password);
 		void channelMode(std::vector<std::string> reqVec, Client& client);
 		void userMode(std::vector<std::string> reqVec, Client& client);
 		bool checkChannelMode(std::vector<std::string> reqVec, Client& client);
 		void channelModeLoop(std::vector<std::string> reqVec, Client &client);
-		void handleModeK(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation);
-		void handleModeO(std::vector<std::string> reqVec, Client &client,  int i, int args_counter, std::string operation);
+		void handleModeK(std::vector<std::string> reqVec, Client &client, unsigned int args_counter, std::string operation);
+		void handleModeO(std::vector<std::string> reqVec, Client & client, unsigned int args_counter, std::string operation);
 		bool checkUserMode(std::vector<std::string> reqVec, Client& client);
 		void sendNewNickReq(std::vector<std::string> reqVec, Client& client);
 		bool checkKick(std::vector<std::string> reqVec, Client &client);
 		void partAllChannels(Client& client);
-		void handleModeL(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation);
+		void handleModeL(std::vector<std::string> reqVec, Client &client, unsigned int args_counter, std::string operation);
 };
 
 bool	channelPrivNeed(Channel channel, std::string nickname, char mode);
