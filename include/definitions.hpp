@@ -93,7 +93,8 @@
 //MODES
 # define R_CHANNELMODEIS(nickname, channel, modes) (SHORT_NAME + " 324 " + nickname + " " + channel + " " + modes + "\r\n")
 # define R_UMODEIS(client, modes) (SHORT_NAME + " 221 " + client.getHostname() + " " + modes + "\r\n")  //client IP needed
-# define E_CHANOPRIVSNEEDED(client, channelName) (SHORT_NAME + " 482 " + client.getHostname() + " " + client.getNickname() + " " + channelName + " :You're not channel operator\r\n")
+// # define E_CHANOPRIVSNEEDED(client, channelName) (SHORT_NAME + " 482 " + client.getHostname() + " " + client.getNickname() + " " + channelName + " :You're not channel operator\r\n")
+# define E_CHANOPRIVSNEEDED(client, channelName) (SHORT_NAME + " 482 " + client.getHostname() + " " + channelName + " :You're not channel operator\r\n")
 # define USERMODE(client, modeStr) (SHORT_NAME + " MODE " + client.getNickname() + " " + modeStr + ":changing mode\r\n")
 # define CHANNELMODE(client, channelName, modeStr) (SHORT_NAME + " MODE " + channelName + " " + modeStr + "\r\n")
 # define CHANNELMODEARGS(client, channelName, modeStr, args) (SHORT_NAME + " MODE " + channelName + " " + modeStr + " " + args + "\r\n")

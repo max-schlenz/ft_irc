@@ -31,8 +31,6 @@ bool Server::parseReq(Client& client, std::string request)
 		if (reqVec[0] == "QUIT")
 			return false;
 
-		// else
-		// 	std::cout << GRAY << "not recognized: " RESET << request << std::endl;
 	}
 	return true;
 }

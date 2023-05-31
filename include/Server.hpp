@@ -213,4 +213,6 @@ class Server {
 		void sendNewNickReq(std::vector<std::string> reqVec, Client& client);
 };
 
+bool		channelPrivNeed(Channel channel, std::string nickname, char mode);
+
 #endif
