@@ -5,11 +5,10 @@ clean up codebase
 toupper implementierung fuer invite
 
 ### Must be fixed
-- [ ]  Invite nur von op?
 
 ### Needs to be implemented 
 - [ ]  alles einmal auf Fehler durchchecken → parsing + commands
-- [ ]  modes: wenn modes +k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
+- [X]  modes: wenn modes +k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
 - [ ]  schauen was im parsing an sich noch fehlt
 - [ ]  alle command funktionen so umschreiben, dass entweder true oder false returned wird
 - [ ]  commands und parsing alle responses durch Macros ersetzten

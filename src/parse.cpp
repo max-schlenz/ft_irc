@@ -20,7 +20,7 @@ bool channelPrivNeed(Channel channel, std::string nickname, char mode)
 	if (channel.getModes()[mode] && channel.getOperators().find(nickname) == channel.getOperators().end())
 		return true;
 	if (mode == 'o' && channel.getOperators().find(nickname) == channel.getOperators().end())
-        return true;
+		return true;
 	return false;
 }
 
@@ -116,7 +116,7 @@ bool Server::checkInvite(std::vector<std::string> reqVec, Client& client) {
 		this->sendResponse(client, response);
 		return false;
 	}
-	if (channelPrivNeed(this->_channelsM[channelToInvite], client.getNickname(), 'i')) {
+	if (channelPrivNeed(this->_channelsM[channelToInvite], client.getNickname(), 'o')) {
 		response = E_CHANOPRIVSNEEDED(client, channelToInvite);
 		this->sendResponse(client, response);
 	 	return false;
@@ -145,7 +145,7 @@ bool Server::checkTopic(std::vector<std::string> reqVec, Client& client)
 		return false;
 	}
 	if (reqVec.size() < 3) {
-		if (this->_channelsM[channelName].getTopic() == "")
+		if (this->_channelsM[channelName].getTopic() == "" || this->_channelsM[channelName].getTopic().size() == 3)
 			response = R_NOTOPIC(client, channelName);
 		else
 			response = R_TOPIC(client, channelName, this->_channelsM[channelName].getTopic());
@@ -245,6 +245,49 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 		response = R_CHANNELMODEIS(client.getNickname(), reqVec[1], modes);
 		this->sendResponse(client, response);
 		return false;
+	}
+	return true;
+}
+
+bool Server::checkKick(std::vector<std::string> reqVec, Client &client)
+{
+	// kick channel user
+	std::string channelName;
+	std::string response;
+
+	if (reqVec.size() < 3) {
+		response = E_NEEDMOREPARAMS(client, reqVec[0]);
+		this->sendResponse(client, response);
+		return false;
+	}
+	channelName = reqVec[1];
+	if (reqVec.size() > 3) {
+		channelName = reqVec[2];
+	}
+	if (this->_channelsM.find(channelName) == this->_channelsM.end()) {
+
+		response = E_NOSUCHCHANNEL(client, reqVec[1]);
+		this->sendResponse(client, response);
+		return false;
+	}
+	if (client.getJoinedChannels().find(channelName) == client.getJoinedChannels().end()) {
+		response = E_NOTONCHANNEL(client, channelName);
+		this->sendResponse(client, response);
+		return false;
+	}
+	if (this->_clientsM.find(reqVec[2]) == this->_clientsM.end()) {
+		response = E_NOSUCHNICK(client, reqVec[2]);
+		this->sendResponse(client, response);
+		return false;
+	}
+	if (this->_channelsM[channelName].getClientsM().find(reqVec[2]) == this->_channelsM[channelName].getClientsM().end()) {
+		this->sendResponse(client, E_USERNOTINCHANNEL(client, reqVec[2], reqVec[1]));
+		return false;
+	}
+	if (channelPrivNeed(this->_channelsM[channelName], client.getNickname(), 'o')) {
+		response = E_CHANOPRIVSNEEDED(client, channelName);
+		this->sendResponse(client, response);
+	 	return false;
 	}
 	return true;
 }

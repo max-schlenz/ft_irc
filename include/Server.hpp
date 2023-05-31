@@ -211,6 +211,7 @@ class Server {
 		void handleModeO(std::vector<std::string> reqVec, Client &client,  int i, int args_counter, std::string operation);
 		bool checkUserMode(std::vector<std::string> reqVec, Client& client);
 		void sendNewNickReq(std::vector<std::string> reqVec, Client& client);
+		bool checkKick(std::vector<std::string> reqVec, Client &client);
 };
 
 bool		channelPrivNeed(Channel channel, std::string nickname, char mode);

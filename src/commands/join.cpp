@@ -97,6 +97,7 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 			createLst(reqVec[2], passwords);
 			passGiven = true;
 		}
+		std::cout << GREEN << channelsToJoin.size() << RESET << std::endl;
 		for (int i = 0; i < channelsToJoin.size(); ++i) {
 			if (client.getJoinedChannels().find(channelsToJoin[i]) != client.getJoinedChannels().end())
 				continue ;
