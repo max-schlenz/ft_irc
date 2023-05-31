@@ -50,6 +50,8 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 		{
 			if (this->_key_set && !client.getPass())
 			{
+				this->sendResponse(client, E_PASSWDMISMATCH(client));
+				this->sendResponse(client, std::string("ERROR No password provided!\r\n"));
 				std::cout << RED << "No password provided by client!" << RESET << std::endl;
 				client.setKick(true);
 				return;
