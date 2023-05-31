@@ -27,6 +27,8 @@ bool Server::parseReq(Client& client, std::string request)
 		
 		if (it != this->_commands.end() && (client.getUserRegistered() || reqVec[0] == "PASS" || reqVec[0] == "NICK" || reqVec[0] == "USER" || reqVec[0] == "CAP" || reqVec[0] == "PING" || reqVec[0] == "DBG"))
 			(this->*(it->second))(reqVec, client);
+		else
+			this->sendResponse(client, E_NOTREGISTERED(client));
 
 		if (reqVec[0] == "QUIT")
 			return false;

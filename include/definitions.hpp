@@ -60,6 +60,8 @@
 # define SHORT_NAME (std::string(":" SERV_ADDR))
 # define LONG_NAME(client) (std::string(":") + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostname())
 
+# define E_NOTREGISTERED(client) (SHORT_NAME + " 451 " + client.getNickname() + " :You have not registered\r\n")
+
 // WELCOME
 # define NOTICE(...) (std::string(":" SERV_ADDR " NOTICE * :") + __VA_ARGS__)
 # define WELCOME_001(client) (std::string(":" SERV_ADDR " 001 ") + client.getNickname() + " :Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname() + "\r\n")
