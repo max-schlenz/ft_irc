@@ -10,6 +10,7 @@ Bot::Bot(int port)
 	this->_userName = "Bot";
 	this->_realName = "Bot";
 	this->_kick = false;
+	this->_connected = true;
 	if(((this->_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0))
 	{
 		std::cout << RED << "[-] Error, bot socket invalid!" << RESET << std::flush;
