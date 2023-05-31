@@ -5,10 +5,10 @@ clean up codebase
 toupper implementierung fuer invite
 
 ### Must be fixed
-- [ ]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
-- [ ]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
-- [ ]  duplicate nickname doesnt work anymore bc nc
-- [ ]  TONI IS CUTE
+- [X]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
+- [X]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
+- [X]  duplicate nickname doesnt work anymore bc nc
+- [X]  TONI IS CUTE
 
 ### Needs to be implemented 
 - [ ]  alles einmal auf Fehler durchchecken → parsing + commands
@@ -21,7 +21,7 @@ toupper implementierung fuer invite
 ### Implemented
 - [X]  nickname wenn doppelt am anfang - entweder kicken oder richtig handlen
 - [X]  operator sollte operator bleiben nach dem joinen von anderen personen
-- [X]  kick parsing
+- [ ]  kick parsing
 - [X]  quit parsing
 - [X]  quit implementierung
 - [X]  PRIVMSG funktioniert @Max? (i think so 👀)
