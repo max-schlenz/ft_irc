@@ -24,7 +24,7 @@ static bool validChannelMode(std::map<char, bool> modes, char mode) {
 
 static bool modeAlreadyOper(std::string operation, char mode, Channel& channel)
 {
-	if (operation == "-" && !channel.getModes()[mode] || (operation == "+" && channel.getModes()[mode] && mode != 'k'))
+	if (operation == "-" && !channel.getModes()[mode] || (operation == "+" && channel.getModes()[mode] && mode != 'k' && mode != 'l'))
 		return true;
 	return false;
 }
@@ -111,13 +111,15 @@ void Server::handleModeL(std::vector<std::string> reqVec, Client &client, int i,
 		this->sendResponse(client, response);
 	}
 	else if (argsGiven && args_counter < args.size()) {
+		std::cout << "in here 1" << std::endl;
 		if (operation == "+") {
+			std::cout << "in here 2" << std::endl;
 			int limit = ft_stoi(args[args_counter]);
 			response = CHANNELMODEARGS(client, channelName, operation + "l", itos(limit));
 			this->_channelsM[channelName].setModeTrue('l');
 			this->_channelsM[channelName].setLimit(limit);
+			this->sendResponse(client, response);
 		}
-		this->sendResponse(client, response);
 	}
 }
 
