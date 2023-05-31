@@ -78,3 +78,11 @@ std::map<char, bool> Channel::getModes() {
 std::map<std::string, Client*>& Channel::getOperators() {
 	return this->_operators;
 }
+
+std::map<std::string, Client*>& Channel::getInvitedClientsM() {
+	return this->_invitedClientsM;
+}
+
+void Channel::addInvitedClient(std::string name, Client* client) {
+	this->_invitedClientsM[name] = client;
+}

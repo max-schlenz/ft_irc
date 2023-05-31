@@ -11,6 +11,8 @@ void Server::invite(std::vector<std::string> reqVec, Client &client)
 			{
 				if (itClient->first == reqVec[1])
 				{
+					std::cout << "reqVec: " << reqVec[2] << std::endl;
+					this->_channelsM[reqVec[2]].addInvitedClient(reqVec[1], &client);
 					this->sendResponse(*itClient->second, R_SENDINV(client, reqVec[1], reqVec[2]));
 					this->sendResponse(client, R_INVITING(client, reqVec[1], reqVec[2]));
 				}

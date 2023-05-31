@@ -17,6 +17,7 @@ class Channel
 		const std::string& 				getTopic() const;
 		const std::string& 				getPassword() const;
 		std::map<std::string, Client*>&	getClientsM();
+		std::map<std::string, Client*>&	getInvitedClientsM();
 		void 							setTopic(std::string topic);
 		void 							setPassword(std::string password);
 		std::string 					getName();
@@ -24,6 +25,7 @@ class Channel
 		void 							setModeTrue(char mode);
 		void 							setModeFalse(char mode);
 		void 							addOperator(std::string name, Client* client);
+		void 							addInvitedClient(std::string name, Client* client);
 		void 							removeOperator(std::string name);
 		unsigned int 					getLimit();
 		std::map<char, bool> 			getModes();
@@ -36,6 +38,7 @@ class Channel
 		unsigned int					_limit;
 		std::map<char, bool>			_modes;
 		std::map<std::string, Client*> _operators;
+		std::map<std::string, Client*> _invitedClientsM;
 		std::map<std::string, Client*> _clientsM;
 };
 
