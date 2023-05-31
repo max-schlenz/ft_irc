@@ -77,8 +77,8 @@ void Server::setCommands()
 	this->_commands["QUIT"] = &Server::quit;
 	this->_commands["BOT"] = &Server::bot;
 
-	this->_commands["dbg"] = &Server::dbgPrint;
-	this->_commands["dcc"] = &Server::dcc;
+	this->_commands["DBG"] = &Server::dbgPrint;
+	this->_commands["DCC"] = &Server::dcc;
 
 	// this->_commands["pac"] = &Server::dbgPrintAllChannels;
 }
