@@ -5,10 +5,6 @@ clean up codebase
 toupper implementierung fuer invite
 
 ### Must be fixed
-- [X]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
-- [X]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
-- [X]  duplicate nickname doesnt work anymore bc nc
-- [X]  TONI IS CUTE
 
 ### Needs to be implemented 
 - [ ]  alles einmal auf Fehler durchchecken → parsing + commands
@@ -29,6 +25,10 @@ toupper implementierung fuer invite
 - [X]  das topic beim joinen von channels anzeigen
 - [X]  wer ist op wenn der op den channel verlaesst?
 - [X]  Nachrichten im Channel werden bei mehreren Usern vorne abgeschnitten
+- [X]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
+- [X]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
+- [X]  duplicate nickname doesnt work anymore bc nc
+- [X]  Topic darf nur vom op geandert werden !
 
 ### Could get implemented
 INFO  

@@ -15,7 +15,7 @@ static bool checkChars(std::string name)
 	return true;
 }
 
-static bool channelPrivNeed(Channel channel, std::string nickname, char mode)
+bool channelPrivNeed(Channel channel, std::string nickname, char mode)
 {
 	if (channel.getModes()[mode] && channel.getOperators().find(nickname) == channel.getOperators().end())
 		return true;

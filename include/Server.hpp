@@ -214,4 +214,6 @@ class Server {
 		bool checkKick(std::vector<std::string> reqVec, Client &client);
 };
 
+bool		channelPrivNeed(Channel channel, std::string nickname, char mode);
+
 #endif
