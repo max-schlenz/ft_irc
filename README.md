@@ -5,9 +5,7 @@ clean up codebase
 toupper implementierung fuer invite
 
 ### Must be fixed
-- [X]  Nachrichten im Channel werden bei mehreren Usern vorne abgeschnitten
 - [ ]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
-- [X]  wer ist op wenn der op den channel verlaesst?
 - [ ]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
 - [ ]  duplicate nickname doesnt work anymore bc nc
 - [ ]  TONI IS CUTE
@@ -29,6 +27,8 @@ toupper implementierung fuer invite
 - [X]  PRIVMSG funktioniert @Max? (i think so 👀)
 - [X]  parting multiple channels
 - [X]  das topic beim joinen von channels anzeigen
+- [X]  wer ist op wenn der op den channel verlaesst?
+- [X]  Nachrichten im Channel werden bei mehreren Usern vorne abgeschnitten
 
 ### Could get implemented
 INFO  
