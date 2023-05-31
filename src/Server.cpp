@@ -67,4 +67,6 @@ void Server::startServer()
 			}
 		}
 	}
+	if (this->_bot_on)
+		delete this->_bot;
 }

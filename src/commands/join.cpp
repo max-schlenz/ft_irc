@@ -72,7 +72,7 @@ void Server::joinAsNormal(std::string channelName, Client &client)
 		this->sendUserList(*itClient, itChannel->second);
 	if (this->_bot_on && (client.getNickname() != this->_bot->getNickname()))
 	{
-		response = "PRIVMSG " + channelName + " : Welcome " + client.getNickname() + " to channel " + channelName + "!\r\n";
+		response = "PRIVMSG " + channelName + " :Welcome " + client.getNickname() + " to channel " + channelName + "!\r\n";
 		this->sendResponse(*this->_bot, response);
 	}
 }
