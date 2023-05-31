@@ -22,6 +22,7 @@ void Server::acceptClient()
 
 void Server::disconnectClient(Client& client, int i)
 {
+	this->partAllChannels(client);
 	close(client.getSock());
 	close(this->_pollFds[i].fd);
 	std::cout << RED << "Client " << BRED << this->_clients[i - 1].getHostname() << RED << " disconnected." << RESET << std::endl;
