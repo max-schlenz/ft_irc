@@ -35,7 +35,6 @@ bool Server::isValidClient(std::string name)
 	return false;
 }
 
-// ! use isValidClient() as protection !
 Client &Server::getClientName(std::string name)
 {
 	for (std::vector<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)

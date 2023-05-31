@@ -10,8 +10,6 @@ void Server::part(std::vector<std::string> reqVec, Client &client)
 		for (std::vector<std::string>::iterator itPartChannels = partChannels.begin(); itPartChannels != partChannels.end(); ++itPartChannels)
 		{
 			std::map<std::string, Channel *>::iterator itChannel = client.getJoinedChannels().find(*itPartChannels);
-			//! needs to iterate over list of channels to part
-	// std::string channelToPart = reqVec[1];
 			if (this->_channelsM.find(*itPartChannels) == this->_channelsM.end()) {
 				response = E_NOSUCHCHANNEL(client, *itPartChannels);
 				this->sendResponse(client, response);
