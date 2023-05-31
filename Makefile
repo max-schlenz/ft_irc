@@ -23,7 +23,6 @@ SRC_NAME      	=	main \
 					commands/invite \
 					commands/join \
 					commands/kick \
-					commands/leave \
 					commands/mode \
 					commands/nick \
 					commands/notice \
