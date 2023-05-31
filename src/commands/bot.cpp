@@ -18,9 +18,17 @@ void Server::bot(std::vector<std::string> reqVec, Client &client)
 		if (!this->_bot_on && toUpperCase(reqVec[1]) == "ON")
 		{
 			this->_bot = new Bot(this->_port);
+			if (this->_key_set)
+			{
+				response = "PASS :" + this->_key + "\r\n";
+				send(this->_bot->getSock(),response.c_str(), response.size(), 0);
+				usleep(100);
+			}
 			response = "NICK Bot\r\n";
 			send(this->_bot->getSock(),response.c_str(), response.size(), 0);
 			response = "USER Bot 0 * :bot\r\n";
+			send(this->_bot->getSock(),response.c_str(), response.size(), 0);
+			response = "PING Bot 127.0.0.1\r\n";
 			send(this->_bot->getSock(),response.c_str(), response.size(), 0);
 			std::map<std::string, Channel>::iterator it;
 			for (it = _channelsM.begin(); it != _channelsM.end(); ++it)
@@ -40,5 +48,4 @@ void Server::bot(std::vector<std::string> reqVec, Client &client)
 			}
 		}
 	}
-	
 }
