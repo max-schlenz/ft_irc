@@ -11,10 +11,6 @@ void Server::nick(std::vector<std::string> reqVec, Client &client)
 	{
 		std::string oldNick = client.getNickname();
 		std::string newNick = reqVec[1];
- 		/*if (this->_clientsM.size() != 0 && this->_clientsM.find(newNick) != this->_clientsM.end()) {
-			this->sendNewNickReq(reqVec, client);
-			return;
-		}	*/
 		client.setNickname(newNick);
 		std::string response;
 		if (!client.getNickRegistered())

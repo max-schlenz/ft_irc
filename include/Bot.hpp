@@ -10,7 +10,6 @@ class Bot: public Client
 	public:
 		Bot(int port, std::string ipStr);
 		Bot();
-
 };
 
 #endif
