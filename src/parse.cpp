@@ -184,6 +184,18 @@ static std::string getChannelModes(Channel& channel)
 	return modes;
 }
 
+static std::string getModeArgs(std::string modes, Channel& channel)
+{
+	std::string args = "";
+	for (int i = 1; i < modes.size(); ++i) {
+		if (modes[i] == 'k')
+			args += channel.getPassword() + " ";
+		if (modes[i] == 'l')
+			args += itos(channel.getLimit()) + " ";
+	}
+	return args;
+}
+
 bool Server::checkUserMode(std::vector<std::string> reqVec, Client& client)
 {
 	std::string clientIp = client.getHostname();
@@ -232,7 +244,8 @@ bool Server::checkChannelMode(std::vector<std::string> reqVec, Client& client)
 	}
 	if (reqVec.size() < 3) {
 		std::string modes = getChannelModes(this->_channelsM[channelName]);
-		response = R_CHANNELMODEIS(client.getNickname(), reqVec[1], modes);
+		std::string args = getModeArgs(modes, this->_channelsM[channelName]);
+		response = R_CHANNELMODEIS(client.getNickname(), reqVec[1], modes, args);
 		this->sendResponse(client, response);
 		return false;
 	}
