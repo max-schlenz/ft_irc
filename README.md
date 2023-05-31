@@ -5,9 +5,9 @@ clean up codebase
 toupper implementierung fuer invite
 
 ### Must be fixed
-- [ ]  Nachrichten im Channel werden bei mehreren Usern vorne abgeschnitten
+- [X]  Nachrichten im Channel werden bei mehreren Usern vorne abgeschnitten
 - [ ]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
-- [ ]  wer ist op wenn der op den channel verlaesst?
+- [X]  wer ist op wenn der op den channel verlaesst?
 - [ ]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
 
 ### Needs to be implemented 
