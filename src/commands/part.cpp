@@ -17,12 +17,13 @@ void Server::part(std::vector<std::string> reqVec, Client &client)
 
 				std::string response = PART(client, *itPartChannels);
 				this->sendResponse(client, response);
-				this->sendMsgToAll(client, response);
 
 				std::map<std::string, Client *>::iterator itClient = channel->getClientsM().find(client.getNickname());
 				if (itClient != itChannel->second->getClientsM().end())
+				{
+					this->sendMsgToAllInChannel(*itChannel->second, response, client.getNickname());
 					channel->getClientsM().erase(itClient->second->getNickname());
-
+				}
 				size_t numClients = client.getJoinedChannels()[*itPartChannels]->getClientsM().size();
 
 				client.getJoinedChannels().erase(*itPartChannels);

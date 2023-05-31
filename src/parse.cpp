@@ -143,7 +143,7 @@ bool Server::checkTopic(std::vector<std::string> reqVec, Client& client)
 		return false;
 	}
 	if (reqVec.size() < 3) {
-		if (this->_channelsM[channelName].getTopic() == "")
+		if (this->_channelsM[channelName].getTopic() == "" || this->_channelsM[channelName].getTopic().size() == 3)
 			response = R_NOTOPIC(client, channelName);
 		else
 			response = R_TOPIC(client, channelName, this->_channelsM[channelName].getTopic());

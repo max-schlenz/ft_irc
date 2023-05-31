@@ -20,22 +20,20 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 				std::map<std::string, Channel>::iterator itRecChan = this->_channelsM.find(*itRecipient);
 				if (itRecChan != this->_channelsM.end())
 				{
+					std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + *itRecipient + " :";
+					if (reqVec[2].length() > 1)
+						reqVec[2] = reqVec[2].substr(1);
+					for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
+					{
+						response += *itVec;
+						if (itVec + 1 != reqVec.end())
+							response += " ";
+					}
+					response += "\r\n";
 					for (std::map<std::string, Client*>::iterator itRecChanClient = itRecChan->second.getClientsM().begin(); itRecChanClient != itRecChan->second.getClientsM().end(); ++itRecChanClient)
 					{
 						if (itRecChanClient->first != client.getNickname() && isUserInChannel(*itRecChanClient->second, *itRecipient))
-						{
-							std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + *itRecipient + " :";
-							if (reqVec[2].length() > 1)
-								reqVec[2] = reqVec[2].substr(1);
-							for (std::vector<std::string>::iterator itVec = reqVec.begin() + 2; itVec != reqVec.end(); ++itVec)
-							{
-								response += *itVec;
-								if (itVec + 1 != reqVec.end())
-									response += " ";
-							}
-							response += "\r\n";
 							this->sendResponse(*itRecChanClient->second, response);
-						}
 					}
 				}
 				continue;
@@ -61,6 +59,7 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 				}
 				response += "\r\n";
 				this->sendResponse(*itClient->second, response);
+				std::cout << BRED << "1 " << response << std::endl;
 			}
 		}
 	}
