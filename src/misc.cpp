@@ -44,6 +44,14 @@ void Server::sendMsgToAllInChannel(Channel& channel, const std::string& response
 	}
 }
 
+int ft_stoi(std::string str)
+{
+    std::istringstream iss(str);
+    int num;
+    iss >> num;
+    return num;
+}
+
 void Server::dbgPrint(std::vector<std::string> reqVec, Client &client)
 {
 	std::map<std::string, Client*>::iterator clientIt = this->_clientsM.begin();

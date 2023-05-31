@@ -89,6 +89,38 @@ void Server::handleModeK(std::vector<std::string> reqVec, Client &client, int i,
 	}
 }
 
+void Server::handleModeL(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation)
+{
+	std::string channelName = reqVec[1];
+	std::vector<std::string> args;
+	std::map<char, bool> channelModes = this->_channelsM[channelName].getModes();
+	std::string response;
+	bool argsGiven = false;
+	if (reqVec.size() >= 4) {
+		createLst(reqVec[3], args);
+		argsGiven = true;
+	}
+	if (operation == "-" && channelModes['l']) {
+		response = CHANNELMODEARGS(client, channelName, operation + "l", "");
+		this->_channelsM[channelName].setModeFalse('l');
+		this->_channelsM[channelName].setLimit(42);
+		this->sendResponse(client, response);
+	}
+	if ((!argsGiven || args_counter >= args.size())) {
+		response = E_INVALIDMODEPARAM(client, channelName, "l", "You must specify a parameter for the limit mode. Syntax: <limit>");
+		this->sendResponse(client, response);
+	}
+	else if (argsGiven && args_counter < args.size()) {
+		if (operation == "+") {
+			int limit = ft_stoi(args[args_counter]);
+			response = CHANNELMODEARGS(client, channelName, operation + "l", itos(limit));
+			this->_channelsM[channelName].setModeTrue('l');
+			this->_channelsM[channelName].setLimit(limit);
+		}
+		this->sendResponse(client, response);
+	}
+}
+
 void Server::handleModeO(std::vector<std::string> reqVec, Client &client, int i, int args_counter, std::string operation)
 {
 	std::string channelName = reqVec[1];
@@ -167,6 +199,9 @@ void Server::channelModeLoop(std::vector<std::string> reqVec, Client &client)
 			this->handleModeK(reqVec, client, i, args_counter, operation);
 		else if (modes[i] == 'o') {
 			this->handleModeO(reqVec, client, i, args_counter, operation);
+		}
+		else if (modes[i] == 'l') {
+			this->handleModeL(reqVec, client, i, args_counter, operation);
 		}
 		else {
 			if (operation == "-")
