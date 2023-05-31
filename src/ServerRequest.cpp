@@ -25,7 +25,7 @@ bool Server::parseReq(Client& client, std::string request)
 		reqVec[0] = toUpperCase(reqVec[0]);
 		std::map<std::string, void(Server::*)(std::vector<std::string> reqVec, Client& client)>::iterator it = this->_commands.find(reqVec[0]);
 		
-		if (it != this->_commands.end() && (client.getUserRegistered() || reqVec[0] == "NICK" || reqVec[0] == "USER" || reqVec[0] == "CAP" || reqVec[0] == "PING" || reqVec[0] == "DBG"))
+		if (it != this->_commands.end() && (client.getUserRegistered() || reqVec[0] == "PASS" || reqVec[0] == "NICK" || reqVec[0] == "USER" || reqVec[0] == "CAP" || reqVec[0] == "PING" || reqVec[0] == "DBG"))
 			(this->*(it->second))(reqVec, client);
 
 		if (reqVec[0] == "QUIT")

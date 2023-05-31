@@ -15,6 +15,7 @@ void Server::pass(std::vector<std::string> reqVec, Client &client)
 		else
 		{
 			this->sendResponse(client, E_PASSWDMISMATCH(client));
+			this->sendResponse(client, std::string("ERROR Wrong password!\r\n"));
 			client.setKick(true);
 		}
 	}
