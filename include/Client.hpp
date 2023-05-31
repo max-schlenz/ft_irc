@@ -3,141 +3,79 @@
 # define CLIENT_HPP
 
 # include "common.hpp"
+# include "Channel.hpp"
 
 typedef struct sockaddr_in sockaddr_in;
-# include "Channel.hpp"
+
 class Channel;
 
 class Client
 {
 	public:
-		void setUsername(std::string username){
-			this->_userName = username;
-		}
-		void setNickname(std::string nickname){
-			this->_nickName = nickname;
-		}
-		void setRealname(std::string realname){
-			this->_realName = realname;
-		}
-		void setNickRegistered(bool registered){
-			this->_nick_registered = registered;
-		}
-		void setUserRegistered(bool registered){
-			this->_user_registered = registered;
-		}
-		void setModeI(bool mode_i){
-			this->_mode_i = mode_i;
-		}
-		void setIpstr(){
-			this->_hostname = inet_ntoa(this->_saddr_in.sin_addr);
-		}
-		void setSock(int sock){
-			this->_sock = sock;
-		}
-		void setKick(bool kick){
-			this->_kick = kick;
-		}
-		void setPass(bool pass){
-			this->_pass = pass;
-		}
-		void setSin(sockaddr_in& sin){
-			this->_saddr_in_len = sizeof(sin);
-			this->_saddr_in = sin;
-		}
-		void setSinLen(socklen_t sinLen) {
-			this->_saddr_in_len = sinLen;
-		}
-		const std::string& getUsername() const {
-			return (this->_userName);
-		}
-		const std::string& getNickname() const {
-			return (this->_nickName);
-		}
-		const bool& getModeI() const {
-			return (this->_mode_i);
-		}
-		const bool& getPass() const {
-			return (this->_pass);
-		}
-		const bool& getKick() const {
-			return (this->_kick);
-		}
-		const std::string& getHostname() const {
-			return (this->_hostname);
-		}
-		const int& getSock() const {
-			return (this->_sock);
-		}
-		sockaddr_in& getSin() {
-			return (this->_saddr_in);
-		}
-		socklen_t& getSinLen() {
-			return (this->_saddr_in_len);
-		}
-		std::vector<std::string>& getReqQueue() {
-			return this->_reqQueue;
-		}
-		void setReqQueue(std::vector<std::string> reqQueue) {
-			this->_reqQueue = reqQueue;
-		}
-		std::string getUsername() {
-			return this->_userName;
-		}
-		std::string getNickname() {
-			return this->_nickName;
-		}
-		bool getNickRegistered(){
-			return this->_nick_registered;
-		}
-		bool getUserRegistered(){
-			return this->_user_registered;
-		}
-		std::string& getReqQueueBuf(){
-			return this->_reqQueueBuf;
-		}
-		std::string getRealName();
-		pollfd& getPollFd() {
-			return this->_pollFd;
-		}
 
-		void setConnected(bool connected){
-			this->_connected = connected;
-		}
-		bool getConnected(){
-			return this->_connected;
-		}
-		
-		std::map<std::string, Channel*>& getJoinedChannels() {
-			return this->_joinedChannels;
-		}
-		void createBot();
+	Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
+	Client();
 
-		Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd);
-		Client();
+	void 								setUsername(std::string username);	
+	void 								setNickname(std::string nickname);
+	void 								setRealname(std::string realname);
+	void 								setNickRegistered(bool registered);
+	void 								setUserRegistered(bool registered);
+	void 								setModeI(bool mode_i);
+	void 								setIpstr();
+	void 								setSock(int sock);
+	void 								setKick(bool kick);
+	void 								setPass(bool pass);
+	void 								setSin(sockaddr_in& sin);
+	void 								setSinLen(socklen_t sinLen);
+	void								setReqQueue(std::vector<std::string> reqQueue); 
+	void								setConnected(bool connected);
+
+	const bool& 						getModeI() const;
+	const bool&							getPass() const;
+	const bool&							getKick() const;
+	const int&							getSock() const;
+
+	sockaddr_in& 						getSin();
+	socklen_t&							getSinLen();
+	const std::string&					getUsername() const; 
+	const std::string&					getNickname() const;
+	const std::string&					getHostname() const;
+	bool								getNickRegistered();
+	bool								getUserRegistered();
+	bool								getConnected();
+	
+	std::string&						getReqQueueBuf();
+	std::string&						getRealName();
+	pollfd&								getPollFd();
+
+	std::vector<std::string>&			getReqQueue(); 
+	std::map<std::string, Channel*>&	getJoinedChannels();
+
+	void								createBot();
 
 	protected:
-		std::string _nickName;
-		std::string _userName;
-		std::string _realName;
-		bool		_mode_i;
-		bool		_bot;
-		bool		_kick;
-		bool		_pass;
-		bool		_connected;
-		std::string _hostname;
-		int 		_sock;
-		sockaddr_in _saddr_in;
-		socklen_t _saddr_in_len;
+		std::string 					_nickName;
+		std::string 					_userName;
+		std::string 					_realName;
+		std::string 					_hostname;
+
+		bool							_mode_i;
+		bool							_bot;
+		bool							_kick;
+		bool							_pass;
+		bool							_connected;
+		bool							_nick_registered;
+		bool							_user_registered;
 		
-		pollfd _pollFd;
-
-		bool _nick_registered;
-		bool _user_registered;
-
-		std::string _reqQueueBuf;
-		std::vector<std::string> _reqQueue;
-		std::map<std::string, Channel*> _joinedChannels;
+		int 							_sock;
+		sockaddr_in 					_saddr_in;
+		socklen_t						_saddr_in_len;
+		pollfd							_pollFd;
+		
+		std::string						_reqQueueBuf;
+		std::vector<std::string>		_reqQueue;
+		std::map<std::string, Channel*>	_joinedChannels;
 };
 
 #endif
