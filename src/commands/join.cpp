@@ -100,7 +100,11 @@ void Server::join(std::vector<std::string> reqVec, Client &client)
 		for (int i = 0; i < channelsToJoin.size(); ++i) {
 			if (client.getJoinedChannels().find(channelsToJoin[i]) != client.getJoinedChannels().end())
 				continue ;
-			if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
+			if (channelsToJoin[i][0] != '#') {
+				response = E_NOSUCHCHANNEL(client, channelsToJoin[i]);
+				this->sendResponse(client, response);
+			}
+			else if (this->_channelsM.find(channelsToJoin[i]) == this->_channelsM.end())
 				this->joinAsOperator(channelsToJoin[i], client);
 			else {
 				if (this->_channelsM[channelsToJoin[i]].getModes()['i']) {
