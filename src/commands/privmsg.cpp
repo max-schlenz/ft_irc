@@ -20,6 +20,14 @@ void Server::privmsg(std::vector<std::string> reqVec, Client &client)
 				std::map<std::string, Channel>::iterator itRecChan = this->_channelsM.find(*itRecipient);
 				if (itRecChan != this->_channelsM.end())
 				{
+					// CHECK IF IN CHANNEL
+					std::map<std::string, Channel *>::iterator itChannel = client.getJoinedChannels().find(*itRecipient);
+					if (itChannel == client.getJoinedChannels().end())
+					{
+						std::cout << BRED << "User <" << client.getNickname() << "> is not in channel " << *itRecipient << RESET << std::endl;
+						this->sendResponse(client, E_CANNOTSENDTOCHAN(client, *itRecipient));
+						continue;
+					}
 					std::string response = ":" + client.getNickname() + "!" + client.getUsername() + "@127.0.0.1 PRIVMSG " + *itRecipient + " :";
 					if (reqVec[2].length() > 1)
 						reqVec[2] = reqVec[2].substr(1);
