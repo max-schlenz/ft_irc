@@ -9,6 +9,8 @@ toupper implementierung fuer invite
 - [ ]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
 - [X]  wer ist op wenn der op den channel verlaesst?
 - [ ]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
+- [ ]  duplicate nickname doesnt work anymore bc nc
+- [ ]  TONI IS CUTE
 
 ### Needs to be implemented 
 - [ ]  alles einmal auf Fehler durchchecken → parsing + commands
