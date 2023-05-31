@@ -7,7 +7,7 @@ std::string Client::getRealName()
 }
 
 Client::Client(sockaddr_in sin, int sock, std::string ipStr, pollfd pollFd)
-	: _pollFd(pollFd), _saddr_in(sin), _sock(sock), _hostname(ipStr), _nickName("default"), _userName("default"), _realName("default"), _kick(false), _nick_registered(false), _user_registered(false), _mode_i(true), _pass(false), _connected(true)
+	: _nickName("default"), _userName("default"), _realName("default"), _mode_i(true), _kick(false),  _pass(false), _connected(true), _hostname(ipStr), _sock(sock), _saddr_in(sin), _pollFd(pollFd), _nick_registered(false), _user_registered(false)
 {
 	std::cout << GREEN << "Client " << BGREEN << this->_hostname << GREEN << " connected." << RESET << std::endl;
 }
