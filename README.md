@@ -1,41 +1,4 @@
-# ft_irc
-
-### Needs Fixing
-clean up codebase
-toupper implementierung fuer invite
-
-### Must be fixed
-
-### Needs to be implemented 
-- [ ]  alles einmal auf Fehler durchchecken → parsing + commands
-- [X]  modes: wenn modes +k auf 123 gesetzt wird und man es dann mit dem falschen Passwort wieder löschen will e.g. -k 12 → diese Fehlermeldung fehlt noch. (mode.cpp Zeile 89 das was im else steht)
-- [ ]  schauen was im parsing an sich noch fehlt
-- [ ]  alle command funktionen so umschreiben, dass entweder true oder false returned wird
-- [ ]  commands und parsing alle responses durch Macros ersetzten
-- [ ]  topic mit nem leeren String muss das topic loeschen -> "TOPIC #test :"
-
-### Implemented
-- [X]  nickname wenn doppelt am anfang - entweder kicken oder richtig handlen
-- [X]  operator sollte operator bleiben nach dem joinen von anderen personen
-- [X]  kick parsing
-- [X]  quit parsing
-- [X]  quit implementierung
-- [X]  PRIVMSG funktioniert @Max? (i think so 👀)
-- [X]  parting multiple channels
-- [X]  das topic beim joinen von channels anzeigen
-- [X]  wer ist op wenn der op den channel verlaesst?
-- [X]  Nachrichten im Channel werden bei mehreren Usern vorne abgeschnitten
-- [X]  wenn wir als letzter /part aus nem channel machen bekommen wir eine desync message (von channel der wohl nichtmehr existiert)
-- [X]  man kann bei nc immernoch im Channel schreiben, auch wenn man nicht im Channel ist
-- [X]  duplicate nickname doesnt work anymore bc nc
-- [X]  Topic darf nur vom op geandert werden !
-
-### Could get implemented
-INFO  
-TIME  
-LIST  
-VERSION  
-MOTD  
+# An IRC server that works with the KVIrc client
 
 ### Ressources
 ***[rfc 1459](https://www.rfc-editor.org/rfc/rfc1459) Internet Relay Chat Protocol (1993)***  
