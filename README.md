@@ -16,8 +16,8 @@ ft_irc is an IRC (Internet Relay Chat) server implementation, part of the 42 cur
 - **IRC Bot**: Incorporates an IRC bot for additional functionalities (Bonus).
 
 ## Installation and Usage
-1. Clone the repository: `git clone [your-repo-link]`
-2. Compile the program: `make` (or your specific make rule)
+1. Clone the repository
+2. Compile the program: `make`
 3. Run the server: `./ircserv <port> <password>`
 
 ## Technologies Used
